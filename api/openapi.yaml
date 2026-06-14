@@ -1,0 +1,242 @@
+openapi: 3.0.3
+
+info:
+  title: ITMO Ledger API
+  description: |
+    Simple ledger for a bonus / points system. Keeps a single balance per user
+    and changes it with deposit and withdrawal transactions.
+
+    A balance is identified by the user's UUID. The first transaction for a user
+    creates the balance; later transactions update it.
+  version: 0.1.0
+
+servers:
+  - url: http://10.93.26.189:8080/v1
+    description: University VM
+  - url: http://localhost:8080/v1
+    description: Local development
+
+tags:
+  - name: system
+    description: Service health
+  - name: transactions
+    description: Deposits and withdrawals
+  - name: balances
+    description: Reading user balances
+
+paths:
+  /healthcheck:
+    get:
+      tags: [system]
+      summary: Health check
+      description: Liveness probe used by the smoke check. Returns 200 while the service is up.
+      operationId: healthcheck
+      responses:
+        '200':
+          description: Service is available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: available
+
+  /transactions:
+    post:
+      tags: [transactions]
+      summary: Create a transaction
+      description: |
+        Applies a deposit or withdrawal to a user's balance.
+
+        If the user has no balance yet, it is created and the response is
+        `201 Created`. If the balance already exists, it is updated and the
+        response is `200 OK`.
+
+        A withdrawal larger than the current balance is rejected with
+        `400 Bad Request`.
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+            examples:
+              deposit:
+                summary: Deposit
+                value:
+                  user_id: "653f535d-10ba-4186-a05b-74493354f13b"
+                  amount: 100
+                  type: deposit
+              withdrawal:
+                summary: Withdrawal
+                value:
+                  user_id: "653f535d-10ba-4186-a05b-74493354f13b"
+                  amount: 50
+                  type: withdrawal
+      responses:
+        '200':
+          description: Existing balance updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+              example:
+                id: "653f535d-10ba-4186-a05b-74493354f13b"
+                amount: 150
+                updated_at: "2026-06-14T06:00:49Z"
+        '201':
+          description: New balance created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+              example:
+                id: "653f535d-10ba-4186-a05b-74493354f13b"
+                amount: 100
+                updated_at: "2026-06-14T06:00:49Z"
+        '400':
+          description: Malformed request body or insufficient funds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                insufficientFunds:
+                  summary: Withdrawal exceeds the balance
+                  value:
+                    error: "insufficient funds"
+                malformedJSON:
+                  summary: Body is not valid JSON
+                  value:
+                    error: "body contains badly-formed JSON"
+        '422':
+          description: Request body failed validation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              example:
+                error:
+                  user_id: "must be uuid"
+                  amount: "must be positive"
+                  type: "must be deposit or withdrawal"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "the server encountered a problem and could not process your request"
+
+  /users/{id}/balance:
+    get:
+      tags: [balances]
+      summary: Get a user's balance
+      operationId: getUserBalance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User UUID
+          schema:
+            type: string
+            format: uuid
+          example: "653f535d-10ba-4186-a05b-74493354f13b"
+      responses:
+        '200':
+          description: The user's balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+              example:
+                id: "653f535d-10ba-4186-a05b-74493354f13b"
+                amount: 150
+                updated_at: "2026-06-14T06:00:49Z"
+        '404':
+          description: No balance for this user, or the id is not a valid UUID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "the requested resource could not be found"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "the server encountered a problem and could not process your request"
+
+components:
+  schemas:
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Service status
+          example: available
+
+    TransactionRequest:
+      type: object
+      required: [user_id, amount, type]
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          description: User UUID the transaction applies to
+          example: "653f535d-10ba-4186-a05b-74493354f13b"
+        amount:
+          type: integer
+          minimum: 1
+          description: Positive amount to deposit or withdraw
+          example: 100
+        type:
+          type: string
+          enum: [deposit, withdrawal]
+          description: Transaction direction
+          example: deposit
+
+    Balance:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User UUID
+          example: "653f535d-10ba-4186-a05b-74493354f13b"
+        amount:
+          type: integer
+          description: Current balance
+          example: 150
+        updated_at:
+          type: string
+          format: date-time
+          description: When the balance was last changed
+          example: "2026-06-14T06:00:49Z"
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message
+      example:
+        error: "the requested resource could not be found"
+
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: object
+          additionalProperties:
+            type: string
+          description: Field name mapped to its validation message
+      example:
+        error:
+          amount: "must be positive"
