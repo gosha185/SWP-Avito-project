@@ -1,0 +1,13 @@
+package main
+
+import "net/http"
+
+func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
+	data := map[string]string{
+		"status": "available",
+	}
+
+	if err := app.writeJSON(w, http.StatusOK, data, nil); err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
