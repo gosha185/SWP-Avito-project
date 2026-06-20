@@ -1,14 +1,8 @@
-package main
+package storage
 
 import (
-	"bytes"
 	"context"
 	"database/sql"
-	"encoding/json"
-	"log"
-	"net/http"
-	"net/http/httptest"
-	"os"
 	"sync"
 	"testing"
 	"time"
@@ -20,8 +14,6 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 	"simple-ledger.itmo.ru/internal/data"
 )
-
-// --- test infrastructure ---
 
 func newTestDB(t *testing.T) *sql.DB {
 	t.Helper()
@@ -71,52 +63,38 @@ func newTestDB(t *testing.T) *sql.DB {
 	return db
 }
 
-func newTestApp(db *sql.DB) *application {
-	return &application{
-		logger: log.New(os.Stderr, "TEST ", 0),
-		models: data.NewModels(db),
-	}
-}
-
-func postTransaction(t *testing.T, app *application, userID uuid.UUID, amount int, txType string) *httptest.ResponseRecorder {
-	t.Helper()
-	body, _ := json.Marshal(map[string]any{
-		"user_id": userID.String(),
-		"amount":  amount,
-		"type":    txType,
-	})
-	req := httptest.NewRequest(http.MethodPost, "/v1/transactions", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	rec := httptest.NewRecorder()
-	app.createTransactionHandler(rec, req)
-	return rec
-}
-
-func getBalance(t *testing.T, app *application, userID uuid.UUID) int {
-	t.Helper()
-	balance, err := app.models.Balances.Get(userID)
+// applyTransaction replicates the read-modify-write logic from createTransactionHandler.
+func applyTransaction(model data.BalanceModel, userID uuid.UUID, amount int, txType string) error {
+	balance, err := model.Get(userID)
 	if err != nil {
-		t.Fatalf("get balance: %v", err)
+		if err == data.ErrRecordNotFound {
+			return model.Insert(&data.Balance{Id: userID, Amount: amount})
+		}
+		return err
 	}
-	return balance.Amount
-}
 
-// --- concurrency tests ---
+	if txType == "deposit" {
+		balance.Amount += amount
+	} else {
+		balance.Amount -= amount
+	}
+	return model.Update(balance)
+}
 
 // TestConcurrentDepositsLoseUpdates demonstrates the lost-update race condition.
 //
 // 10 goroutines each deposit 10 points simultaneously.
-// Expected final balance: 100.
+// Expected final balance: initialDeposit + goroutines*depositAmount.
 func TestConcurrentDepositsLoseUpdates(t *testing.T) {
 	db := newTestDB(t)
-	app := newTestApp(db)
+	model := data.BalanceModel{DB: db}
 
 	userID := uuid.New()
-	// Seed a starting balance so all goroutines find an existing record.
-	postTransaction(t, app, userID, 0+1, "deposit") // balance = 1 (amount must be > 0)
-	// Adjust: we want to start from a known value; subtract 1 via withdrawal.
-	// Actually, let's just start with a real deposit and factor it in.
 	initialDeposit := 1
+	if err := applyTransaction(model, userID, initialDeposit, "deposit"); err != nil {
+		t.Fatalf("seed deposit: %v", err)
+	}
+
 	goroutines := 10
 	depositAmount := 10
 
@@ -125,13 +103,18 @@ func TestConcurrentDepositsLoseUpdates(t *testing.T) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			postTransaction(t, app, userID, depositAmount, "deposit")
+			_ = applyTransaction(model, userID, depositAmount, "deposit")
 		}()
 	}
 	wg.Wait()
 
+	balance, err := model.Get(userID)
+	if err != nil {
+		t.Fatalf("get balance: %v", err)
+	}
+
 	want := initialDeposit + goroutines*depositAmount
-	got := getBalance(t, app, userID)
+	got := balance.Amount
 
 	if got != want {
 		t.Errorf("RACE CONDITION: concurrent deposits lost updates — want %d, got %d (lost %d points)",
@@ -146,37 +129,45 @@ func TestConcurrentDepositsLoseUpdates(t *testing.T) {
 // would produce. Any deviation exposes lost updates.
 func TestConcurrentMixedTransactionsBalance(t *testing.T) {
 	db := newTestDB(t)
-	app := newTestApp(db)
+	model := data.BalanceModel{DB: db}
 
 	userID := uuid.New()
-	postTransaction(t, app, userID, 1000, "deposit") // seed
+	seed := 1000
+	if err := applyTransaction(model, userID, seed, "deposit"); err != nil {
+		t.Fatalf("seed deposit: %v", err)
+	}
 
 	deposits := 20
 	withdrawals := 10
 	depositAmt := 10
 	withdrawAmt := 5
 
-	// Serial expectation: 1000 + 20*10 - 10*5 = 1000+200-50 = 1150
-	want := 1000 + deposits*depositAmt - withdrawals*withdrawAmt
+	// Serial expectation: seed + deposits*depositAmt - withdrawals*withdrawAmt
+	want := seed + deposits*depositAmt - withdrawals*withdrawAmt
 
 	var wg sync.WaitGroup
 	for i := 0; i < deposits; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			postTransaction(t, app, userID, depositAmt, "deposit")
+			_ = applyTransaction(model, userID, depositAmt, "deposit")
 		}()
 	}
 	for i := 0; i < withdrawals; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			postTransaction(t, app, userID, withdrawAmt, "withdrawal")
+			_ = applyTransaction(model, userID, withdrawAmt, "withdrawal")
 		}()
 	}
 	wg.Wait()
 
-	got := getBalance(t, app, userID)
+	balance, err := model.Get(userID)
+	if err != nil {
+		t.Fatalf("get balance: %v", err)
+	}
+
+	got := balance.Amount
 	if got != want {
 		t.Errorf("RACE CONDITION: mixed concurrent transactions diverged — want %d, got %d (delta %+d)",
 			want, got, got-want)
