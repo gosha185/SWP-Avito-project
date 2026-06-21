@@ -3,3 +3,7 @@
 
 # go build artifacts
 /bin/
+
+# IDE files
+.claude
+.idea
