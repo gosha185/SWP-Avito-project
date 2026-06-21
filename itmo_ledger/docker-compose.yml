@@ -7,17 +7,19 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./migrations/000001_create_balance_table.up.sql:/docker-entrypoint-initdb.d/000001_create_balance_table.up.sql:ro
+      - ./migrations/000001_create_balances_table.up.sql:/docker-entrypoint-initdb.d/01.sql:ro
+      - ./migrations/000002_create_batches_table.up.sql:/docker-entrypoint-initdb.d/02.sql:ro
+      - ./migrations/000003_create_holds_table.up.sql:/docker-entrypoint-initdb.d/03.sql:ro
+      - ./migrations/000004_create_ledger_table.up.sql:/docker-entrypoint-initdb.d/04.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
-
   api:
     build: .
     environment:
-      DB_DSN: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
+      DB_DSN: ${DB_DSN}
     depends_on:
       db:
         condition: service_healthy
