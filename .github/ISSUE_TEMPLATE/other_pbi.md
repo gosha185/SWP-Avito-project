@@ -1,24 +1,49 @@
-Type
+---
+name: Other PBI
+about: Template for a non-user-story Product Backlog Item
+title: 'PBI-XXX: Brief Description'
+labels: 'pbi'
+assignees: ''
+---
 
-* [ ] Technical PBI
-* [ ] Infrastructure PBI
-* [ ] Documentation PBI
+## Type
+- [ ] Technical PBI
+- [ ] Infrastructure PBI
+- [ ] Documentation PBI
 
-Description
+## Description
+[Describe the task in detail — what needs to be done and why]
 
-[Translate the task description into the necessary language or clarify technical details for implementation]
+## MoSCoW Priority
+- [ ] Must Have
+- [ ] Should Have
+- [ ] Could Have
+- [ ] Won't Have
 
-Priority MoSCoW
+## Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
 
-* [ ] Must-Have
-* [ ] Should-Have
-* [ ] Could-Have
-* [ ] Won't Do
+## Notes
+[Additional context, constraints, or open questions]
 
-Acceptance Criteria
+## Assignee
+@username
 
-* [ ] Criterion 1
-* [ ] Criterion 2
-* [ ] Criterion 3
+## Reviewer
+@username
 
-Story points: 1/2/3/5/8/13/20/40/100
+## Story Points
+[1, 2, 3, 5, 8, 13, 20, 40, 100]
+
+## Requirement Status
+- [ ] Active
+- [ ] Removed
+
+## Work Status
+- [ ] To Do
+- [ ] Ready
+- [ ] In Progress
+- [ ] Review
+- [ ] Done
