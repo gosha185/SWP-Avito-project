@@ -43,7 +43,8 @@ Each team member participated in the review workflow:
 - [PR #82 – Concurrency tests](https://github.com/gosha185/SWP-Avito-project/pull/82) (created by Ivan, reviewed by Leilia)
 
 ### MVP v1 Delivery
-- [Deployment URL](http://10.93.26.189:8080/) 
+- [Deployment URL](http://10.93.26.189:8080/)
+- [SemVer Release v1.0.0](https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.0.0)
 - [Smoke Check Video](https://drive.google.com/drive/folders/1TfXaxg2H7Fxpvp4eFZiBwjoB8QnFaAOz) 
 
 ---
