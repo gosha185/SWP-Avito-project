@@ -1,242 +1,295 @@
 openapi: 3.0.3
-
 info:
-  title: ITMO Ledger API
-  description: |
-    Simple ledger for a bonus / points system. Keeps a single balance per user
-    and changes it with deposit and withdrawal transactions.
-
-    A balance is identified by the user's UUID. The first transaction for a user
-    creates the balance; later transactions update it.
-  version: 0.1.0
+  title: Bonus Service API
+  version: "1.0.0"
+  description: >
+    Bonus / loyalty points service. Accrual with TTL, two-phase redemption
+    (hold then confirm or cancel) with FEFO spend order, balance lookup and
+    paginated transaction history. All money values are integers in the
+    smallest unit (no decimals).
 
 servers:
-  - url: http://10.93.26.189:8080/v1
-    description: University VM
-  - url: http://localhost:8080/v1
-    description: Local development
-
-tags:
-  - name: system
-    description: Service health
-  - name: transactions
-    description: Deposits and withdrawals
-  - name: balances
-    description: Reading user balances
+  - url: http://localhost:8080
+    description: Local (через прокси)
+  # - url: http://10.93.26.189:9091
+  #   description: VM (uncomment when running on the server)
 
 paths:
-  /healthcheck:
-    get:
-      tags: [system]
-      summary: Health check
-      description: Liveness probe used by the smoke check. Returns 200 while the service is up.
-      operationId: healthcheck
-      responses:
-        '200':
-          description: Service is available
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Health'
-              example:
-                status: available
-
-  /transactions:
+  /v1/accrual:
     post:
-      tags: [transactions]
-      summary: Create a transaction
-      description: |
-        Applies a deposit or withdrawal to a user's balance.
-
-        If the user has no balance yet, it is created and the response is
-        `201 Created`. If the balance already exists, it is updated and the
-        response is `200 OK`.
-
-        A withdrawal larger than the current balance is rejected with
-        `400 Bad Request`.
-      operationId: createTransaction
+      summary: Accrue bonus points
+      description: Creates a new batch of points for a user with a TTL of `days`.
+      operationId: accrue
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransactionRequest'
-            examples:
-              deposit:
-                summary: Deposit
-                value:
-                  user_id: "653f535d-10ba-4186-a05b-74493354f13b"
-                  amount: 100
-                  type: deposit
-              withdrawal:
-                summary: Withdrawal
-                value:
-                  user_id: "653f535d-10ba-4186-a05b-74493354f13b"
-                  amount: 50
-                  type: withdrawal
+              $ref: '#/components/schemas/AccrualRequest'
       responses:
-        '200':
-          description: Existing balance updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Balance'
-              example:
-                id: "653f535d-10ba-4186-a05b-74493354f13b"
-                amount: 150
-                updated_at: "2026-06-14T06:00:49Z"
         '201':
-          description: New balance created
+          description: Points accrued, batch created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Balance'
-              example:
-                id: "653f535d-10ba-4186-a05b-74493354f13b"
-                amount: 100
-                updated_at: "2026-06-14T06:00:49Z"
-        '400':
-          description: Malformed request body or insufficient funds
+                $ref: '#/components/schemas/AccrualResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '409': { $ref: '#/components/responses/KeyConflict' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /v1/hold:
+    post:
+      summary: Hold (reserve) points for an order
+      description: >
+        Reserves `amount` points for `order_id`, moving them from available to
+        held. Points are taken from the batches that expire soonest (FEFO).
+        The reservation expires after `hours` if not confirmed or cancelled.
+      operationId: createHold
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HoldRequest'
+      responses:
+        '201':
+          description: Hold created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HoldResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '409':
+          description: >
+            Conflict. Either insufficient available points to reserve, or the
+            idempotency key was already used for a different operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
               examples:
-                insufficientFunds:
-                  summary: Withdrawal exceeds the balance
-                  value:
-                    error: "insufficient funds"
-                malformedJSON:
-                  summary: Body is not valid JSON
-                  value:
-                    error: "body contains badly-formed JSON"
-        '422':
-          description: Request body failed validation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationError'
-              example:
-                error:
-                  user_id: "must be uuid"
-                  amount: "must be positive"
-                  type: "must be deposit or withdrawal"
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                error: "the server encountered a problem and could not process your request"
+                insufficient:
+                  value: { error: "not enough balance to hold the order" }
+                keyReused:
+                  value: { error: "idempotency key already used for another operation" }
+        '500': { $ref: '#/components/responses/ServerError' }
 
-  /users/{id}/balance:
-    get:
-      tags: [balances]
-      summary: Get a user's balance
-      operationId: getUserBalance
+  /v1/users/{user_id}/holds/{order_id}/confirm:
+    post:
+      summary: Confirm a hold
+      description: Finalizes a reservation. Held points are spent for good.
+      operationId: confirmHold
       parameters:
-        - name: id
-          in: path
-          required: true
-          description: User UUID
-          schema:
-            type: string
-            format: uuid
-          example: "653f535d-10ba-4186-a05b-74493354f13b"
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/OrderId'
+        - $ref: '#/components/parameters/IdempotencyKey'
       responses:
         '200':
-          description: The user's balance
+          description: Hold confirmed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Balance'
-              example:
-                id: "653f535d-10ba-4186-a05b-74493354f13b"
-                amount: 150
-                updated_at: "2026-06-14T06:00:49Z"
-        '404':
-          description: No balance for this user, or the id is not a valid UUID
+                $ref: '#/components/schemas/HoldResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/KeyConflict' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /v1/users/{user_id}/holds/{order_id}/cancel:
+    post:
+      summary: Cancel a hold
+      description: Releases a reservation. Held points return to available.
+      operationId: cancelHold
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/OrderId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '200':
+          description: Hold cancelled
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                error: "the requested resource could not be found"
-        '500':
-          description: Server error
+                $ref: '#/components/schemas/HoldResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '409': { $ref: '#/components/responses/KeyConflict' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /v1/users/{user_id}/balance:
+    get:
+      summary: Get balance and soon-to-expire points
+      description: >
+        Returns the user's available points and how many of them expire within
+        the next `days` days. An unknown user returns a zeroed balance, not 404.
+      operationId: getBalance
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - name: days
+          in: query
+          required: true
+          description: Window in days for the `expiring` amount.
+          schema:
+            type: integer
+            minimum: 1
+            example: 30
+      responses:
+        '200':
+          description: Balance
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-              example:
-                error: "the server encountered a problem and could not process your request"
+                $ref: '#/components/schemas/BalanceResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /v1/users/{user_id}/history:
+    get:
+      summary: Get transaction history
+      description: Paginated list of operations recorded in the ledger, newest first.
+      operationId: getHistory
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            example: 50
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            example: 0
+      responses:
+        '200':
+          description: History page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoryResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '500': { $ref: '#/components/responses/ServerError' }
 
 components:
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: >
+        Unique key per operation. A retry with the same key returns the original
+        result; the same key used for a different operation returns 409.
+      schema:
+        type: string
+        format: uuid
+    UserId:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    OrderId:
+      name: order_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
   schemas:
-    Health:
+    AccrualRequest:
+      type: object
+      required: [user_id, amount, days]
+      properties:
+        user_id: { type: string, format: uuid }
+        amount: { type: integer, format: int64, minimum: 1, example: 500 }
+        days: { type: integer, minimum: 1, example: 30 }
+    AccrualResponse:
       type: object
       properties:
-        status:
-          type: string
-          description: Service status
-          example: available
+        batch_id: { type: integer, format: int64, example: 1 }
 
-    TransactionRequest:
+    HoldRequest:
       type: object
-      required: [user_id, amount, type]
+      required: [user_id, order_id, amount, hours]
       properties:
-        user_id:
-          type: string
-          format: uuid
-          description: User UUID the transaction applies to
-          example: "653f535d-10ba-4186-a05b-74493354f13b"
-        amount:
-          type: integer
-          minimum: 1
-          description: Positive amount to deposit or withdraw
-          example: 100
-        type:
-          type: string
-          enum: [deposit, withdrawal]
-          description: Transaction direction
-          example: deposit
+        user_id: { type: string, format: uuid }
+        order_id: { type: string, format: uuid }
+        amount: { type: integer, format: int64, minimum: 1, example: 200 }
+        hours: { type: integer, format: int64, minimum: 1, example: 24 }
+    HoldResponse:
+      type: object
+      properties:
+        hold_id: { type: integer, format: int64, example: 7 }
 
-    Balance:
+    BalanceResponse:
       type: object
       properties:
-        id:
+        available: { type: integer, format: int64, example: 500 }
+        expiring: { type: integer, format: int64, example: 500 }
+
+    Transaction:
+      type: object
+      properties:
+        operation_type:
           type: string
-          format: uuid
-          description: User UUID
-          example: "653f535d-10ba-4186-a05b-74493354f13b"
-        amount:
-          type: integer
-          description: Current balance
-          example: 150
-        updated_at:
-          type: string
-          format: date-time
-          description: When the balance was last changed
-          example: "2026-06-14T06:00:49Z"
+          enum: [accrual, hold, confirm, cancel, expiry]
+          example: accrual
+        amount: { type: integer, format: int64, example: 500 }
+        created_at: { type: string, format: date-time }
+    HistoryResponse:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
 
     Error:
       type: object
       properties:
         error:
-          type: string
-          description: Human-readable error message
-      example:
-        error: "the requested resource could not be found"
+          description: >
+            Either a message string, or a map of field name to message for
+            validation errors (422).
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties: { type: string }
 
+  responses:
+    BadRequest:
+      description: >
+        Malformed request: bad JSON body, missing Idempotency-Key header, or an
+        invalid UUID / query parameter.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: "body must not be empty" }
     ValidationError:
-      type: object
-      properties:
-        error:
-          type: object
-          additionalProperties:
-            type: string
-          description: Field name mapped to its validation message
-      example:
-        error:
-          amount: "must be positive"
+      description: A field value failed validation.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: { amount: "must be positive" } }
+    KeyConflict:
+      description: The idempotency key was already used for another operation.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: "idempotency key already used for another operation" }
+    ServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { error: "the server encountered a problem and could not process your request" }
