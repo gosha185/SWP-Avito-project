@@ -1,5 +1,11 @@
-Transcript
+# Customer Review Transcript – Week 3
+
+**Date:** 20 June 2026  
+**Participants:** Customer representative (Expert from Avito), Team Members (Stepan, Georgii, Leilia, Ekaterina, Ivan)  
+**Meeting purpose:** Sprint Review – feedback on MVP v1 scope, Product Backlog, Sprint Backlog, and team processes.
+
 ---
+
 The speakers are referred to as **Team Member** and **Expert** (customer).
 
 **Team Member:**  
