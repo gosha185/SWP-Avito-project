@@ -1,0 +1,36 @@
+# Lychee configuration
+
+max_concurrency = 32
+include_verbatim = false
+
+exclude_path = [
+    ".git",
+    "target",
+    "bin",
+    "reports/week2/images",
+    "internal/migrations",
+    "postgres_data",
+    ".lychee",
+]
+
+exclude = [
+    # Local development
+    "http://localhost",
+    "http://127.0.0.1",
+    "https://localhost",
+    "postgres://",
+    # Template placeholders
+    "\\{\\{.*\\}\\}",
+    # GitHub internal PR/commit links (may point to non-existent IDs during scanning)
+    "/pull/",
+    "/commit/",
+]
+
+exclude_all_private = true
+
+retry_wait_time = 5
+max_retries = 3
+timeout = 20
+
+cache = true
+max_cache_age = "1d"
