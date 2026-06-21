@@ -9,40 +9,48 @@
 
 ## Artifacts Presented
 
-- Product Backlog (all 27 PBIs with priorities, estimates, and acceptance criteria)
-- Sprint Backlog (25 tasks selected for MVP v1)
-- Sprint Milestone (`Sprint 1 – MVP v1`)
-- User stories with acceptance criteria
-- Story Point estimates (Modified Fibonacci)
+- [Product Backlog](https://github.com/users/gosha185/projects/1)
+- [Sprint Backlog](https://github.com/users/gosha185/projects/2)
+- [Sprint Milestone – Sprint 1. MVP v1](https://github.com/gosha185/SWP-Avito-project/milestone/1)
+- [User Stories Index](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/user-stories.md)
+- [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/definition-of-done.md)
+- [Roadmap](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/roadmap.md)
+- [Customer Review Transcript](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week3/customer-review-transcript.md)
 
 ---
 
 ## Discussion Points
 
 ### 1. Story Point Estimation
+
 The team discussed estimation challenges with the customer. The expert explained the difference between implementation tasks (easier to estimate) and research tasks (more variance). Recommended approaches:
 - Keep estimates ≤ 5 story points by decomposing large tasks.
 - Use time‑boxed research for unknown work.
 
 ### 2. Definition of Ready (DoR) and Definition of Done (DoD)
+
 The expert explained the difference:
 - **DoR** – criteria for when a task is ready to be taken into work (e.g., designs ready, ambiguities resolved).
 - **DoD** – criteria for when a task is truly complete (e.g., unit tests, integration tests, deployed to production).
 - Suggested using GitHub Issue templates to automate DoD/DoR checklists.
 
 ### 3. Sprint Backlog Board
+
 The expert recommended setting up a Kanban‑style board (To Do → In Progress → Review → Done) to visualise progress and track tasks daily.
 
 ### 4. Burndown Chart
+
 The expert suggested using a burndown chart to track planned vs actual progress, helping the team calibrate future sprint capacity.
 
 ### 5. Retrospective Advice
+
 The expert recommended:
 - Write down problems as they occur (not just at the end).
 - Separate retrospective discussion into two parts: **metrics** (quantitative) and **process/feelings** (qualitative).
 - The facilitator should prepare sprint metrics in advance.
 
 ### 6. Incremental Delivery
+
 The expert emphasised delivering fully completed increments (e.g., solving one problem entirely) rather than partial progress on many problems. A finished increment is more valuable to the business.
 
 ---
