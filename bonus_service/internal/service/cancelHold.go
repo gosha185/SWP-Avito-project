@@ -40,7 +40,7 @@ func (bs *BonusService) CancelHold(ctx context.Context, entry *models.LedgerEntr
 	}
 	entry.Metadata = json.RawMessage(fmt.Sprintf(`{"order_id": "%s", "expires_at": "%s"}`, order.String(), hold.ExpiresAt.Format(time.RFC3339)))
 	entry.Amount = hold.Amount
-	err = bs.LedgersDB.Insert(ctx, tx, entry)
+	err = bs.LedgersDB.Insert(ctx, tx, entry) //Maintaining ledger
 	if err != nil {
 		return 0, err
 	}
