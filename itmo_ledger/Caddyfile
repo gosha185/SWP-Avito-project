@@ -1,8 +1,8 @@
 :8080 {
-	handle /v1/* {
-		reverse_proxy api:8080
-	}
-	handle {
-		reverse_proxy swagger:8080
-	}
+    handle /v1/* {
+        reverse_proxy api:9091
+    }
+    handle {
+        reverse_proxy swagger:8080
+    }
 }
