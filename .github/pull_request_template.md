@@ -1,37 +1,27 @@
-<!-- Provide a general summary of your changes in the Title above -->
+# Pull Request
 
-## Summary
+## Related Issue
+Closes #[issue number]
 
-<!-- What does this PR do?
-Replace <issue-number> with the number of the corresponding task issue.
-Add more details if necessary.
--->
-
-- Closes #<issue-number>
-
-## Type of change
-
+## Type of Change
 - [ ] Bug fix
 - [ ] New feature (non-breaking)
 - [ ] Breaking change
 - [ ] Database migration
-- [ ] Documentation
+- [ ] Documentation update
+- [ ] Infrastructure change
 
-## Testing
+## Description
+<!-- Brief description of what this PR does -->
 
-<!-- How did you test this PR? -->
+## Acceptance Criteria Verification
+- [ ] All acceptance criteria from the issue are satisfied
+- [ ] Code is reviewed by another team member
+- [ ] CHANGELOG.md is updated (if user-visible change)
+- [ ] Not applicable: no user-visible change
 
-- [ ] Unit tests passed
-- [ ] Integration tests passed
-- [ ] Manual testing (describe below)
-
-## Checklist
-
-- [ ] Code follows project style
-- [ ] No secrets or sensitive data
-- [ ] Tests added/updated
-- [ ] Documentation updated (if needed)
+## Testing (if applicable)
+<!-- Describe how this PR was tested -->
 
 ## Screenshots (if applicable)
-
 <!-- Add screenshots here -->
