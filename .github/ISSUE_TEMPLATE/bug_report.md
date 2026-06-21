@@ -1,13 +1,13 @@
 ---
 name: Bug Report
-about: The template for the error message
-title: 'Bug: Short description'
+about: Template for reporting a bug
+title: 'Bug: short description'
 labels: 'bug'
 assignees: ''
 ---
 
 ## Description
-[A brief description of the error]
+[Brief description of the bug]
 
 ## Steps to Reproduce
 1. Step 1
@@ -15,12 +15,25 @@ assignees: ''
 3. Step 3
 
 ## Expected Result
-[What was supposed to happen]
+[What should have happened]
 
 ## Actual Result
-[What really happened]
+[What actually happened]
 
 ## Severity
 - [ ] Critical
 - [ ] Major
 - [ ] Minor
+
+## Environment
+[OS, browser, version, etc.]
+
+## Acceptance Criteria for Fix
+- [ ] Criterion 1
+- [ ] Criterion 2
+
+## Assignee
+@username
+
+## Reviewer
+@username
