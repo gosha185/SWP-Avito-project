@@ -266,7 +266,7 @@ func (h *APIHandler) GetBalanceHandler(w http.ResponseWriter, r *http.Request) {
 
 	response := getBalanceResponse{
 		Available: availableBonuses,
-		Expiring: expiringBonuses,
+		Expiring:  expiringBonuses,
 	}
 
 	if err := h.writeJSON(w, http.StatusOK, response, nil); err != nil {
@@ -315,11 +315,40 @@ func (h *APIHandler) GetHistoryHandler(w http.ResponseWriter, r *http.Request) {
 	response := GetHistoryResponse{
 		Transactions: transactions,
 	}
-	
+
 	for i, ledgerEntry := range history {
 		transactions[i].OperationType = ledgerEntry.OperationType
 		transactions[i].Amount = ledgerEntry.Amount
 		transactions[i].CreatedAt = ledgerEntry.CreatedAt
+	}
+
+	if err := h.writeJSON(w, http.StatusOK, response, nil); err != nil {
+		h.serverErrorResponse(w, r, err)
+	}
+}
+
+func (h *APIHandler) GetHoldsHandler(w http.ResponseWriter, r *http.Request) {
+	userId, err := uuid.Parse(r.PathValue("user_id"))
+	if err != nil {
+		h.badRequestResponse(w, r, err)
+		return
+	}
+
+	v := validator.New()
+	v.Check(userId != uuid.Nil, "user_id", "must be provided")
+	if !v.Valid() {
+		h.failedValidationResponse(w, r, v.Errors)
+		return
+	}
+
+	heldPoints, err := h.service.GetHeld(r.Context(), userId)
+	if err != nil {
+		h.badRequestResponse(w, r, err)
+		return
+	}
+
+	response := GetHoldResponse{
+		Amount: heldPoints,
 	}
 
 	if err := h.writeJSON(w, http.StatusOK, response, nil); err != nil {
