@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"fmt"
-	"net/http"
 	"log"
+	"net/http"
 )
 
 func (h *APIHandler) errorResponse(w http.ResponseWriter, r *http.Request, status int, message any) {

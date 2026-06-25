@@ -1,9 +1,8 @@
 package service
 
 import (
+	"bonus-service/internal/storage"
 	"database/sql"
-
-	"simple-ledger.itmo.ru/internal/storage"
 )
 
 type BonusService struct {
