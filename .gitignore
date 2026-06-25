@@ -1,5 +1,43 @@
-# secrets
-.env
-
-# go build artifacts
+# Binaries
 /bin/
+/bin/*
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+*.cov
+
+# IDE
+.vscode/
+.idea/
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Docker
+postgres_data/
+
+# Generated files
+*.gen.go
+
+# Build and temp directories
+dist/
+tmp/
+coverage.out
+
+# Application specific
+*.log
