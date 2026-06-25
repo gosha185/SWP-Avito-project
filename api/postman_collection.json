@@ -118,6 +118,35 @@
       ]
     },
     {
+      "name": "Get Holds",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/users/{{user_id}}/holds",
+          "host": ["{{base_url}}"],
+          "path": ["v1", "users", "{{user_id}}", "holds"]
+        },
+        "description": "Returns the total amount of points currently frozen/held for the user."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Returns amount\", function () {",
+              "    pm.expect(pm.response.json()).to.have.property(\"amount\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "Create Hold",
       "request": {
         "method": "POST",
