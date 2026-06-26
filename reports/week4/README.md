@@ -31,8 +31,7 @@
 - [Sprint 2 Backlog](https://github.com/users/gosha185/projects/3)
 
 ### Sprint
-- [Sprint Milestone – Sprint 2](https://github.com/gosha185/SWP-Avito-project/milestone/2)
-- [MVP v1 Scope](https://github.com/gosha185/SWP-Avito-project/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Sprint+1+–+MVP+v1%22)
+- [MVP v1 Scope](https://github.com/gosha185/SWP-Avito-project/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Sprint+1.+MVP+v1%22)
 
 ---
 
@@ -73,10 +72,6 @@
 
 | Feedback point | Resulting PBI or issue | Status | Response |
 |---|---|---|---|
-| Need ability to see points expiring soon | [#8](https://github.com/gosha185/SWP-Avito-project/issues/8) | In Progress | Implemented as technical PBI with configurable expiry window |
-| Need automatic release of stale holds | [#32](https://github.com/gosha185/SWP-Avito-project/issues/32) | In Progress | TTL worker implemented for automatic hold release |
-| Need better test coverage | [#143](https://github.com/gosha185/SWP-Avito-project/issues/143) | In Progress | Unit and integration tests added for critical modules |
-| Need CI automation | [#144](https://github.com/gosha185/SWP-Avito-project/issues/144) | In Progress | CI pipeline configured with linting, tests, coverage, QRTs |
 
 ---
 
@@ -98,8 +93,8 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 
 | QR | Sub-characteristic | Scenario |
 |---|---|---|
-| QR-001 | Time behaviour | API response time ≤ 500ms |
-| QR-002 | Availability | Service availability ≥ 99.5% |
+| QR-001 | Time behaviour | API response time ≤ 2 sec |
+| QR-002 | Availability | Service availability ≥ 99% |
 | QR-003 | Testability | Critical module coverage ≥ 30% |
 
 ---
@@ -127,10 +122,10 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 - ✅ Definition of Done updated for Assignment 4
 
 ### In Progress
-- ⏳ Remaining MVP v1 tasks (#8, #9, #12, #14, #15, #16, #23, #32)
-- ⏳ Unit and integration tests (#143)
-- ⏳ CI pipeline configuration (#144)
-- ⏳ Quality requirement tests (#133)
+- ⏳ Remaining MVP v1 tasks
+- ⏳ Unit and integration tests
+- ⏳ CI pipeline configuration 
+- ⏳ Quality requirement tests
 
 ### Next Steps
 - Complete remaining MVP v1 tasks
@@ -143,12 +138,7 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 ## Contribution Traceability
 
 | Team Member | Issues | PRs | Reviews | Testing/QA | Documentation |
-|---|---|---|---|---|---|
-| Leilia (Leilia34) | #132–#142 | ✅ | ✅ | — | ✅ |
-| Ekaterina (deadnothingness) | #9, #11, #32–#36 | ✅ | ✅ | — | — |
-| Stepan (Stepan4ick) | #12–#16, #28–#31, #144, #145 | ✅ | ✅ | — | — |
-| Georgii (gosha185) | #24–#27, #146 | ✅ | ✅ | — | — |
-| Ivan (Laplace-mt) | #10, #59, #101, #143 | ✅ | ✅ | ✅ | — |
+
 
 ---
 
@@ -164,8 +154,7 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 - [Reflection](reflection.md)
 - [Retrospective](retrospective.md)
 - [LLM Report](llm-report.md)
-- [Presentation Slides](presentation.pdf) *(optional public copy)*
-
+- [Presentation Slides](presentation.pdf) 
 ---
 
 ## Screenshots
