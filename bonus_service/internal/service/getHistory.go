@@ -1,10 +1,10 @@
 package service
 
 import (
+	"bonus-service/internal/models"
 	"context"
 
 	"github.com/google/uuid"
-	"simple-ledger.itmo.ru/internal/models"
 )
 
 func (bs *BonusService) GetHistory(ctx context.Context, user uuid.UUID, limit int, offset int) ([]models.LedgerEntry, error) {

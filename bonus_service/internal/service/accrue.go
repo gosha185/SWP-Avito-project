@@ -1,12 +1,11 @@
 package service
 
 import (
+	"bonus-service/internal/models"
 	"context"
 	"encoding/json"
 	"fmt"
 	"time"
-
-	"simple-ledger.itmo.ru/internal/models"
 )
 
 func (bs *BonusService) Accrue(ctx context.Context, entry *models.LedgerEntry, days int64) (int64, error) {

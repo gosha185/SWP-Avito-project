@@ -1,4 +1,4 @@
-module simple-ledger.itmo.ru
+module bonus-service
 
 go 1.25.4
 

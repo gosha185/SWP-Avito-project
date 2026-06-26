@@ -1,12 +1,12 @@
 package service
 
 import (
+	"bonus-service/internal/models"
+	"bonus-service/internal/storage"
 	"context"
 	"database/sql"
 
 	"github.com/google/uuid"
-	"simple-ledger.itmo.ru/internal/models"
-	"simple-ledger.itmo.ru/internal/storage"
 )
 
 func (bs *BonusService) validate(ctx context.Context, user uuid.UUID, requiredPoints int64, key string, positiveIntegers ...int64) (*sql.Tx, *models.Balance, error) {

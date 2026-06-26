@@ -1,13 +1,13 @@
 package service
 
 import (
+	"bonus-service/internal/models"
 	"context"
 	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/google/uuid"
-	"simple-ledger.itmo.ru/internal/models"
 )
 
 func (bs *BonusService) Hold(ctx context.Context, entry *models.LedgerEntry, order uuid.UUID, hours int64) (int64, error) {

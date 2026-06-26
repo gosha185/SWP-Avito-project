@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 func (h *APIHandler) readIDParam(r *http.Request) (uuid.UUID, error) {
