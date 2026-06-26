@@ -15,7 +15,7 @@
 
 ### Sprint Dates
 
-24–30 June 2026
+22–28 June 2026
 
 ### Sprint Milestone
 
@@ -26,8 +26,9 @@
 ## Artifacts
 
 ### Backlogs
-- [Product Backlog](https://github.com/gosha185/SWP-Avito-project/projects/1)
-- [Sprint Backlog](https://github.com/gosha185/SWP-Avito-project/projects/2)
+- [Product Backlog](https://github.com/users/gosha185/projects/1)
+- [Sprint Backlog](https://github.com/users/gosha185/projects/2)
+- [Sprint 2 Backlog](https://github.com/users/gosha185/projects/3)
 
 ### Sprint
 - [Sprint Milestone – Sprint 2](https://github.com/gosha185/SWP-Avito-project/milestone/2)
@@ -153,9 +154,6 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 
 ## Links
 
-- [Product Backlog](https://github.com/gosha185/SWP-Avito-project/projects/1)
-- [Sprint Backlog](https://github.com/gosha185/SWP-Avito-project/projects/2)
-- [Sprint Milestone – Sprint 2](https://github.com/gosha185/SWP-Avito-project/milestone/2)
 - [SemVer Release v1.0.0](https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.0.0)
 
 ---
