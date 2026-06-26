@@ -50,3 +50,7 @@ type transaction struct {
 type GetHistoryResponse struct {
 	Transactions []transaction `json:"transactions"`
 }
+
+type GetHoldResponse struct {
+	Amount int64 `json:"amount"`
+}

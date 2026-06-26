@@ -11,6 +11,7 @@ func NewRouter(h *APIHandler) *http.ServeMux {
 	router.HandleFunc("POST /v1/users/{user_id}/holds/{order_id}/cancel", h.CancelHoldHandler)
 	router.HandleFunc("GET /v1/users/{user_id}/balance", h.GetBalanceHandler)
 	router.HandleFunc("GET /v1/users/{user_id}/history", h.GetHistoryHandler)
+	router.HandleFunc("GET /v1/users/{user_id}/holds", h.GetHoldsHandler)
 
 	return router
 }
