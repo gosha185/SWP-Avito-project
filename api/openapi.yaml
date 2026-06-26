@@ -147,6 +147,23 @@ paths:
         '400': { $ref: '#/components/responses/BadRequest' }
         '500': { $ref: '#/components/responses/ServerError' }
 
+  /v1/users/{user_id}/holds:
+    get:
+      summary: Get total held points
+      description: Returns the total amount of points currently frozen/held for the user.
+      operationId: getHolds
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: Total held points amount
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetHoldResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
   /v1/users/{user_id}/history:
     get:
       summary: Get transaction history
@@ -265,6 +282,11 @@ components:
             - type: string
             - type: object
               additionalProperties: { type: string }
+
+    GetHoldResponse:
+      type: object
+      properties:
+        amount: { type: integer, format: int64, example: 150 }
 
   responses:
     BadRequest:
