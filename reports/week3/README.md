@@ -64,10 +64,10 @@ Each team member participated in the review workflow:
 ![MVP v1 Scope](images/mvp-version.png)
 
 ### SemVer Release
-![SemVer Release](images/release.png)
+// [SemVer Release]()
 
 ### Delivered MVP v1
-![MVP v1](images/mvp-v1.png)
+// [MVP v1]() 
 
 ### Reviewed PR
 ![Reviewed PR](images/reviewed-pr.png)

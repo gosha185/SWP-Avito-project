@@ -73,8 +73,8 @@ Deliver core bonus operations: users can view their available balance and see po
 ## Links
 - [Historical User Stories (Assignment 2)](../week2/user-stories.md)
 - [Current User Stories Index](../../docs/user-stories.md)
-- [Product Backlog Board](https://github.com/gosha185/SWP-Avito-project/projects/1)
-- [Sprint Backlog Board](https://github.com/gosha185/SWP-Avito-project/projects/2)
+- [Product Backlog Board](https://github.com/users/gosha185/projects/1)
+- [Sprint Backlog Board](https://github.com/users/gosha185/projects/2)
 - [Sprint Milestone](https://github.com/gosha185/SWP-Avito-project/milestones/1)
 - [MVP v1 Scope](https://github.com/gosha185/SWP-Avito-project/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Sprint+1+–+MVP+v1%22)
 
