@@ -13,7 +13,7 @@ This document defines measurable quality requirements for the Avito Bonus Points
 **Why this matters:** Users need quick feedback when checking their balance, viewing holds, or performing accrual operations. Slow responses degrade user experience and may cause timeouts in partner services (order processing, payment systems).
 
 **Measurable per endpoint:**
-| Endpoint | Expected response time (95th percentile) | 
+| Endpoint | Expected response time (95th percentile) under 100 concurrent users| 
 |----------|-------------------------------------------|
 | `GET /v1/users/{user_id}/balance` | ≤ 500ms | 
 | `GET /v1/users/{user_id}/holds` | ≤ 500ms | 
@@ -23,7 +23,7 @@ This document defines measurable quality requirements for the Avito Bonus Points
 | `POST /v1/confirm` | ≤ 500ms | 
 | `POST /v1/cancel` | ≤ 500ms |
 
-**Linked quality requirement tests:** [QRT-001](quality-requirement-tests.md#qrt-001-api-response-time)
+**Linked quality requirement tests:** [QRT-001](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-001-api-response-time)
 
 ---
 
@@ -35,7 +35,7 @@ This document defines measurable quality requirements for the Avito Bonus Points
 
 **Why this matters:** The bonus system must be reliable for users and partner services. Downtime causes lost transactions, double processing, and user frustration.
 
-**Linked quality requirement tests:** [QRT-002](quality-requirement-tests.md#qrt-002-health-check-availability)
+**Linked quality requirement tests:** [QRT-002](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-002-api-response-time)
 
 ---
 
@@ -47,7 +47,7 @@ This document defines measurable quality requirements for the Avito Bonus Points
 
 **Why this matters:** Critical product logic (balance operations, holds, accrual, TTL workers) must be directly verifiable so defects can be detected before merge. This reduces regression risk and increases developer confidence when making changes.
 
-**Linked quality requirement tests:** [QRT-003](quality-requirement-tests.md#qrt-003-critical-module-unit-coverage)
+**Linked quality requirement tests:** [QRT-003](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-003-api-response-time)
 
 ---
 
@@ -66,7 +66,7 @@ This document defines measurable quality requirements for the Avito Bonus Points
 | Data integrity | No lost or corrupted transactions |
 | Query completeness | All transactions in the period are returned |
 
-**Linked quality requirement tests:** [QRT-004](quality-requirement-tests.md#qrt-004-data-retention-and-integrity)
+**Linked quality requirement tests:** [QRT-004](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-004-api-response-time)
 
 ---
 
@@ -78,4 +78,4 @@ This document defines measurable quality requirements for the Avito Bonus Points
 
 **Why this matters:** Critical operations must be resilient to transient failures. Users should not lose points or experience double processing due to temporary issues.
 
-**Linked quality requirement tests:** [QRT-005](quality-requirement-tests.md#qrt-005-fault-tolerance-and-recovery)
+**Linked quality requirement tests:** [QRT-005](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-005-api-response-time)
