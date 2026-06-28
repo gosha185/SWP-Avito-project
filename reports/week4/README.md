@@ -4,7 +4,7 @@
 
 [SWP-Avito-project](https://github.com/gosha185/SWP-Avito-project) – Bonus System
 
-**License:** [MIT](LICENSE)
+**License:** [MIT](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/LICENSE)
 
 ---
 
@@ -172,7 +172,7 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 ## Screenshots
 
 ### Sprint Milestone
-![Sprint Milestone](images/sprint-milestone.png)
+![Sprint Milestone](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/sprint-milestone.jpg)
 
 ### Latest CI Run
 ![Latest CI Run] update
