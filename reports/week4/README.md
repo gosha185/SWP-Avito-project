@@ -175,25 +175,25 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 ![Sprint Milestone](images/sprint-milestone.png)
 
 ### Latest CI Run
-![Latest CI Run](images/ci-run.png)
+![Latest CI Run] update
 
-### Branch Protection Rules
-![Branch Protection Rules](images/branch-protection.png)
+### Branch Protection
+![Branch Protection](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/branch-protection.jpg)
 
 ### Coverage Report
-![Coverage Report](images/coverage.png)
+![Coverage Report] update
 
 ### Additional QA Check
-![Additional QA Check](images/qa-check.png)
+![Additional QA Check] update
 
 ### SemVer Release
-![SemVer Release](images/release.png)
+![SemVer Release] update
 
 ### Reviewed PR
-![Reviewed PR](images/reviewed-pr.png)
+![Reviewed PR](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/reviewed-pr.jpg)
 
 ### Product Backlog
-![Product Backlog](images/product-backlog.png)
+![Product Backlog](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/product-backlog.jpg)
 
 ### Sprint Backlog
-![Sprint Backlog](images/sprint-backlog.png)
+![Sprint Backlog](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/sprint-backlog.jpg)
