@@ -59,7 +59,7 @@
 
 - [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions) — link will be updated after CI is configured
 - [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions) — link will be updated after CI is configured
-- [Branch Protection]
+- [Branch Protection](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/branch-protection.jpg)
 ---
 
 ## Deployment and Release
