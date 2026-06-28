@@ -93,5 +93,5 @@ This document defines end-user-facing acceptance test scenarios for the Avito Bo
 
 | Issue | Severity | Action | Resulting PBI |
 |-------|----------|--------|---------------|
-| Cancelling a hold that was already cancelled returns HTTP 500 instead of HTTP 400 | Minor | Fix error handling to return 400 Bad Request | [#XXX](https://github.com/gosha185/SWP-Avito-project/issues/XXX) |
+| Cancelling a hold that was already cancelled returns HTTP 500 instead of HTTP 400 | Minor | Fix error handling to return 400 Bad Request | [#XXX](https://github.com/gosha185/SWP-Avito-project/issues/177) |
 | FEFO (first-expiring first-out) logic implemented | N/A | Verified — points with earliest expiration are spent first | None |
