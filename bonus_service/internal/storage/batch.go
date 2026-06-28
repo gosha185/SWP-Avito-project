@@ -259,3 +259,26 @@ func (r *BatchRepo) SetBatchRemaining(ctx context.Context, tx *sql.Tx, batchID i
 
 	return nil
 }
+
+// DeleteExpiredZeroBatches deletes batches with remaining = 0
+// and expires_at < NOW() - daysOld.
+// Returns number of deleted rows.
+// Used by cleanup worker.
+func (r *BatchRepo) DeleteExpiredZeroBatches(ctx context.Context, daysOld int) (int64, error) {
+    query := `
+        DELETE FROM batches
+        WHERE remaining = 0
+          AND expires_at < NOW() - ($1 || ' days')::INTERVAL
+    `
+    result, err := r.db.ExecContext(ctx, query, daysOld)
+    if err != nil {
+        return 0, fmt.Errorf("failed to delete expired zero batches: %w", err)
+    }
+
+    rowsAffected, err := result.RowsAffected()
+    if err != nil {
+        return 0, fmt.Errorf("failed to get rows affected: %w", err)
+    }
+
+    return rowsAffected, nil
+}
