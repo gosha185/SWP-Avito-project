@@ -8,23 +8,25 @@ This document describes the testing strategy, critical modules, coverage status,
 
 Critical modules are source files responsible for core user workflows, persistence, business rules, or other behavior where defects would materially affect the product.
 
-| Critical module | Why critical | Required line coverage | Current line coverage | 
+| Critical module | Why critical | Required line coverage | Current line coverage | Evidence |
 |---|---|---|---:|---:|
-| `internal/balance/balance.go` | Core balance operations | 30% | — |
-| `internal/holds/holds.go` | Hold creation, confirmation, cancellation | 30% | — | 
-| `internal/accrual/accrual.go` | Point accrual with TTL and idempotency | 30% | — |
-| `internal/ttl/ttl_worker.go` | TTL worker for expired points and holds | 30% | — |
-| `internal/ledger/ledger.go` | Immutable audit ledger operations | 30% | — | 
- Evidence: [Coverage run] (UPDATE)
+| `internal/balance/balance.go` | Core balance operations | 30% | 87.5% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| `internal/holds/holds.go` | Hold creation, confirmation, cancellation | 30% | — | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| `internal/accrual/accrual.go` | Point accrual with TTL and idempotency | 30% | 81.8% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| `internal/ttl/ttl_worker.go` | TTL worker for expired points and holds | 30% | — | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| `internal/ledger/ledger.go` | Immutable audit ledger operations | 30% | — | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions) |
+
+**Total Coverage: 53.2%**
+
 ---
 
 ## Automated Test Status
 
 | Test type | Scope | Command or CI check | Latest result | Evidence |
 |---|---|---|---|---|
-| Unit tests | Critical product logic | `go test ./internal/... -v` | — | [CI run] (UPDATE)  |
-| Integration tests | API + database interaction | `go test ./tests/integration/... -v` | — | [CI run] (UPDATE) |
-| Automated QRTs | QR-001 to QR-005 | `go test -run=TestPerformance ./...` | — | [QRT report] (UPDATE) |
+| Unit tests | Critical product logic | `go test ./internal/... -v` | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| Integration tests | API + database interaction | `go test ./tests/integration/... -v` | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| Automated QRTs | QR-001 to QR-005 | `go test -run=TestPerformance ./...` | ✅ Passing | [QRT report](https://github.com/gosha185/SWP-Avito-project/actions) |
 
 ---
 
@@ -32,13 +34,13 @@ Critical modules are source files responsible for core user workflows, persisten
 
 | Gate or check | Required for Done? | Latest protected-branch status | Evidence |
 |---|---|---|---|
-| Linting (`golangci-lint`) | Yes | — | [CI run]  (UPDATE) |
-| Build (`go build`) | Yes | — | [CI run] (UPDATE) |
-| Unit tests | Yes | — | [CI run]  (UPDATE)|
-| Integration tests | Yes | — | [CI run] (UPDATE) |
-| Coverage report | Yes | — | [Coverage run] (UPDATE) |
-| Automated QRTs | Yes | — | [QRT report] (UPDATE) |
-| Additional QA check (dependency vulnerability scan) | Yes | — | [QA check report] (UPDATE) |
+| Linting (`golangci-lint`) | Yes | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| Build (`go build`) | Yes | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| Unit tests | Yes | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| Integration tests | Yes | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions) |
+| Coverage report | Yes | 53.2% | [Coverage run](images/coverage.png) |
+| Automated QRTs | Yes | ✅ Passing | [QRT report](https://github.com/gosha185/SWP-Avito-project/actions) |
+| Additional QA check (dependency vulnerability scan) | Yes | ✅ Passing | [QA check report](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/branch-protection.jpg) |
 
 ---
 
@@ -46,7 +48,7 @@ Critical modules are source files responsible for core user workflows, persisten
 
 | QA objective or risk | Additional QA check | Scope | Latest result | Evidence | Limitations or follow-up |
 |---|---|---|---|---|---|
-| Dependencies with known vulnerabilities may expose users or deployments to avoidable risk. | Automated dependency vulnerability scan (`govulncheck`) | Product dependency manifests (`go.mod`, `go.sum`) | — | [CI run] (UPDATE) | Some vulnerabilities may require manual triage or delayed upstream fixes. |
+| Dependencies with known vulnerabilities may expose users or deployments to avoidable risk. | Automated dependency vulnerability scan (`govulncheck`) | Product dependency manifests (`go.mod`, `go.sum`) | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions) | Some vulnerabilities may require manual triage or delayed upstream fixes. |
 
 ---
 
@@ -54,7 +56,7 @@ Critical modules are source files responsible for core user workflows, persisten
 
 | Evidence | Scope | Result | Follow-up PBI or issue |
 |---|---|---|---|
-| Customer UAT observation | End-user scenarios (balance, holds, accrual) | — | [UAT results]  (UPDATE) |
+| Customer UAT observation | End-user scenarios (balance, holds, accrual) | 6/7 passed | [UAT](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/user-acceptance-tests.md#user-acceptance-tests) |
 
 ---
 
@@ -67,7 +69,7 @@ All Assignment 4 quality gates are maintained product assets and will continue t
 - ✅ Unit tests
 - ✅ Integration tests
 - ✅ Automated QRTs (QR-001 to QR-005)
-- ✅ Coverage reporting
+- ✅ Coverage reporting (currently 53.2%)
 - ✅ Additional QA check (dependency vulnerability scan)
 
 When a product change makes a check obsolete, the team will replace it with an equivalent or stronger check and document the reason.
