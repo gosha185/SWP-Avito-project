@@ -215,3 +215,24 @@ func (r *HoldRepo) GetExpiredHolds(ctx context.Context, tx *sql.Tx) ([]models.Ho
 
 	return holds, nil
 }
+
+// DeleteOldHolds deletes holds with status in ('confirmed', 'cancelled')
+// and expires_at < NOW() - daysOld.
+// Returns number of deleted rows.
+// hold_batches is deleted automatically via ON DELETE CASCADE.
+func (r *HoldRepo) DeleteOldHolds(ctx context.Context, daysOld int) (int64, error) {
+	query := `
+        DELETE FROM holds
+        WHERE status IN ('confirmed', 'cancelled')
+          AND expires_at < NOW() - ($1 || ' days')::INTERVAL
+    `
+	result, err := r.db.ExecContext(ctx, query, daysOld)
+	if err != nil {
+		return 0, fmt.Errorf("failed to delete old holds: %w", err)
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+	return rowsAffected, nil
+}
