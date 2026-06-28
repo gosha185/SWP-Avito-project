@@ -5,19 +5,6 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [1.0.1] - 2026-06-28
-
-### Added
-
-**HTTP API**
-- Endpoints: holds (gives number of all current held points)
-
-### Fixed
-
-- Repository was cleaned up from old and unused files
-- Imports problem was sold by refactoring project
-- Changes above made project able to run
-
 ## [1.0.0] - 2026-06-21
 
 First full release of the bonus service: accrual with expiry, two-phase
@@ -71,4 +58,3 @@ with interactive API documentation.
   OpenAPI spec, Docker and reverse-proxy deployment
 
 [1.0.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.0.0
-[1.0.1]:
