@@ -217,4 +217,4 @@ This document defines end-user-facing acceptance test scenarios for the Avito Bo
 | UAT-004 | Place points on hold | ✅ Passed |
 | UAT-005 | Confirm a hold | ✅ Passed |
 | UAT-006 | Cancel a hold | ✅ Passed |
-| UAT-007 | Cancel an already cancelled hold (error handling) | ❌ Failed — see [#174](https://github.com/gosha185/SWP-Avito-project/issues/174) |
+| UAT-007 | Cancel an already cancelled hold (error handling) | ❌ Failed — see [#174](https://github.com/gosha185/SWP-Avito-project/issues/177) |
