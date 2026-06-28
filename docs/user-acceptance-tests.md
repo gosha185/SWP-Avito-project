@@ -203,7 +203,7 @@ This document defines end-user-facing acceptance test scenarios for the Avito Bo
 
 **Customer comments:** "This definitely needs improvement. I'd expect HTTP 400 (Bad Request) instead. The request itself is invalid rather than the server encountering an internal error."
 
-**Resulting PBIs or issues:** [#174](https://github.com/gosha185/SWP-Avito-project/issues/177)
+**Resulting PBIs or issues:** [#177](https://github.com/gosha185/SWP-Avito-project/issues/177)
 
 ---
 
@@ -217,4 +217,4 @@ This document defines end-user-facing acceptance test scenarios for the Avito Bo
 | UAT-004 | Place points on hold | ✅ Passed |
 | UAT-005 | Confirm a hold | ✅ Passed |
 | UAT-006 | Cancel a hold | ✅ Passed |
-| UAT-007 | Cancel an already cancelled hold (error handling) | ❌ Failed — see [#174](https://github.com/gosha185/SWP-Avito-project/issues/177) |
+| UAT-007 | Cancel an already cancelled hold (error handling) | ❌ Failed — see [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) |
