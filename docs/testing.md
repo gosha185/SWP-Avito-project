@@ -10,11 +10,11 @@ Critical modules are source files responsible for core user workflows, persisten
 
 | Critical module | Why critical | Required line coverage | Current line coverage | Evidence |
 |---|---|---|---:|---:|
-| `internal/balance/balance.go` | Core balance operations | 30% | 87.5% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
-| `internal/holds/holds.go` | Hold creation, confirmation, cancellation | 30% | — | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
-| `internal/accrual/accrual.go` | Point accrual with TTL and idempotency | 30% | 81.8% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
-| `internal/ttl/ttl_worker.go` | TTL worker for expired points and holds | 30% | — | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
-| `internal/ledger/ledger.go` | Immutable audit ledger operations | 30% | — | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
+| `bonus_service/internal/balance/balance.go` | Core balance operations | 30% | 87.5% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
+| `bonus_service/internal/holds/holds.go` | Hold creation, confirmation, cancellation | 30% | 0% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
+| `bonus_service/internal/accrual/accrual.go` | Point accrual with TTL and idempotency | 30% | 81.8% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
+| `bonus_service/internal/ttl/ttl_worker.go` | TTL worker for expired points and holds | 30% | 0% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
+| `bonus_service/internal/ledger/ledger.go` | Immutable audit ledger operations | 30% | 0% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
 
 **Total Coverage: 53.2%**
 
