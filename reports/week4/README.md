@@ -57,8 +57,8 @@
 
 ## CI and Quality Gates
 
-- [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions) — link will be updated after CI is configured
-- [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions) — link will be updated after CI is configured
+- [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions)
+- [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28330957879)
 - [Branch Protection](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/branch-protection.jpg)
 ---
 
