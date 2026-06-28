@@ -228,7 +228,8 @@ func isDuplicateKeyError(err error) bool {
 	if err == nil {
 		return false
 	}
-	if pgErr, ok := errors.AsType[*pq.Error](err); ok {
+	var pgErr *pq.Error
+	if errors.As(err, &pgErr) {
 		return pgErr.Code == "23505"
 	}
 	return false
