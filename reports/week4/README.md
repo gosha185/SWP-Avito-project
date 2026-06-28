@@ -67,7 +67,7 @@
 - [Deployment URL](http://10.93.26.189:8080/)
 - [SemVer Release v1.0.0](https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.0.0)
 - [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
-- [Public Demo Video](https://drive.google.com/drive/folders/1ErYiGQRrbtJMk0coST_A4IIJJGk0-AWv) — sanitized demo video
+- [Public Demo Video](https://drive.google.com/file/d/1nJIoO6pt99Obi517iMFWUHnlumuFBYgq/view?usp=sharing)
 ---
 
 ## Customer Feedback Response
@@ -109,16 +109,11 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 ---
 
 ## Testing Status
-
 | Critical Module | Coverage Target | Current Coverage | Status |
 |---|---|---|---|
-| Balance | ≥ 30% | — | Awaiting CI run |
-| Holds | ≥ 30% | — | Awaiting CI run |
-| Accrual | ≥ 30% | — | Awaiting CI run |
-| TTL Worker | ≥ 30% | — | Awaiting CI run |
-| Ledger | ≥ 30% | — | Awaiting CI run |
-
----
+| Balance | ≥ 30% | 87.5% | ✅ |
+| Batch | ≥ 30% | 81.8% | ✅ |
+| Total Coverage | — | 53.2% | ✅ |
 
 ## Current Product Status
 
@@ -133,10 +128,6 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 - ✅ Daily Scrums introduced
 - ✅ Sprint Board reorganised into 4 columns
 
-### In Progress
-
-- ⏳ CI pipeline configuration
-- ⏳ Several documentatuon (awaiting CI)
 
 ### Next Steps
 
@@ -165,7 +156,7 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 - [Customer Review Summary](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week4/customer-review-summary.md)
 - [Reflection](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week4/reflection.md)
 - [Retrospective](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week4/retrospective.md)
-- [LLM Report](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week2/llm-report.md)
+- [LLM Report](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week4/llm-report.md)
 
 ---
 
@@ -175,16 +166,16 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 ![Sprint Milestone](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/sprint-milestone.jpg)
 
 ### Latest CI Run
-![Latest CI Run] update
+![Latest CI Run](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/latest-ci-run.jpg)
 
 ### Branch Protection
 ![Branch Protection](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/branch-protection.jpg)
 
 ### Coverage Report
-![Coverage Report] update
+![Coverage Report](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/coverage.jpg)
 
 ### Additional QA Check
-![Additional QA Check] update
+![Additional QA Check](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/qa-check.jpg)
 
 ### SemVer Release
 ![SemVer Release] update
