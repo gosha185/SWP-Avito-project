@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-bonus-service:
-    name: Test Bonus Service Storage
+    name: Test Bonus Service
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -36,17 +36,30 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '1.22'
+        go-version: '1.25.4'
         cache-dependency-path: bonus_service/go.sum
 
     - name: Install dependencies
       run: go mod download
 
-    - name: Run storage tests
-      run: go test -v ./internal/storage/
+    - name: Run tests with coverage
+      run: |
+        go test -v -coverprofile=coverage.out -covermode=atomic ./internal/storage/
+        go tool cover -func=coverage.out
       env:
         POSTGRES_HOST: localhost
         POSTGRES_PORT: 5432
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
         POSTGRES_DB: bonus_db_test
+
+    - name: Generate HTML coverage report
+      run: |
+        go tool cover -html=coverage.out -o coverage.html
+
+    - name: Upload coverage report as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report-bonus-service
+        path: bonus_service/coverage.html
+        retention-days: 7
