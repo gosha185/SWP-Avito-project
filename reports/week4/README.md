@@ -42,7 +42,7 @@
 
 - [Quality Requirements](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md)
 - [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md)
-- [Testing Documentation] WAIT CI
+- [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/testing.md)
 - [User Acceptance Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/user-acceptance-tests.md)
 
 ---
@@ -65,7 +65,7 @@
 ## Deployment and Release
 
 - [Deployment URL](http://10.93.26.189:8080/)
-- [SemVer Release v1.0.0](https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.0.0)
+- [SemVer Release v1.1.0](https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.1.0)
 - [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
 - [Public Demo Video](https://drive.google.com/file/d/1nJIoO6pt99Obi517iMFWUHnlumuFBYgq/view?usp=sharing)
 ---
@@ -178,7 +178,7 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 ![Additional QA Check](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/qa-check.jpg)
 
 ### SemVer Release
-![SemVer Release] update
+![SemVer Release](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/semver.jpg)
 
 ### Reviewed PR
 ![Reviewed PR](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/reviewed-pr.jpg)
