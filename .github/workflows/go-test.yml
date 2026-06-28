@@ -1,0 +1,65 @@
+name: Go Tests
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test-bonus-service:
+    name: Test Bonus Service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./bonus_service
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bonus_db_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.25.4'
+        cache-dependency-path: bonus_service/go.sum
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Run tests with coverage
+      run: |
+        go test -v -coverprofile=coverage.out -covermode=atomic ./internal/storage/
+        go tool cover -func=coverage.out
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: bonus_db_test
+
+    - name: Generate HTML coverage report
+      run: |
+        go tool cover -html=coverage.out -o coverage.html
+
+    - name: Upload coverage report as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report-bonus-service
+        path: bonus_service/coverage.html
+        retention-days: 7
