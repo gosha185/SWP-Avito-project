@@ -1,11 +1,10 @@
 # SWP-Avito-project
-## Run with Docker (MVP v0)
+## Run with Docker
 
-The MVP v0 service (Go API + PostgreSQL + self-hosted Swagger UI) lives in
-`itmo_ledger/` and runs with a single command.
+The MVP v1.1.0 service (Go API + PostgreSQL + self-hosted Swagger UI)  runs with a single command.
 
-    cd itmo_ledger
-    cp .env.example .env          # then set POSTGRES_PASSWORD in .env
+    cd bonus_service
+    cp .env.example .env          # then set POSTGRES_PASSWORD and other variables if needed
     docker compose up --build -d
 
 - Swagger UI: http://localhost:8080/
@@ -14,5 +13,3 @@ The MVP v0 service (Go API + PostgreSQL + self-hosted Swagger UI) lives in
 
 Deployed instance (university network): http://10.93.26.189:8080/
 
-See `reports/week2/mvp-v0-report.md` for the MVP v0 report and smoke-check
-scenario, and `reports/week2/README.md` for the Week 2 submission index.
