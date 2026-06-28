@@ -178,7 +178,7 @@ This Sprint introduces quality requirements based on **ISO/IEC 25010**:
 ![Additional QA Check](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/qa-check.jpg)
 
 ### SemVer Release
-![SemVer Release](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/semver.jpg)
+![SemVer Release](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/semver.png)
 
 ### Reviewed PR
 ![Reviewed PR](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/reviewed-pr.jpg)
