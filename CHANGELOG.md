@@ -71,4 +71,4 @@ with interactive API documentation.
   OpenAPI spec, Docker and reverse-proxy deployment
 
 [1.0.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.0.0
-[1.0.1]: TODO
+[1.0.1]:
