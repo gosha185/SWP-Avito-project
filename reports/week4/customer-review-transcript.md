@@ -1,7 +1,7 @@
 # Customer Review Transcript – Week 4
 
-**Date:** 25 June 2026  
-**Participants:** Customer representative (Expert from Avito), Team Members (Ekaterina, Ivan, Georgii, and others)  
+**Date:** 27 June 2026  
+**Participants:** Industry Expert (Customer), Team Members
 **Meeting purpose:** Sprint Review – demonstration of Sprint 2 results, User Acceptance Testing (UAT), and feedback on
 the team's development process.
 
@@ -9,513 +9,747 @@ the team's development process.
 
 The speakers are referred to as **Team Member** and **Expert** (customer).
 
-> **Team Member:**  
-> Hello everyone. Can you hear me?
+---
 
-> **Expert:**  
-> Hello. Yes, we can hear you.
+**[00:29]**
 
-> **Team Member:**  
-> Great. I assume we're still waiting for someone?
+**Team Member:**
 
-> **Team Member:**  
-> Most likely not. One of our teammates is currently in an area with poor internet access, so they're unlikely to be
-> able to join.
+Hello everyone. Can you hear me?
 
-> **Team Member:**  
-> Alright then, let's get started.
+**[00:34]**
 
-> **Team Member:**  
-> Before we begin, could we please ask for your permission to record the meeting and create a transcript?
+**Expert:**
 
-> **Expert:**  
-> Of course. Can I just give permission once for all future meetings, or do you have to ask every time? Either option is
-> fine with me.
+Hello. Yes, we can hear you.
 
-> **Team Member:**  
-> I'm actually not sure. Every assignment specifically tells us to ask for permission before each meeting.
+**[00:36]**
 
-> **Expert:**  
-> I see. In that case, yes—you have my permission to record the meeting and create a transcript.
+**Team Member:**
 
-> **Team Member:**  
-> Thank you very much.
+Great. I assume we're still waiting for [inaudible]?
 
-> **Expert:**  
-> You can treat this as a public meeting. Feel free to use or quote anything I say if necessary.
+**[00:40]**
 
-> **Team Member:**  
-> Great. Today we're following a slightly different format. We've been asked to conduct a Sprint Review with you as our
-> customer. Our sprint lasts one week, and this time we were instructed to present its results directly to you.
+**Team Member:**
 
-> **Expert:**  
-> Sounds good.
+Most likely not. One of our teammates is currently in an area with poor internet access, so they're unlikely to be able
+to join.
 
-> **Team Member:**  
-> Could someone please share the Sprint Backlog? The page isn't loading on my side.
+**[00:47]**
 
-> **Team Member:**  
-> Let's open Project 3 and Sprint 2.
+**Team Member:**
 
-> **Team Member:**  
-> To briefly summarize our work this week, we introduced Daily Scrums as you recommended. Every day we discuss what
-> we've completed and what we're planning to work on next.
+Alright then, let's get started.
 
-> We also reorganized our Sprint Board into four columns: **To Do**, **In Progress**, **Review**, and **Done**. This
-> structure makes it much easier to track the progress of each task.
+**[00:51]**
 
-> We haven't started every task yet, so today's Sprint Review is happening slightly before the sprint officially ends.
-> However, most of our tasks have already been completed or are currently in progress, and overall the sprint is going
-> well.
+**Team Member:**
 
-> I think that concludes the Sprint Review itself. We were also asked to conduct User Acceptance Testing (UAT) with you.
+Before we begin, could we please ask for your permission to record the meeting and create a transcript?
 
-> **Expert:**  
-> Before we move on, I'd like to explain how Sprint Reviews are usually conducted in large technology companies so you
-> have a better understanding of what stakeholders typically expect.
+**[00:56]**
 
-> Since I come from a technical background, many technical details are obvious to me. However, when you work in a large
-> company, it's considered good practice to invite the actual business stakeholders to Sprint Reviews. Those meetings
-> often include sales managers, marketing specialists, business development managers, and other people who know the
-> business domain very well but aren't deeply familiar with the technical implementation.
+**Expert:**
 
-> Because of that, Sprint Reviews should be understandable not only to engineers but also to non-technical stakeholders.
+Of course. Can I just give permission once for all future meetings, or do you have to ask every time? Either option is
+fine with me.
 
-> Of course, the format depends on your audience. If your customer is another engineering team, using technical
-> terminology is perfectly acceptable. But when presenting to business stakeholders, your explanation needs to focus on
-> business value rather than implementation details.
+**[01:04]**
 
-> There are a few common practices that make Sprint Reviews more useful.
+**Team Member:**
 
-> First, teams usually explain what their Sprint Goal was and how close they came to achieving it. This doesn't have to
-> be a long presentation. You simply say something like: *"Our Sprint Goal consisted of implementing these two User
-Stories. We fully completed the first one, partially completed the second one, and achieved about 50% of the planned
-work. We'll explain why in a moment."*
+I'm actually not sure. Every assignment specifically tells us to ask for permission before each meeting.
 
-> The second thing business stakeholders care about is what has actually been completed. That's where you demonstrate
-> the working functionality—which is exactly what we're about to do.
+**[01:11]**
 
-> They also want to know what the team plans to accomplish during the next sprint. So the traditional Sprint Review
-> usually consists of three parts:
->
-> - what the previous Sprint Goal was;
-> - how successfully the team achieved it;
-> - what the next Sprint Goal will be and how the team plans to accomplish it.
+**Expert:**
 
-> The important thing is to explain everything in a way that business stakeholders can understand.
+I see. In that case, yes—you have my permission to record the meeting and create a transcript.
 
-> For example, if you simply say, *"We're doing refactoring,"* many business people won't understand why that matters.
+**[01:16]**
 
-> But if you say, *"Next sprint we'll complete the frontend for this feature,"* or *"We'll fully deliver this part of
-the functionality,"* then it's immediately clear to them what value they'll receive.
+**Team Member:**
 
-> There's one more important Agile principle I'd like to mention. Agile is more a collection of recommendations than a
-> strict framework.
+Thank you very much.
 
-> One of its core ideas is that every sprint should deliver a **potentially usable increment**—a piece of completed
-> functionality that someone can actually use.
+**[01:17]**
 
-> That means your Sprint Goal should also reflect this idea.
+**Expert:**
 
-> For example, implementing the entire frontend without the backend doesn't produce a usable feature.
+You can treat this as a public meeting. Feel free to use or quote anything I say if necessary.
 
-> On the other hand, delivering a small feature end-to-end—with both frontend and backend working together—is a valuable
-> increment because users can already benefit from it and solve at least part of their problem.
+**[01:22]**
 
-> Hopefully that gives you a better picture of how Sprint Reviews are typically conducted in real product teams.
+**Team Member:**
 
-> **Team Member:**  
-> Yes, that explanation was very clear.
+Great. Today we're following a slightly different format. We've been asked to conduct a Sprint Review with you as our
+customer. Our sprint lasts one week, and this time we were instructed to present its results directly to you.
 
-> We also had a Sprint Goal for Sprint 2, although I honestly don't remember the exact wording.
+**[01:39]**
 
-> To summarize, during the previous sprint we built the product, but it wasn't fully operational. Some components were
-> missing, and several tests were failing.
+**Expert:**
 
-> This week's objective was to implement all the missing pieces, make sure the product passed its tests, and get
-> everything working properly.
+Sounds good.
 
-> As far as I understand, we achieved that goal. Our tester spent quite a bit of time working on it.
+**[01:41]**
 
-> Ivan, would you like to add something about the testing?
+**Team Member:**
 
-> **Team Member:**  
-> About the tests specifically?
+Could someone please share the Sprint Backlog? The page isn't loading on my side.
 
-> **Team Member:**  
-> Yes, about the product in general.
+**[01:50]**
 
-> **Team Member:**  
-> I implemented tests for concurrent requests and added most of the unit tests. I believe we've covered the majority of
-> the functionality.
+**Team Member:**
 
-> **Team Member:**  
-> Great.
+Let's wait a moment while someone opens the Sprint Backlog. [inaudible]
 
-> As part of this sprint, we were also asked to conduct User Acceptance Testing (UAT), so we'd like to demonstrate the
-> system to you.
+**[02:05]**
 
-> Could someone please share their screen?
+**Team Member:**
 
-> **Team Member:**  
-> I think that's my responsibility. If I understood correctly, since we don't have a user interface yet, we'll
-> demonstrate the functionality through Swagger.
+Let's open the Sprint Backlog for Sprint 2.
 
-> **Expert:**  
-> Exactly. Since there isn't a UI yet, Swagger is perfectly fine.
+**[02:21]**
 
-> **Team Member:**  
-> Let's begin by awarding **500 bonus points** to a user with this ID. These points will expire in **30 days**.
+**Team Member:**
 
-> The request completed successfully.
+To briefly summarize our work this week, we introduced **Daily Scrums** as you recommended. Every day we discuss what
+we've completed and what we're planning to work on next.
 
-> Now let's check the user's balance.
+We also reorganized our Sprint Board into four columns: **To Do**, **In Progress**, **Review**, and **Done**. This
+structure makes it much easier to track the progress of each task.
 
-> Here we can see that the user has **500 points**, all of which expire in **30 days**.
+We haven't started every task yet, so today's Sprint Review is happening slightly before the sprint officially ends.
+However, most of our tasks have already been completed or are currently in progress, and overall the sprint is going
+well.
 
-> If we request the balance for points expiring within **10 days**, the result shows that **zero points** expire during
-> that period, which is exactly what we'd expect.
+I think that concludes the Sprint Review itself. We were also asked to conduct **User Acceptance Testing (UAT)** with
+you.
 
-> Now let's place **200 points** on hold for **24 hours**.
+**[03:11]**
 
-> We'll also specify an idempotency key for convenience.
+**Expert:**
 
-> The request completed successfully.
+Before we move on, I'd like to explain how Sprint Reviews are usually conducted in large technology companies so you
+have a better understanding of what stakeholders typically expect.
 
-> We can now check the user's holds.
+Since I come from a technical background, many technical details are obvious to me. However, when you work in a large
+company, it's considered good practice to invite the actual business stakeholders to Sprint Reviews. Those meetings
+often include sales managers, marketing specialists, business development managers, and other people who know the
+business domain very well but aren't deeply familiar with the technical implementation.
 
-> As expected, **200 points are currently on hold**.
+Because of that, Sprint Reviews should be understandable not only to engineers but also to non-technical stakeholders.
 
-> **Expert:**  
-> Right.
+Of course, the format depends on your audience. If your customer is another engineering team, using technical
+terminology is perfectly acceptable. But when presenting to business stakeholders, your explanation needs to focus on
+business value rather than implementation details.
 
-> What does the balance show now?
+There are a few common practices that make Sprint Reviews more useful.
 
-> **Team Member:**  
-> Here it is.
+First, teams usually explain what their Sprint Goal was and how close they came to achieving it. This doesn't have to be
+a long presentation. You simply say something like: "Our Sprint Goal consisted of implementing these two User Stories.
+We fully completed the first one, partially completed the second one, and achieved about 50% of the planned work. We'll
+explain why in a moment."
 
-> **Expert:**  
-> That looks correct.
+The second thing business stakeholders care about is what has actually been completed. That's where you demonstrate the
+working functionality—which is exactly what we're about to do.
 
-> We placed **200 points on hold**, so there should be **300 available points remaining**. That matches the expected
-> behavior.
+They also want to know what the team plans to accomplish during the next sprint. So the traditional Sprint Review
+usually consists of three parts:
 
-> **Team Member:**  
-> Exactly.
+* what the previous Sprint Goal was;
 
-> Now let's confirm the hold.
+* how successfully the team achieved it;
 
-> We created the hold using an order ID, and that hold can later be either **confirmed** or **cancelled**.
+* what the next Sprint Goal will be and how the team plans to accomplish it.
 
-> We'll confirm it now.
+The important thing is to explain everything in a way that business stakeholders can understand.
 
-> The operation completed successfully.
+For example, if you simply say, "We're doing refactoring," many business people won't understand why that matters.
 
-> If we check the list of holds again, it should now be empty.
+But if you say, "Next sprint we'll complete the frontend for this feature," or "We'll fully deliver this part of the
+functionality," then it's immediately clear to them what value they'll receive.
 
-> Yes—there are **no active holds**.
+There's one more important Agile principle I'd like to mention. Agile is more a collection of recommendations than a
+strict framework.
 
-> **Expert:**  
-> And the balance?
+One of its core ideas is that every sprint should deliver a potentially usable increment—a piece of completed
+functionality that someone can actually use.
 
-> **Team Member:**  
-> Let's check.
+That means your Sprint Goal should also reflect this idea.
 
-> **Expert:**  
-> It should remain at **300 points**.
+For example, implementing the entire frontend without the backend doesn't produce a usable feature.
 
-> **Team Member:**  
-> That's right.
+On the other hand, delivering a small feature end-to-end—with both frontend and backend working together—is a valuable
+increment because users can already benefit from it and solve at least part of their problem.
 
-> Since the points were deducted from the available balance at the moment the hold was created, confirming the hold
-> doesn't change the available balance any further.
+Hopefully that gives you a better picture of how Sprint Reviews are typically conducted in real product teams.
 
-> That's why the balance was **300** both before and after confirmation.
+**[06:57]**
 
-> **Expert:**  
-> Correct. That's exactly how it should work.
+**Team Member:**
 
-> **Team Member:**  
-> Now let's award another **200 points** to the same user...
+Yes, that explanation was very clear.
 
-> Actually, before that, let's place another hold for **200 points**.
+We also had a Sprint Goal for Sprint 2, although I honestly don't remember the exact wording.
 
-> The request failed because we reused the same **order ID**.
+To summarize, during the previous sprint we built the product, but it wasn't fully operational. Some components were
+missing, and several tests were failing.
 
-> **Expert:**  
-> That's actually an interesting case.
+This week's objective was to implement the missing functionality, ensure the product passed all tests, and make
+everything work correctly.
 
-> In practice, businesses often come up with fairly unusual requirements.
+As far as I understand, we achieved that goal. Our tester spent quite a bit of time working on it.
 
-> Imagine a situation where the business decides that customers receive **10% cashback** on an order that expires after
-> three months.
+Would anyone like to add something about the testing?
 
-> Later they introduce a promotional campaign where customers receive **another 10%** for the very same order, but this
-> second reward expires after only one week.
+**[07:44]**
 
-> In that scenario, the same order could legitimately be associated with multiple point batches.
+**Team Member:**
 
-> So it's not always obvious that the order ID should have a unique constraint.
+About the tests specifically?
 
-> That said, your implementation is perfectly reasonable for the current requirements.
+**[07:46]**
 
-> If business requirements change later, removing that uniqueness constraint is always possible.
+**Team Member:**
 
-> I'm not asking you to change it now—I'm simply illustrating how requirements evolve over time.
+Yes, about the product in general.
 
-> One thing you'll learn is that you should never assume the business requirements are final.
+**[07:48]**
 
-> **Team Member:**  
-> Understood.
+**Team Member:**
 
-> We've now successfully placed another **200-point hold**.
+I implemented tests for concurrent requests and added most of the unit tests. I believe we've covered the majority of
+the functionality.
 
-> Let's verify that.
+**[07:59]**
 
-> Yes, we now have **200 points on hold**.
+**Team Member:**
 
-> Next, let's cancel that hold.
+Great.
 
-> We'll use the same user and order, together with a different idempotency key.
+As part of this sprint, we were also asked to conduct **User Acceptance Testing (UAT)**, so we'd like to demonstrate the
+system to you.
 
-> The hold has been cancelled successfully.
+Could someone please share their screen?
 
-> If we check the holds again, there should now be **zero active holds**, and the balance should return to **300
-available points**.
+**[08:10]**
 
-> That's exactly what happened.
+**Team Member:**
 
-> We held **200 points**, cancelled the hold, and those points became available again.
+I think that's my responsibility. Since we don't have a graphical user interface yet, we'll demonstrate the
+functionality through Swagger.
 
-> **Expert:**  
-> What happens if we try to cancel the same hold again?
+**[08:18]**
 
-> Not with the same idempotency key—a completely new request.
+**Expert:**
 
-> **Team Member:**  
-> Let's try it.
+Exactly. Since there isn't a UI yet, Swagger is perfectly fine.
 
-> The operation fails, but currently the API returns **HTTP 500**.
+**[08:23]**
 
-> This definitely needs improvement.
+**Team Member:**
 
-> **Expert:**  
-> Yes.
+Let's begin by awarding **500 bonus points** to a user. These points will expire in **30 days**.
 
-> In this situation I'd expect **HTTP 400 (Bad Request)** instead.
+The request completed successfully.
 
-> The request itself is invalid rather than the server encountering an internal error.
+Now let's check the user's balance.
 
-> **Team Member:**  
-> Agreed.
+Here we can see that the user has **500 points**, all of which expire in **30 days**.
 
-> We can also display the user's transaction history.
+If we request the balance for points expiring within **10 days**, the result shows that **zero points** expire during
+that period, which is exactly what we'd expect.
 
-> Here we can see the entire sequence:
+**[09:07]**
 
-> - points awarded;
-> - points placed on hold;
-> - hold confirmed;
-> - another hold created;
-> - hold cancelled.
+**Team Member:**
 
-> **Expert:**  
-> I don't remember whether we discussed this previously, but did we decide that points with the **earliest expiration
-date** should always be spent first?
+Now let's place **200 points** on hold for **24 hours**.
 
-> **Team Member:**  
-> I believe that requirement was included, and we've implemented it.
+We'll also specify an **idempotency key**.
 
-> **Expert:**  
-> Great.
+The request completed successfully.
 
-> Then next time we should verify that behavior.
+We can now check the user's active holds.
 
-> For example, we could award points that expire in **30 days**, then award another batch expiring in **7 days**.
+As expected, **200 points are currently on hold**.
 
-> After creating a hold, we should verify that the system reserves—and later deducts—the points with the **shorter
+**[09:43]**
+
+**Expert:**
+
+Right.
+
+What does the balance show now?
+
+**[09:47]**
+
+**Team Member:**
+
+Here it is.
+
+**[09:49]**
+
+**Expert:**
+
+That looks correct.
+
+We placed **200 points on hold**, so there should now be **300 available points** remaining.
+
+**[09:57]**
+
+**Team Member:**
+
+Exactly.
+
+Now let's confirm the hold.
+
+The hold was created using an order identifier, and it can later be either **confirmed** or **cancelled**.
+
+We'll confirm it now.
+
+The operation completed successfully.
+
+If we check the list of active holds again, it should now be empty.
+
+Yes—there are **no active holds**.
+
+**[10:32]**
+
+**Expert:**
+
+And the balance?
+
+**[10:34]**
+
+**Team Member:**
+
+Let's check.
+
+**[10:36]**
+
+**Expert:**
+
+It should remain at **300 points**.
+
+**[10:40]**
+
+**Team Member:**
+
+That's right.
+
+Since the points were deducted from the available balance when the hold was created, confirming the hold doesn't change
+the available balance any further.
+
+That's why the balance remains **300 points**.
+
+**[10:56]**
+
+**Expert:**
+
+Correct. That's exactly how it should work.
+
+**[10:59]**
+
+**Team Member:**
+
+Now let's place another hold.
+
+**[11:07]**
+
+**Team Member:**
+
+The request failed because we accidentally reused the same order identifier.
+
+**[11:12]**
+
+**Expert:**
+
+That's actually an interesting example.
+
+In practice, business requirements often change over time.
+
+Imagine that customers receive **10% cashback** for an order, with those points expiring after three months.
+
+Later, the business introduces a promotion that awards **another 10%** for the same order, but with a different
+expiration period.
+
+In that case, the same order could legitimately be associated with multiple bonus point batches.
+
+So it's not always obvious that an order identifier should remain unique forever.
+
+Your implementation is perfectly reasonable for the current requirements.
+
+If business requirements change in the future, you can always revisit this decision.
+
+I'm not suggesting that you change anything now—I'm simply illustrating how requirements evolve.
+
+One important lesson is that you should never assume today's business rules are permanent.
+
+**[12:20]**
+
+**Team Member:**
+
+Understood.
+
+We've now successfully created another **200-point hold**.
+
+Let's verify that.
+
+Yes, we now have **200 points on hold**.
+
+Next, let's cancel that hold.
+
+We'll submit the cancellation request using a new idempotency key.
+
+The hold has been cancelled successfully.
+
+If we check the holds again, there should now be **zero active holds**, and the available balance should return to **300
+points**.
+
+That's exactly what happened.
+
+We held **200 points**, cancelled the hold, and those points became available again.
+
+**[13:16]**
+
+**Expert:**
+
+What happens if we try to cancel the same hold again?
+
+Not with the same idempotency key—a completely new request.
+
+**[13:26]**
+
+**Team Member:**
+
+Let's try it.
+
+The operation fails, but currently the API returns **HTTP 500 Internal Server Error**.
+
+This definitely needs improvement.
+
+**[13:40]**
+
+**Expert:**
+
+Yes.
+
+In this situation I'd expect **HTTP 400 Bad Request** instead.
+
+The request itself is invalid rather than the server encountering an internal error.
+
+**[13:52]**
+
+**Team Member:**
+
+Agreed.
+
+We can also display the user's transaction history.
+
+Here we can see the complete sequence of operations:
+
+- bonus points awarded;
+- points placed on hold;
+- hold confirmed;
+- another hold created;
+- hold cancelled.
+
+**[14:24]**
+
+**Expert:**
+
+I don't remember whether we discussed this previously, but did we decide that points with the **earliest expiration date
+** should always be spent first?
+
+**[14:34]**
+
+**Team Member:**
+
+Yes, I believe that requirement was included, and we've implemented it.
+
+**[14:40]**
+
+**Expert:**
+
+Great.
+
+Then next time we should verify that behavior.
+
+For example, we could award points that expire in **30 days**, then award another batch expiring in **7 days**.
+
+After creating a hold, we should verify that the system reserves—and later deducts—the points with the **shorter
 remaining lifetime** first.
 
-> That behavior should become visible if we inspect the balance with different expiration filters.
+That behavior should also be visible when checking balances with different expiration filters.
 
-> I'd also like to test another scenario.
+I'd also like to test another scenario.
 
-> Let's award this user **200 points twice**, each request using a different idempotency key.
+Let's award the same user **200 points twice**, using different idempotency keys for each request.
 
-> **Team Member:**  
-> Alright.
+**[15:32]**
 
-> Here's the first request—**200 points awarded**.
+**Team Member:**
 
-> And here's the second one—another **200 points**.
+Alright.
 
-> Previously the user had **300 available points**, so the balance should now become **700 points**.
+Here's the first request—**200 points awarded**.
 
-> **Expert:**  
-> Now let's try placing **all available points on hold**.
+And here's the second one—another **200 points**.
 
-> In other words, let's verify that your implementation can reserve points originating from multiple award transactions.
+Previously the user had **300 available points**, so the balance should now become **700 points**.
 
-> **Team Member:**  
-> From multiple point awards, yes.
+**[15:58]**
 
-> Let's create the hold.
+**Expert:**
 
-> Ah, the request failed because we accidentally reused the same order ID again.
+Now let's try placing **all available points on hold**.
 
-> **Expert:**  
-> Right. Please check that scenario later.
+In other words, let's verify that your implementation can reserve points originating from multiple award transactions.
 
-> **Team Member:**  
-> Actually, the user has **700 points**, not 800.
+**[16:08]**
 
-> I forgot that only **300 points** remained after the previous operations.
+**Team Member:**
 
-> So let's place **700 points** on hold instead.
+From multiple point awards, yes.
 
-> **Expert:**  
-> Yes, let's reduce the amount accordingly.
+Let's create the hold.
 
-> **Team Member:**  
-> Done.
+Ah, the request failed because we accidentally reused the same order identifier.
 
-> **Expert:**  
-> Great.
+**[16:21]**
 
-> **Team Member:**  
-> If we open the list of active holds, we can see that all **700 points** have been successfully reserved.
+**Expert:**
 
-> **Expert:**  
-> Excellent.
+Right.
 
-> The correctness of this scenario depends on your implementation details.
+Please verify that scenario later.
 
-> If your system explicitly links deduction transactions to individual award transactions, then you'll need to handle
-> these relationships carefully.
+**[16:25]**
 
-> If, instead, your implementation simply operates on the total available amount, then this scenario shouldn't introduce
-> any problems.
+**Team Member:**
 
-> Since everything works correctly in your implementation, I don't see any issues here.
+Actually, the user has **700 points**, not 800.
 
-> **Team Member:**  
-> I think that's everything for the demonstration.
+I forgot that only **300 points** remained after the previous operations.
 
-> Unless anyone has anything to add, we can finish this part.
+So let's place **700 points** on hold instead.
 
-> **Team Member:**  
-> That's all we wanted to demonstrate today.
+**[16:39]**
 
-> We'd mainly appreciate your feedback on these scenarios.
+**Expert:**
 
-> Georgii, go ahead.
+Yes, let's reduce the amount accordingly.
 
-> **Team Member:**  
-> I have a question regarding our API responses.
+**[16:42]**
 
-> Right now, after mutation requests we return the internal **batch ID** that is generated by our server rather than
-> supplied by the client.
+**Team Member:**
 
-> Is that actually useful?
+Done.
 
-> More generally, what information should an API return after a successful mutation request?
+**[16:44]**
 
-> **Expert:**  
-> That's a very good question.
+**Expert:**
 
-> In most cases, the client is primarily interested in whether the operation succeeded.
+Great.
 
-> If an error occurs, then the response should clearly explain the reason.
+**[16:46]**
 
-> If the request succeeds, it's often difficult to imagine that the client has forgotten what it originally sent.
+**Team Member:**
 
-> One possible approach is simply to return the same fields that were provided in the request—as confirmation that
-> they've been successfully stored.
+If we open the list of active holds, we can see that all **700 points** have been successfully reserved.
 
-> Another perfectly acceptable option is to return an **empty response body** for successful operations.
+**[16:53]**
 
-> There's nothing inherently wrong with that.
+**Expert:**
 
-> Error responses, however, should provide meaningful information.
+Excellent.
 
-> For example, earlier your API correctly reported **"insufficient funds"** when appropriate.
+The correctness of this scenario depends on your implementation details.
 
-> Responses like that are genuinely useful to clients.
+If your system explicitly links deduction transactions to individual award transactions, you'll need to maintain those
+relationships carefully.
 
-> Personally, I think returning an empty response for successful requests is completely reasonable.
+If, instead, your implementation simply operates on the total available balance, then this scenario becomes much
+simpler.
 
-> **Team Member:**  
-> Thank you.
+Since everything works correctly in your implementation, I don't see any issues here.
 
-> **Team Member:**  
-> If there are no more questions, I think that's everything from our side.
+**[17:18]**
 
-> We'd mainly like to hear your feedback on today's Sprint Review.
+**Team Member:**
 
-> As for the next sprint, as you mentioned earlier, we still need to define our Sprint Goal.
+I think that's everything we wanted to demonstrate.
 
-> At the moment our plan is simply to continue improving the project.
+Unless anyone has anything else to add, we can finish this part.
 
-> We'll probably receive additional university assignments, and those will naturally influence our priorities and
-> determine what we'll focus on next.
+**[17:27]**
 
-> **Expert:**  
-> Yes, and I'd like to emphasize one important point.
+**Team Member:**
 
-> A **Sprint Goal** should never simply repeat the Sprint Backlog.
+We'd mainly appreciate your feedback on today's demonstration.
 
-> The purpose of the Sprint Goal is to identify what is **most important** during that sprint.
+**[17:34]**
 
-> Why is that valuable?
+**Expert:**
 
-> Imagine you're halfway through the sprint and realize that completing every planned task is no longer realistic.
+Before we continue, I noticed the browser icon on your desktop.
 
-> During your Daily Scrum, you should discuss how to redistribute your efforts so that you achieve the **Sprint Goal**
-> first.
+I actually worked on that browser for about a year and a half.
 
-> The Sprint Goal is essentially the central theme of the sprint.
+**[17:46]**
 
-> Everything directly related to that goal should receive the highest priority.
+**Team Member:**
 
-> Other work is secondary.
+Really?
 
-> That's exactly why the Sprint Goal exists—it helps the team make informed decisions whenever priorities need to
-> change.
+**[17:48]**
 
-> Ideally, the Sprint Goal should be defined **before the sprint begins**.
+**Expert:**
 
-> Of course, your project is educational, so the situation is a little different.
+Yes.
 
-> At Avito, for example, I always know which projects are expected to increase revenue or improve customer satisfaction.
+Small world.
 
-> If my team's objective for a sprint is to deliver a feature that directly contributes to one of those business goals,
-> then that becomes our Sprint Goal.
+Anyway, let's get back to the review.
 
-> If we later realize we won't have enough time to finish everything, I'd rather postpone some technical debt or a
-> nice-to-have feature than fail to deliver the work that actually affects revenue or user satisfaction.
+**[17:57]**
 
-> That's why it's so important to define the Sprint Goal in advance—especially in real industrial projects.
+**Team Member:**
 
-> Our Technical Director has an interesting way of describing teams that don't have a Sprint Goal.
+Team Member, you wanted to ask a question.
 
-> He calls them **samurai**.
+**[18:02]**
 
-> They have no goal—only the journey.
+**Team Member:**
 
-> It's much better to have a destination before you start.
+Yes.
 
-> **Team Member:**  
-> That's a great point.
+I have a question regarding our API responses.
 
-> Thank you very much for your time today, and thank you again for rescheduling the meeting.
+Right now, after mutation requests, we return the internally generated **batch identifier**.
 
-> This discussion was extremely helpful for us.
+Is that actually useful?
 
-> We'll see you again next week.
+More generally, what information should an API return after a successful mutation request?
 
-> Goodbye.
+**[18:28]**
 
-> **Expert:**  
-> Goodbye.
+**Expert:**
 
-> Have a great day, and good luck with the project.
+That's a very good question.
+
+In most cases, the client is primarily interested in whether the operation succeeded.
+
+If an error occurs, the response should clearly explain the reason.
+
+If the request succeeds, it's often difficult to imagine that the client has forgotten what it originally sent.
+
+One possible approach is to return the same fields that were provided in the request as confirmation that they've been
+successfully stored.
+
+Another perfectly acceptable option is to return an **empty response body** for successful operations.
+
+There's nothing inherently wrong with that.
+
+Error responses, however, should always contain meaningful information.
+
+For example, earlier your API correctly reported **insufficient funds**.
+
+Responses like that are genuinely useful to clients.
+
+Personally, I think returning an empty response for successful requests is completely reasonable.
+
+**[19:24]**
+
+**Team Member:**
+
+Thank you.
+
+**[19:26]**
+
+**Team Member:**
+
+If there are no more questions, I think that's everything from our side.
+
+We'd mainly like to hear your feedback on today's Sprint Review.
+
+As for the next sprint, as you mentioned earlier, we still need to define our Sprint Goal.
+
+At the moment our plan is simply to continue improving the project.
+
+We'll probably receive additional university assignments, and those will naturally influence our priorities.
+
+**[19:55]**
+
+**Expert:**
+
+Yes, and I'd like to emphasize one important point.
+
+A **Sprint Goal** should never simply repeat the Sprint Backlog.
+
+Its purpose is to identify what is **most important** during the sprint.
+
+Why is that valuable?
+
+Imagine you're halfway through the sprint and realize that completing every planned task is no longer realistic.
+
+During your Daily Scrum, you should discuss how to redistribute your efforts so that you achieve the **Sprint Goal**
+first.
+
+The Sprint Goal is essentially the central objective of the sprint.
+
+Everything directly related to that objective should receive the highest priority.
+
+Other work is secondary.
+
+That's exactly why the Sprint Goal exists—it helps the team make informed decisions whenever priorities need to change.
+
+Ideally, the Sprint Goal should be defined **before the sprint begins**.
+
+Of course, your project is educational, so the situation is a little different.
+
+At **[redacted]**, for example, I always know which projects are expected to increase revenue or improve customer
+satisfaction.
+
+If my team's objective for a sprint is to deliver a feature that directly contributes to one of those business goals,
+then that becomes our Sprint Goal.
+
+If we later realize we won't have enough time to finish everything, I'd rather postpone technical debt or a nice-to-have
+improvement than fail to deliver the work that actually affects revenue or user satisfaction.
+
+That's why it's so important to define the Sprint Goal in advance, especially in real industrial projects.
+
+Our Technical Director has an interesting way of describing teams that don't have a Sprint Goal.
+
+He calls them **samurai**.
+
+They have no goal—only the journey.
+
+It's much better to have a destination before you start.
+
+**[21:42]**
+
+**Team Member:**
+
+That's a great point.
+
+Thank you very much for your time today, and thank you again for rescheduling the meeting.
+
+This discussion was extremely helpful for us.
+
+We'll see you again next week.
+
+Goodbye.
+
+**[21:56]**
+
+**Expert:**
+
+Goodbye.
+
+Have a great day, and good luck with the project.
+
+---
