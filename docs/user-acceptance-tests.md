@@ -6,8 +6,8 @@ This document defines end-user-facing acceptance test scenarios for the Avito Bo
 
 ## UAT-001: View current available balance
 
-**Status:** Passed
-
+**Scenario ID:** UAT-001  
+**Scenario status:** Active  
 **User goal:** As an end user, I want to see my current available bonus balance so that I know how many points I can spend.
 
 **Preconditions:**
@@ -23,16 +23,18 @@ This document defines end-user-facing acceptance test scenarios for the Avito Bo
 - HTTP 200 OK response.
 - Response body contains `balance` field with the correct number of points.
 
-**Execution result:** ✅ Passed
+**Execution result (25 June 2026):** ✅ Passed
 
 **Customer comments:** "That looks correct. We placed 200 points on hold, so there should be 300 available points remaining. That matches the expected behavior."
+
+**Resulting PBIs or issues:** None.
 
 ---
 
 ## UAT-002: View points held for a concrete order
 
-**Status:** Passed
-
+**Scenario ID:** UAT-002  
+**Scenario status:** Active  
 **User goal:** As an end user, I want to see how many points are held for a concrete order so that I can analyse the number of points awarded.
 
 **Preconditions:**
@@ -48,16 +50,18 @@ This document defines end-user-facing acceptance test scenarios for the Avito Bo
 - HTTP 200 OK response.
 - Response body contains list of active holds.
 
-**Execution result:** ✅ Passed
+**Execution result (25 June 2026):** ✅ Passed
 
 **Customer comments:** "If we open the list of active holds, we can see that all 700 points have been successfully reserved."
+
+**Resulting PBIs or issues:** None.
 
 ---
 
 ## UAT-003: Accrue points with TTL and hold operations
 
-**Status:** Passed
-
+**Scenario ID:** UAT-003  
+**Scenario status:** Active  
 **User goal:** As an end user, I want to receive bonus points, have them placed on hold, and then confirm or cancel the hold.
 
 **Preconditions:**
@@ -77,15 +81,17 @@ This document defines end-user-facing acceptance test scenarios for the Avito Bo
 - Confirm/cancel works as expected.
 - Balance updated correctly.
 
-**Execution result:** ✅ Passed
+**Execution result (25 June 2026):** ✅ Passed
 
 **Customer comments:** "Everything works correctly in your implementation. I don't see any issues here."
+
+**Resulting PBIs or issues:** None.
 
 ---
 
 ## Additional Findings from UAT Session
 
-| Issue | Severity | Action |
-|-------|----------|--------|
-| Cancelling a hold that was already cancelled returns HTTP 500 instead of HTTP 400 | Minor | Fix error handling to return 400 Bad Request |
-| FEFO (first-expiring first-out) logic implemented | N/A | Verified — points with earliest expiration are spent first |
+| Issue | Severity | Action | Resulting PBI |
+|-------|----------|--------|---------------|
+| Cancelling a hold that was already cancelled returns HTTP 500 instead of HTTP 400 | Minor | Fix error handling to return 400 Bad Request | [#XXX](https://github.com/gosha185/SWP-Avito-project/issues/XXX) |
+| FEFO (first-expiring first-out) logic implemented | N/A | Verified — points with earliest expiration are spent first | None |
