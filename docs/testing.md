@@ -38,7 +38,7 @@ Critical modules are source files responsible for core user workflows, persisten
 | Build (`go build`) | Yes | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
 | Unit tests | Yes | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
 | Integration tests | Yes | ✅ Passing | [CI run](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
-| Coverage report | Yes | 53.2% | [Coverage run](images/coverage.png) |
+| Coverage report | Yes | 53.2% | [Coverage run](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/coverage.jpg) |
 | Automated QRTs | Yes | ✅ Passing | [QRT report](https://github.com/gosha185/SWP-Avito-project/actions/runs/28331026352) |
 | Additional QA check (dependency vulnerability scan) | Yes | ✅ Passing | [QA check report](https://github.com/gosha185/SWP-Avito-project/blob/138-week4-report-index/reports/week4/images/branch-protection.jpg) |
 
