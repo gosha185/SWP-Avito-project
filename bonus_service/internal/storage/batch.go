@@ -265,20 +265,63 @@ func (r *BatchRepo) SetBatchRemaining(ctx context.Context, tx *sql.Tx, batchID i
 // Returns number of deleted rows.
 // Used by cleanup worker.
 func (r *BatchRepo) DeleteExpiredZeroBatches(ctx context.Context, daysOld int) (int64, error) {
-    query := `
+	query := `
         DELETE FROM batches
         WHERE remaining = 0
           AND expires_at < NOW() - ($1 || ' days')::INTERVAL
     `
-    result, err := r.db.ExecContext(ctx, query, daysOld)
-    if err != nil {
-        return 0, fmt.Errorf("failed to delete expired zero batches: %w", err)
-    }
+	result, err := r.db.ExecContext(ctx, query, daysOld)
+	if err != nil {
+		return 0, fmt.Errorf("failed to delete expired zero batches: %w", err)
+	}
 
-    rowsAffected, err := result.RowsAffected()
-    if err != nil {
-        return 0, fmt.Errorf("failed to get rows affected: %w", err)
-    }
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
 
-    return rowsAffected, nil
+	return rowsAffected, nil
+}
+
+// GetExpiredBatches returns all batches with remaining > 0 and expires_at < NOW().
+// Uses FOR UPDATE to lock rows for subsequent updates.
+// Must be called within a transaction.
+// Used by ExpireAllBatches() in service layer.
+func (r *BatchRepo) GetExpiredBatches(ctx context.Context, tx *sql.Tx) ([]models.BonusBatch, error) {
+	query := `
+        SELECT id, user_id, amount, remaining, expires_at, created_at
+        FROM batches
+        WHERE remaining > 0 AND expires_at < NOW()
+        ORDER BY expires_at
+        FOR UPDATE
+    `
+
+	rows, err := tx.QueryContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query expired batches: %w", err)
+	}
+	defer rows.Close()
+
+	var batches []models.BonusBatch
+	for rows.Next() {
+		var b models.BonusBatch
+		err := rows.Scan(
+			&b.ID,
+			&b.UserID,
+			&b.Amount,
+			&b.Remaining,
+			&b.ExpiresAt,
+			&b.CreatedAt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan expired batch: %w", err)
+		}
+		batches = append(batches, b)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows iteration error: %w", err)
+	}
+
+	return batches, nil
 }
