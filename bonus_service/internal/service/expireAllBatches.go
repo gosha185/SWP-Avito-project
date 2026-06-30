@@ -23,23 +23,24 @@ func (bs *BonusService) ExpireAllBatches(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
-		err = bs.BalancesDB.UpdateBalance(ctx, tx, batch.UserID, -batch.Amount, 0)
+		err = bs.BalancesDB.UpdateBalance(ctx, tx, batch.UserID, -batch.Remaining, 0)
 		if err != nil {
 			return err
 		}
-		err = bs.BatchesDB.DecreaseBatchRemaining(ctx, tx, batch.ID, batch.Amount)
+		err = bs.BatchesDB.DecreaseBatchRemaining(ctx, tx, batch.ID, batch.Remaining)
 		if err != nil {
 			return err
 		}
-		entry.Amount += batch.Amount
-	}
-	_, err = bs.BatchesDB.DeleteExpiredZeroBatches(ctx, 0)
-	if err != nil {
-		return err
+		entry.Amount += batch.Remaining
 	}
 	err = bs.LedgersDB.Insert(ctx, tx, entry)
 	if err != nil {
 		return err
 	}
-	return tx.Commit()
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+	_, err = bs.BatchesDB.DeleteExpiredZeroBatches(ctx, 0)
+	return err
 }
