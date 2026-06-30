@@ -1,15 +1,184 @@
-# SWP-Avito-project
-## Run with Docker
+# Bonus Service (SWP Avito Project)
 
-The MVP v1.1.0 service (Go API + PostgreSQL + self-hosted Swagger UI)  runs with a single command.
+Bonus Service is a backend service for a bonus points system. It implements earning, holding, and spending bonus points with TTL support, a two-phase spending model (hold / confirm), and full operation auditing via an immutable ledger.
 
-    cd bonus_service
-    cp .env.example .env          # then set POSTGRES_PASSWORD and other variables if needed
-    docker compose up --build -d
+The service is written in Go and uses PostgreSQL as the primary data storage.
+
+---
+
+## Features
+
+### Business capabilities
+- Accrual of bonus points
+- Retrieval of user balance
+- Two-phase spending model:
+  - hold: reserve points for an order
+  - confirm: finalize spending
+  - cancel: release reserved points
+- FEFO (First Expired, First Out) batch spending strategy
+- TTL support for:
+  - point batches
+  - active holds
+- Transaction history via immutable ledger
+
+### System properties
+- Idempotency via external_key
+- ACID guarantees via PostgreSQL transactions
+- Immutable audit log (ledger)
+- Indexed data model for performance optimization
+- Schema designed for future sharding (composite primary keys)
+
+---
+
+## Quick start (Docker)
+
+### 1. Prepare environment
+```bash
+cp .env.example .env
+```
+
+PostgreSQL credentials should be like this:
+
+```
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=admin
+POSTGRES_DB=admindb
+```
+
+Database connection string (used by application) should be like this:
+
+```
+DB_DSN=postgres://admin:admin@db:5432/admindb?sslmode=disable
+```
+
+---
+
+### 2. Run the service
+```bash
+cd bonus_service
+docker compose up --build -d
+```
+
+---
+
+### 3. Access points
 
 - Swagger UI: http://localhost:8080/
-- API base path: http://localhost:8080/v1
+- API base URL: http://localhost:8080/v1
 - Health check: http://localhost:8080/v1/healthcheck
+- Deployed instance (university network): http://10.93.26.189:8080/
 
-Deployed instance (university network): http://10.93.26.189:8080/
+---
 
+## Architecture
+
+Main modules:
+- balance: user balance management
+- accrual: bonus accrual logic
+- holds: two-phase spending workflow
+- ledger: immutable audit log
+- ttl worker: expiration processing for batches and holds
+
+---
+
+## Database schema
+
+PostgreSQL is used as the primary database.
+
+Main tables:
+- balances: user balance state
+- batches: bonus point batches with expiration
+- holds: reserved funds for operations
+- hold_batches: mapping between holds and batches
+- ledger: immutable operation log
+
+See docs/migrations.md for full schema details.
+
+---
+
+## API
+
+The API is defined using OpenAPI 3.0.
+
+Main endpoints:
+- POST /v1/accrual
+- POST /v1/hold
+- POST /v1/confirm
+- POST /v1/cancel
+- GET /v1/balance
+- GET /v1/balance/{user_id}/history
+
+Swagger UI is available after service startup.
+
+---
+
+## Testing
+
+Run unit and integration tests:
+
+```bash
+go test ./internal/... -v
+go test ./tests/integration/... -v
+```
+
+Performance and QRT tests:
+
+```bash
+go test -run=TestPerformance ./... -bench=. -benchtime=10s
+```
+
+---
+
+## Quality gates
+
+The project includes CI quality checks:
+
+- linting (golangci-lint)
+- build verification
+- unit tests
+- integration tests
+- performance QRT tests
+- coverage reporting
+- vulnerability scanning (govulncheck)
+
+---
+
+## User stories (MVP)
+
+- view available balance
+- view points per order
+- admin transaction history
+- warning for exceeding limits (in progress)
+
+---
+
+## Configuration
+
+Environment variables:
+
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- POSTGRES_DB
+- DB_DSN
+
+See .env.example for full configuration list.
+
+---
+
+## Docker
+
+The system includes:
+- PostgreSQL database
+- Go API service
+- Automatic database migrations
+
+Persistent storage is configured for PostgreSQL data.
+
+---
+
+## Key implementation details
+
+- FEFO-based batch spending
+- TTL worker for automatic cleanup and expiration
+- Immutable ledger for auditability
+- Idempotency protection at database level
