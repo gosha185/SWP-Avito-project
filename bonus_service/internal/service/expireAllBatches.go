@@ -3,22 +3,23 @@ package service
 import (
 	"bonus-service/internal/models"
 	"context"
+	"database/sql"
 	"encoding/json"
 	"time"
 )
 
 func (bs *BonusService) ExpireAllBatches(ctx context.Context) error {
-	tx, err := bs.DB.BeginTx(ctx, nil)
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback()
-	entry := &models.LedgerEntry{OperationType: models.OpExpiry, CreatedAt: time.Now(), Metadata: json.RawMessage(`"expired": "batches"`)}
 	batches, err := bs.BatchesDB.GetExpiredBatches(ctx)
 	if err != nil {
 		return err
 	}
+	var tx *sql.Tx
 	for _, batch := range batches {
+		tx, err = bs.DB.BeginTx(ctx, nil)
+		if err != nil {
+			break
+		}
+		entry := &models.LedgerEntry{OperationType: models.OpExpiry, Amount: batch.Remaining, BatchID: batch.ID, CreatedAt: time.Now(), Metadata: json.RawMessage(`"expired": "batches"`)}
 		_, err := bs.BalancesDB.GetBalanceForUpdate(ctx, tx, batch.UserID)
 		if err != nil {
 			break
@@ -31,16 +32,17 @@ func (bs *BonusService) ExpireAllBatches(ctx context.Context) error {
 		if err != nil {
 			break
 		}
-		entry.Amount = batch.Remaining
+		err = bs.LedgersDB.Insert(ctx, tx, entry)
+		if err != nil {
+			break
+		}
+		err = tx.Commit()
+		if err != nil {
+			break
+		}
 	}
-	err = bs.LedgersDB.Insert(ctx, tx, entry)
-	if err != nil {
-		return err
+	if tx != nil {
+		defer tx.Rollback()
 	}
-	err = tx.Commit()
-	if err != nil {
-		return err
-	}
-	_, err = bs.BatchesDB.DeleteExpiredZeroBatches(ctx, 0)
 	return err
 }
