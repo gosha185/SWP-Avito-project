@@ -14,24 +14,24 @@ func (bs *BonusService) ExpireAllBatches(ctx context.Context) error {
 	}
 	defer tx.Rollback()
 	entry := &models.LedgerEntry{OperationType: models.OpExpiry, CreatedAt: time.Now(), Metadata: json.RawMessage(`"expired": "batches"`)}
-	batches, err := bs.BatchesDB.GetExpiredBatches(ctx, tx)
+	batches, err := bs.BatchesDB.GetExpiredBatches(ctx)
 	if err != nil {
 		return err
 	}
 	for _, batch := range batches {
 		_, err := bs.BalancesDB.GetBalanceForUpdate(ctx, tx, batch.UserID)
 		if err != nil {
-			return err
+			break
 		}
 		err = bs.BalancesDB.UpdateBalance(ctx, tx, batch.UserID, -batch.Remaining, 0)
 		if err != nil {
-			return err
+			break
 		}
 		err = bs.BatchesDB.DecreaseBatchRemaining(ctx, tx, batch.ID, batch.Remaining)
 		if err != nil {
-			return err
+			break
 		}
-		entry.Amount += batch.Remaining
+		entry.Amount = batch.Remaining
 	}
 	err = bs.LedgersDB.Insert(ctx, tx, entry)
 	if err != nil {
