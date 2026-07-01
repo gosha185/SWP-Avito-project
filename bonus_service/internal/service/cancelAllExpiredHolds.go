@@ -20,7 +20,7 @@ func (bs *BonusService) CancelAllExpiredHolds(ctx context.Context) error {
 		if err != nil {
 			break
 		}
-		entry := &models.LedgerEntry{OperationType: models.OpCancel, Amount: hold.Amount, CreatedAt: time.Now(), Metadata: json.RawMessage(fmt.Sprintf(`{"order_id": "%s", "expires_at": "%s", "expired": "holds"}`, hold.OrderID.String(), hold.ExpiresAt.Format(time.RFC3339)))}
+		entry := &models.LedgerEntry{OperationType: models.OpExpiry, Amount: hold.Amount, CreatedAt: time.Now(), Metadata: json.RawMessage(fmt.Sprintf(`{"order_id": "%s", "expires_at": "%s", "expired": "holds"}`, hold.OrderID.String(), hold.ExpiresAt.Format(time.RFC3339)))}
 		_, err = bs.BalancesDB.GetBalanceForUpdate(ctx, tx, hold.UserID)
 		if err != nil {
 			break
