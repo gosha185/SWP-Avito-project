@@ -25,10 +25,6 @@ func (bs *BonusService) CancelAllExpiredHolds(ctx context.Context) error {
 		if err != nil {
 			break
 		}
-		err = bs.BalancesDB.UpdateBalance(ctx, tx, hold.UserID, 0, -hold.Amount)
-		if err != nil {
-			break
-		}
 		err = bs.HoldsDB.UpdateHoldStatus(ctx, tx, hold.ID, "cancelled")
 		if err != nil {
 			break
@@ -38,15 +34,17 @@ func (bs *BonusService) CancelAllExpiredHolds(ctx context.Context) error {
 		if err != nil {
 			break
 		}
+		var sum int64
 		for _, holdBatch := range holdBatches {
-			err = bs.BalancesDB.UpdateBalance(ctx, tx, hold.UserID, holdBatch.Amount, 0)
-			if err != nil {
-				break
-			}
+			sum += holdBatch.Amount
 			err = bs.BatchesDB.IncreaseBatchRemaining(ctx, tx, holdBatch.BatchID, holdBatch.Amount)
 			if err != nil {
 				break
 			}
+		}
+		err = bs.BalancesDB.UpdateBalance(ctx, tx, hold.UserID, sum, -hold.Amount)
+		if err != nil {
+			break
 		}
 		err = bs.LedgersDB.Insert(ctx, tx, entry)
 		if err != nil {
