@@ -31,9 +31,21 @@
 - [Sprint 2 Backlog](https://github.com/users/gosha185/projects/3)
 - [Sprint 3 Backlog](https://github.com/users/gosha185/projects/4)
 
-### Sprint
-- [MVP v2 Scope]()
+## Links 
 
+- [SemVer Release MVP v2]()
+
+### Sprint
+- [MVP v2 Scope](https://github.com/gosha185/SWP-Avito-project/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Sprint+3+–+MVP+v2%22)
+
+---
+
+## Deployment and Release
+
+- [Deployment URL](http://10.93.26.189:8080/)
+- [SemVer Release MVP v2]()
+- [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
+- [Public Demo Video]()
 ---
 
 ## Quality Documentation
@@ -53,6 +65,9 @@
 
 ---
 
+## Architecture Summary
+---
+
 ## Process Documentation
 - [Development Process]()
 - [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/definition-of-done.md)
@@ -65,6 +80,21 @@
 - [CI Pipeline]()
 - [Latest CI Run]()
 - [Branch Protection Rules]()
+
+---
+
+
+## Testing and CI Status
+
+| Gate | Status |
+|------|--------|
+| Linting | ✅ Passing |
+| Build | ✅ Passing |
+| Unit tests | ✅ Passing |
+| Integration tests | ✅ Passing |
+| Coverage | ???% |
+| QRTs | ✅ Passing |
+| Additional QA | ✅ Passing |
 
 ---
 
@@ -90,7 +120,40 @@
 
 ---
 
+## Week 5 Files
+
+- [Sprint Review Summary]()
+- [Sprint Review Transcript]()
+- [Reflection]()
+- [Retrospective]()
+- [LLM Report](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/llm-report.md)
+
+---
+## Current Product Status
+
+### Completed
+
+### In Progress
+
+### Next Steps
+
+---
 ## Screenshots
+
 ### Sprint Milestone
-![Sprint Milestone](images/sprint-milestone.png)
-...
+![Sprint Milestone]()
+
+### Board/Project Workflow View
+![Board View]()
+
+### Latest CI Run
+![Latest CI Run]()
+
+### SemVer Release
+![SemVer Release]()
+
+### Reviewed PR
+![Reviewed PR]()
+
+### Hosted Docs Site
+![Hosted Docs]()
