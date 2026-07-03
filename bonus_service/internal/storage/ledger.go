@@ -223,6 +223,68 @@ func (r *LedgerRepo) GetLedgerByOrderID(ctx context.Context, orderID uuid.UUID) 
 	return entries, nil
 }
 
+// InsertExpiryEntries inserts ledger entries for expired batches.
+// Must be called within a transaction.
+// Returns number of inserted rows.
+func (r *LedgerRepo) InsertExpiryEntries(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        INSERT INTO ledger (user_id, operation_type, amount, batch_id, external_key, created_at, metadata)
+        SELECT
+            user_id,
+            'expiry' AS operation_type,
+            remaining AS amount,
+            id AS batch_id,
+            'expiry-' || id || '-' || EXTRACT(EPOCH FROM NOW())::TEXT AS external_key,
+            NOW() AS created_at,
+            jsonb_build_object('reason', 'ttl_expiry') AS metadata
+        FROM batches
+        WHERE remaining > 0 AND expires_at < NOW()
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to insert expiry entries: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
+}
+
+// InsertCancelEntries inserts ledger entries for cancelled holds.
+// Must be called within a transaction.
+// Returns number of inserted rows.
+func (r *LedgerRepo) InsertCancelEntries(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        INSERT INTO ledger (user_id, operation_type, amount, batch_id, external_key, created_at, metadata)
+        SELECT
+            user_id,
+            'cancel' AS operation_type,
+            amount,
+            NULL AS batch_id,
+            'cancel-' || id || '-' || EXTRACT(EPOCH FROM NOW())::TEXT AS external_key,
+            NOW() AS created_at,
+            jsonb_build_object('reason', 'ttl_expiry') AS metadata
+        FROM holds
+        WHERE status = 'active' AND expires_at < NOW()
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to insert cancel entries: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
+}
+
 // isDuplicateKeyError checks if the error is a PostgreSQL unique violation (23505).
 func isDuplicateKeyError(err error) bool {
 	if err == nil {
