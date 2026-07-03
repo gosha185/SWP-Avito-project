@@ -1,3 +1,114 @@
+# Development Process
+
+This document describes the team's development process, git workflow, issue management, quality gates, and testing strategy for the Avito Bonus Points Service.
+
+---
+
+## Overview
+
+We follow a **Scrum-based process** with one-week Sprints. Each Sprint includes:
+
+- **Sprint Planning** — define Sprint Goal and select PBIs
+- **Daily Scrum** — 15-minute sync to discuss progress and blockers
+- **Development work** — issue-linked branches and PRs
+- **Sprint Review** — demonstrate increment to the customer
+- **Sprint Retrospective** — reflect and improve the process
+
+---
+
+## Git Workflow
+
+We use a **feature-branch workflow**:
+
+- **Main branch** (`main`) is protected. Direct pushes are disabled.
+- **Feature branches** are created from Issues: `<issue-number>-short-description`
+- **Pull Requests** are required for all changes.
+- **Review** by another team member is required before merge.
+
+---
+
+### Git Graph
+
+```mermaid
+gitGraph
+   commit id: "Initial commit"
+   branch user-stories
+   checkout user-stories
+   commit id: "Add user stories"
+   commit id: "Update formatting"
+   checkout main
+   merge user-stories
+   branch testing-docs
+   checkout testing-docs
+   commit id: "Add testing docs"
+   commit id: "Fix typos"
+   checkout main
+   merge testing-docs
+   branch fix-http-400
+   checkout fix-http-400
+   commit id: "Fix HTTP 500 → HTTP 400"
+   commit id: "Add tests"
+   checkout main
+   merge fix-http-400
+```
+---
+### Explanation
+
+The GitGraph diagram illustrates our **standard feature-branch workflow**. It shows the general development pattern we follow for every change, using three simplified examples:
+
+1. `user-stories` — adding user stories documentation
+2. `testing-docs` — creating testing documentation
+3. `fix-http-400` — fixing HTTP error handling
+
+In practice, every new task (whether a feature, bug fix, or documentation update) follows the same process:
+
+- A new branch is created from `main` for each issue.
+- The branch name follows the pattern `<issue-number>-short-description>`.
+- Work is committed to that branch.
+- Once ready, a Pull Request is opened and linked to the issue.
+- After review and CI checks pass, the branch is merged back into `main` using a merge commit.
+
+The diagram is not a historical log of all branches — it is a **visual representation of the workflow** that applies to every change in the project.
+
+---
+
+### Issue Workflow
+
+We use GitHub Issues to track all work.
+
+**Issue Types:**
+
+- **User Story** — user-facing functionality
+- **Other PBI** — technical tasks, infrastructure, documentation
+- **Bug Report** — defects found during testing
+- **Course Task** — assignment-related work (not PBIs)
+
+**Each Issue must contain:**
+
+- Clear title and description
+- Acceptance criteria
+- Story Points
+- Assignee (implementer)
+- Different reviewer
+- Work Status (`To Do` → `Ready` → `In Progress` → `Review` → `Done`)
+
+---
+
+### Definition of Done
+
+See [`docs/definition-of-done.md`](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/definition-of-done.md) for the full checklist.
+
+A PBI is Done when:
+
+- All acceptance criteria are satisfied
+- Code is reviewed by another team member
+- PR is merged into `main`
+- CI checks pass
+- `CHANGELOG.md` is updated
+- Quality requirements and QRTs are satisfied
+
+---
+
 ## Code Review Process
 
 Every change to the project is developed in a separate feature branch and integrated into the protected `main` branch through a GitHub Pull Request. Direct pushes to `main` are disabled to ensure that all changes are reviewed and verified before becoming part of the production codebase.
