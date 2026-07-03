@@ -286,19 +286,16 @@ func (r *BatchRepo) DeleteExpiredZeroBatches(ctx context.Context, daysOld int) (
 }
 
 // GetExpiredBatches returns all batches with remaining > 0 and expires_at < NOW().
-// Uses FOR UPDATE to lock rows for subsequent updates.
-// Must be called within a transaction.
-// Used by ExpireAllBatches() in service layer.
-func (r *BatchRepo) GetExpiredBatches(ctx context.Context, tx *sql.Tx) ([]models.BonusBatch, error) {
+// No locking.
+func (r *BatchRepo) GetExpiredBatches(ctx context.Context) ([]models.BonusBatch, error) {
 	query := `
         SELECT id, user_id, amount, remaining, expires_at, created_at
         FROM batches
         WHERE remaining > 0 AND expires_at < NOW()
         ORDER BY expires_at
-        FOR UPDATE
     `
 
-	rows, err := tx.QueryContext(ctx, query)
+	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query expired batches: %w", err)
 	}
