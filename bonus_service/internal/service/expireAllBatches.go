@@ -19,7 +19,7 @@ func (bs *BonusService) ExpireAllBatches(ctx context.Context) error {
 		if err != nil {
 			break
 		}
-		entry := &models.LedgerEntry{OperationType: models.OpExpiry, Amount: batch.Remaining, BatchID: batch.ID, CreatedAt: time.Now(), Metadata: json.RawMessage(`"expired": "batches"`)}
+		entry := &models.LedgerEntry{OperationType: models.OpExpiry, Amount: batch.Remaining, BatchID: sql.NullInt64{batch.ID, true}, CreatedAt: time.Now(), Metadata: json.RawMessage(`"expired": "batches"`)}
 		_, err := bs.BalancesDB.GetBalanceForUpdate(ctx, tx, batch.UserID)
 		if err != nil {
 			break
