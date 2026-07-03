@@ -236,3 +236,28 @@ func (r *HoldRepo) DeleteOldHolds(ctx context.Context, daysOld int) (int64, erro
 	}
 	return rowsAffected, nil
 }
+
+// CancelAllExpiredHolds cancels all holds with status = 'active' and expires_at < NOW().
+// This is a mass operation used by the TTL worker.
+// Must be called within a transaction.
+// Returns number of updated rows.
+func (r *HoldRepo) CancelAllExpiredHolds(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        UPDATE holds
+        SET status = 'cancelled'
+        WHERE status = 'active'
+          AND expires_at < NOW()
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to cancel expired holds: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
+}
