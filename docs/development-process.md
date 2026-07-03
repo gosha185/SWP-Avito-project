@@ -71,3 +71,32 @@ Overall, the migration strategy provides:
 * clear separation between schema management and application logic;
 * consistent database initialization across local development and containerized deployments.
 
+---
+
+## CI and Quality Gates
+
+The project utilizes **GitHub Actions** to automate code verification and enforce quality standards on every change. The CI pipeline is triggered automatically on pushes to the `main` branch, as well as on all Pull Requests targeting `main`.
+
+The following quality gates are executed as part of the CI workflow:
+
+* **Build Verification**: The pipeline ensures that the application compiles successfully without errors before any tests are run.
+* **Automated Testing**: Unit, integration, and performance tests are executed automatically to catch regressions early in the development cycle.
+* **Coverage Reporting**: Test coverage is measured during the CI run. HTML coverage reports are generated and uploaded as artifacts, allowing the team to review which parts of the code are exercised by tests.
+* **Vulnerability Scanning**: The `govulncheck` tool is used to scan the codebase and its dependencies for known security vulnerabilities. This check runs on Pull Requests, pushes to `main`, and on a weekly schedule to ensure ongoing security.
+* **Documentation Link Checking**: A Lychee-based workflow automatically verifies that all links in Markdown documentation files are valid, preventing broken references in the project docs.
+
+These gates ensure that no code is merged into the protected `main` branch unless it passes all required automated checks, maintaining the stability, security, and quality of the project.
+
+---
+
+## Testing Strategy
+
+The project follows a comprehensive testing strategy to ensure the reliability, correctness, and performance of the bonus service. Tests are organized into different levels based on their scope and purpose:
+
+* **Unit and Integration Tests**: Unit tests verify the logic of individual components and functions in isolation. Integration tests validate the interaction between different parts of the system, particularly the database layer. To support this, the CI pipeline provisions a temporary PostgreSQL service container to run these tests against a real database instance, ensuring that SQL queries and schema interactions work as expected. They are located within the `internal/storage` packages and can be executed locally using:
+  ```bash
+  go test ./internal/storage/ -v
+  ```
+* **Test Coverage**: The CI pipeline automatically generates coverage profiles (coverage.out) and HTML reports. This allows the team to track how much of the codebase is covered by tests and identify areas that require additional test cases.
+  
+By combining unit and integration testing, the team ensures that changes are thoroughly validated at multiple levels before they reach the production environment.
