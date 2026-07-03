@@ -52,7 +52,9 @@ func (r *BatchRepo) GetExpiringBatches(ctx context.Context, userID uuid.UUID) ([
 	query := `
         SELECT  id, user_id, amount, remaining, expires_at, created_at
         FROM batches
-        WHERE user_id = $1 AND remaining > 0
+        WHERE user_id = $1 
+          AND remaining > 0 
+          AND expires_at > NOW()
         ORDER BY expires_at
     `
 
