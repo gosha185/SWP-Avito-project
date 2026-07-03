@@ -118,7 +118,8 @@ func TestBatchRepo_IncreaseBatchRemaining(t *testing.T) {
 
 	tx, err = db.BeginTx(ctx, nil)
 	require.NoError(t, err)
-	require.NoError(t, repo.IncreaseBatchRemaining(ctx, tx, batch.ID, 100))
+	_, err = repo.IncreaseBatchRemaining(ctx, tx, batch.ID, 100)
+	require.NoError(t, err)
 	require.NoError(t, tx.Commit())
 
 	batches, err := repo.GetExpiringBatches(ctx, userID)

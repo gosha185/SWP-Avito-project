@@ -169,27 +169,33 @@ func (r *BatchRepo) CreateBatch(ctx context.Context, tx *sql.Tx, batch *models.B
 	return nil
 }
 
-func (r *BatchRepo) IncreaseBatchRemaining(ctx context.Context, tx *sql.Tx, batchID int64, amount int64) error {
+// IncreaseBatchRemaining adds points back to a batch.
+// Returns (true, nil) if the batch was updated successfully.
+// Returns (false, nil) if the batch does not exist or has already expired.
+// Returns (false, err) on database error.
+//
+// Used by: CancelHold to return points to original batches.
+// The method checks expires_at > NOW() to ensure points are not restored
+// to batches that have already expired (they should be burned instead).
+func (r *BatchRepo) IncreaseBatchRemaining(ctx context.Context, tx *sql.Tx, batchID int64, amount int64) (bool, error) {
 	query := `
         UPDATE batches
         SET remaining = remaining + $1
         WHERE id = $2
+          AND expires_at > NOW()
     `
 
 	result, err := tx.ExecContext(ctx, query, amount, batchID)
 	if err != nil {
-		return fmt.Errorf("failed to increase batch %d: %w", batchID, err)
+		return false, fmt.Errorf("failed to increase batch %d: %w", batchID, err)
 	}
 
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
-		return fmt.Errorf("failed to get rows affected: %w", err)
-	}
-	if rowsAffected == 0 {
-		return ErrBatchNotFound
+		return false, fmt.Errorf("failed to get rows affected: %w", err)
 	}
 
-	return nil
+	return rowsAffected > 0, nil
 }
 
 // DecreaseBatchRemaining subtracts amount from batch remaining.
