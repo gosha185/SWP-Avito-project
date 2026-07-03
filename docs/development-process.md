@@ -100,3 +100,73 @@ The project follows a comprehensive testing strategy to ensure the reliability, 
 * **Test Coverage**: The CI pipeline automatically generates coverage profiles (coverage.out) and HTML reports. This allows the team to track how much of the codebase is covered by tests and identify areas that require additional test cases.
   
 By combining unit and integration testing, the team ensures that changes are thoroughly validated at multiple levels before they reach the production environment.
+
+---
+
+## CI/CD and Deployment
+
+The project uses a container-based deployment model with Docker and a CI-driven release workflow based on GitHub Actions.
+
+### Continuous Integration
+
+Every change merged into the `main` branch triggers the CI pipeline. The pipeline ensures that the application is always in a deployable state by executing:
+
+- building the Go application inside a reproducible environment
+- running unit, integration, and quality requirement tests
+- executing static analysis and vulnerability checks
+- validating that the application can be successfully containerized
+
+Only changes that pass all CI checks are considered eligible for deployment.
+
+---
+
+### Deployment Strategy
+
+The service is deployed using Docker Compose. The runtime environment includes:
+
+- Go API service
+- PostgreSQL database
+- supporting infrastructure services (e.g. Swagger UI)
+
+Deployment is performed by rebuilding containers from the latest version of the `main` branch:
+
+```bash
+docker compose up --build -d
+```
+
+This ensures that the deployed system always reflects the latest validated state of the repository.
+
+---
+
+### Release Process
+
+Each merge into the `main` branch represents a new deployable version of the system.
+
+- Releases are defined implicitly through Git history
+- Rollback is performed by reverting to a previous commit and redeploying
+- No manual changes are performed inside running containers
+
+---
+
+### Environment Configuration
+
+All configuration is provided through a `.env` file. The CI pipeline assumes all required variables are present before deployment.
+
+Required variables include:
+
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- POSTGRES_DB
+- DB_DSN
+
+Missing or invalid configuration will prevent service startup, ensuring fail-fast behavior.
+
+---
+
+### Deployment Principles
+
+- reproducible builds using Docker
+- infrastructure defined as code via docker-compose
+- CI must pass before deployment
+- main branch is always deployable
+- no manual production changes
