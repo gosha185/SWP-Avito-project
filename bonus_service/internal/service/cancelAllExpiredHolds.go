@@ -36,10 +36,13 @@ func (bs *BonusService) CancelAllExpiredHolds(ctx context.Context) error {
 		}
 		var sum int64
 		for _, holdBatch := range holdBatches {
-			sum += holdBatch.Amount
-			err = bs.BatchesDB.IncreaseBatchRemaining(ctx, tx, holdBatch.BatchID, holdBatch.Amount)
+			var validness bool
+			validness, err = bs.BatchesDB.IncreaseBatchRemaining(ctx, tx, holdBatch.BatchID, holdBatch.Amount)
 			if err != nil {
 				break
+			}
+			if validness {
+				sum += holdBatch.Amount
 			}
 		}
 		err = bs.BalancesDB.UpdateBalance(ctx, tx, hold.UserID, sum, -hold.Amount)
