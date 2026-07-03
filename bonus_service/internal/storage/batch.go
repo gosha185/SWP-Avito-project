@@ -52,7 +52,9 @@ func (r *BatchRepo) GetExpiringBatches(ctx context.Context, userID uuid.UUID) ([
 	query := `
         SELECT  id, user_id, amount, remaining, expires_at, created_at
         FROM batches
-        WHERE user_id = $1 AND remaining > 0
+        WHERE user_id = $1 
+          AND remaining > 0 
+          AND expires_at > NOW()
         ORDER BY expires_at
     `
 
@@ -284,19 +286,16 @@ func (r *BatchRepo) DeleteExpiredZeroBatches(ctx context.Context, daysOld int) (
 }
 
 // GetExpiredBatches returns all batches with remaining > 0 and expires_at < NOW().
-// Uses FOR UPDATE to lock rows for subsequent updates.
-// Must be called within a transaction.
-// Used by ExpireAllBatches() in service layer.
-func (r *BatchRepo) GetExpiredBatches(ctx context.Context, tx *sql.Tx) ([]models.BonusBatch, error) {
+// No locking.
+func (r *BatchRepo) GetExpiredBatches(ctx context.Context) ([]models.BonusBatch, error) {
 	query := `
         SELECT id, user_id, amount, remaining, expires_at, created_at
         FROM batches
         WHERE remaining > 0 AND expires_at < NOW()
         ORDER BY expires_at
-        FOR UPDATE
     `
 
-	rows, err := tx.QueryContext(ctx, query)
+	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query expired batches: %w", err)
 	}
@@ -324,4 +323,29 @@ func (r *BatchRepo) GetExpiredBatches(ctx context.Context, tx *sql.Tx) ([]models
 	}
 
 	return batches, nil
+}
+
+// ExpireAllBatches sets remaining = 0 for all batches with remaining > 0
+// and expires_at < NOW(). This is a mass operation used by the cleanup worker.
+// Must be called within a transaction.
+// Returns number of updated rows.
+func (r *BatchRepo) ExpireAllBatches(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        UPDATE batches
+        SET remaining = 0
+        WHERE remaining > 0
+          AND expires_at < NOW()
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to expire batches: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
 }

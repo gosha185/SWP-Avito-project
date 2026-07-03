@@ -132,3 +132,68 @@ func (r *BalanceRepo) UpdateBalance(ctx context.Context, tx *sql.Tx, userID uuid
 
 	return nil
 }
+
+// UpdateBalancesForExpiredBatches decreases available balances
+// for users whose batches have expired.
+// Must be called within a transaction.
+// Returns number of updated rows.
+func (r *BalanceRepo) UpdateBalancesForExpiredBatches(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        UPDATE balances
+        SET available = available - sub.expired_sum,
+            updated_at = NOW()
+        FROM (
+            SELECT user_id, COALESCE(SUM(remaining), 0) AS expired_sum
+            FROM batches
+            WHERE remaining > 0 AND expires_at < NOW()
+            GROUP BY user_id
+        ) AS sub
+        WHERE balances.user_id = sub.user_id
+          AND sub.expired_sum > 0
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to update balances for expired batches: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
+}
+
+// UpdateBalancesForExpiredHolds restores available and decreases held
+// for users whose holds have expired.
+// Must be called within a transaction.
+// Returns number of updated rows.
+func (r *BalanceRepo) UpdateBalancesForExpiredHolds(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        UPDATE balances
+        SET available = available + sub.hold_sum,
+            held = held - sub.hold_sum,
+            updated_at = NOW()
+        FROM (
+            SELECT user_id, COALESCE(SUM(amount), 0) AS hold_sum
+            FROM holds
+            WHERE status = 'active' AND expires_at < NOW()
+            GROUP BY user_id
+        ) AS sub
+        WHERE balances.user_id = sub.user_id
+          AND sub.hold_sum > 0
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to update balances for expired holds: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
+}

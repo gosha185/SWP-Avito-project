@@ -175,17 +175,16 @@ func (r *HoldRepo) UpdateHoldStatus(ctx context.Context, tx *sql.Tx, holdID int6
 }
 
 // GetExpiredHolds returns all active holds with expired_at < NOW().
-// Must be called within a transaction.
-// Used by TTL worker.
-func (r *HoldRepo) GetExpiredHolds(ctx context.Context, tx *sql.Tx) ([]models.Hold, error) {
+// No locking.
+func (r *HoldRepo) GetExpiredHolds(ctx context.Context) ([]models.Hold, error) {
 	query := `
         SELECT id, user_id, order_id, amount, status, expires_at, created_at
         FROM holds
         WHERE status = 'active' AND expires_at < NOW()
-        FOR UPDATE
+        ORDER BY expires_at
     `
 
-	rows, err := tx.QueryContext(ctx, query)
+	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query expired holds: %w", err)
 	}
@@ -234,5 +233,30 @@ func (r *HoldRepo) DeleteOldHolds(ctx context.Context, daysOld int) (int64, erro
 	if err != nil {
 		return 0, fmt.Errorf("failed to get rows affected: %w", err)
 	}
+	return rowsAffected, nil
+}
+
+// CancelAllExpiredHolds cancels all holds with status = 'active' and expires_at < NOW().
+// This is a mass operation used by the TTL worker.
+// Must be called within a transaction.
+// Returns number of updated rows.
+func (r *HoldRepo) CancelAllExpiredHolds(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        UPDATE holds
+        SET status = 'cancelled'
+        WHERE status = 'active'
+          AND expires_at < NOW()
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to cancel expired holds: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
 	return rowsAffected, nil
 }
