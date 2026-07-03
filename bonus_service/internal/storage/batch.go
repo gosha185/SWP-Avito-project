@@ -325,3 +325,28 @@ func (r *BatchRepo) GetExpiredBatches(ctx context.Context, tx *sql.Tx) ([]models
 
 	return batches, nil
 }
+
+// ExpireAllBatches sets remaining = 0 for all batches with remaining > 0
+// and expires_at < NOW(). This is a mass operation used by the cleanup worker.
+// Must be called within a transaction.
+// Returns number of updated rows.
+func (r *BatchRepo) ExpireAllBatches(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        UPDATE batches
+        SET remaining = 0
+        WHERE remaining > 0
+          AND expires_at < NOW()
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to expire batches: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
+}
