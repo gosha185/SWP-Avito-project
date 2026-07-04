@@ -38,6 +38,9 @@ type cancelHoldResponse struct {
 
 type getBalanceResponse struct {
 	Available int64 `json:"available"`
+}
+
+type getExpirationsResponse struct {
 	Expiring  int64 `json:"expiring"`
 }
 

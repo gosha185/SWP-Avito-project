@@ -15,7 +15,7 @@ servers:
   #   description: VM (uncomment when running on the server)
 
 paths:
-  /v1/accrual:
+  /accrual:
     post:
       summary: Accrue bonus points
       description: Creates a new batch of points for a user with a TTL of `days`.
@@ -40,7 +40,7 @@ paths:
         '409': { $ref: '#/components/responses/KeyConflict' }
         '500': { $ref: '#/components/responses/ServerError' }
 
-  /v1/hold:
+  /hold:
     post:
       summary: Hold (reserve) points for an order
       description: >
@@ -80,7 +80,7 @@ paths:
                   value: { error: "idempotency key already used for another operation" }
         '500': { $ref: '#/components/responses/ServerError' }
 
-  /v1/users/{user_id}/holds/{order_id}/confirm:
+  /users/{user_id}/holds/{order_id}/confirm:
     post:
       summary: Confirm a hold
       description: Finalizes a reservation. Held points are spent for good.
@@ -100,7 +100,7 @@ paths:
         '409': { $ref: '#/components/responses/KeyConflict' }
         '500': { $ref: '#/components/responses/ServerError' }
 
-  /v1/users/{user_id}/holds/{order_id}/cancel:
+  /users/{user_id}/holds/{order_id}/cancel:
     post:
       summary: Cancel a hold
       description: Releases a reservation. Held points return to available.
@@ -120,23 +120,14 @@ paths:
         '409': { $ref: '#/components/responses/KeyConflict' }
         '500': { $ref: '#/components/responses/ServerError' }
 
-  /v1/users/{user_id}/balance:
+  /users/{user_id}/balance:
     get:
       summary: Get balance and soon-to-expire points
       description: >
-        Returns the user's available points and how many of them expire within
-        the next `days` days. An unknown user returns a zeroed balance, not 404.
+        Returns the user's available points. An unknown user returns a zeroed balance, not 404.
       operationId: getBalance
       parameters:
         - $ref: '#/components/parameters/UserId'
-        - name: days
-          in: query
-          required: true
-          description: Window in days for the `expiring` amount.
-          schema:
-            type: integer
-            minimum: 1
-            example: 30
       responses:
         '200':
           description: Balance
@@ -147,7 +138,31 @@ paths:
         '400': { $ref: '#/components/responses/BadRequest' }
         '500': { $ref: '#/components/responses/ServerError' }
 
-  /v1/users/{user_id}/holds:
+  /users/{user_id}/balance/expirations:
+    get:
+      summary: Get expiring points within time window
+      description: Returns amount of points that will expire within the next N days.
+      operationId: getExpirations
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - name: days
+          in: query
+          required: true
+          description: Number of days to look ahead for expiring points
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Expiring points
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ExpirationsResponse'
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /users/{user_id}/holds:
     get:
       summary: Get total held points
       description: Returns the total amount of points currently frozen/held for the user.
@@ -164,7 +179,7 @@ paths:
         '400': { $ref: '#/components/responses/BadRequest' }
         '500': { $ref: '#/components/responses/ServerError' }
 
-  /v1/users/{user_id}/history:
+  /users/{user_id}/history:
     get:
       summary: Get transaction history
       description: Paginated list of operations recorded in the ledger, newest first.
@@ -252,6 +267,10 @@ components:
       type: object
       properties:
         available: { type: integer, format: int64, example: 500 }
+    
+    ExpirationsResponse:
+      type: object
+      properties:
         expiring: { type: integer, format: int64, example: 500 }
 
     Transaction:
@@ -263,6 +282,7 @@ components:
           example: accrual
         amount: { type: integer, format: int64, example: 500 }
         created_at: { type: string, format: date-time }
+
     HistoryResponse:
       type: object
       properties:

@@ -26,9 +26,9 @@
           "options": { "raw": { "language": "json" } }
         },
         "url": {
-          "raw": "{{base_url}}/v1/accrual",
+          "raw": "{{base_url}}/accrual",
           "host": ["{{base_url}}"],
-          "path": ["v1", "accrual"]
+          "path": ["accrual"]
         },
         "description": "Accrue points for a user with a TTL of `days`. Returns the new batch id."
       },
@@ -63,9 +63,9 @@
           "options": { "raw": { "language": "json" } }
         },
         "url": {
-          "raw": "{{base_url}}/v1/accrual",
+          "raw": "{{base_url}}/accrual",
           "host": ["{{base_url}}"],
-          "path": ["v1", "accrual"]
+          "path": ["accrual"]
         },
         "description": "Same request with a FIXED Idempotency-Key. First send returns 201, every send after that returns 409 (the key is already used). This demonstrates idempotency."
       },
@@ -89,14 +89,11 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}/v1/users/{{user_id}}/balance?days=30",
+          "raw": "{{base_url}}/users/{{user_id}}/balance",
           "host": ["{{base_url}}"],
-          "path": ["v1", "users", "{{user_id}}", "balance"],
-          "query": [
-            { "key": "days", "value": "30" }
-          ]
+          "path": ["users", "{{user_id}}", "balance"]
         },
-        "description": "Available points and how many expire within the next `days` days. Unknown user returns a zeroed balance, not 404."
+        "description": "Available points. Unknown user returns a zeroed balance, not 404."
       },
       "event": [
         {
@@ -107,10 +104,45 @@
               "pm.test(\"Status is 200 OK\", function () {",
               "    pm.response.to.have.status(200);",
               "});",
-              "pm.test(\"Has available and expiring\", function () {",
+              "pm.test(\"Has available\", function () {",
               "    var b = pm.response.json();",
               "    pm.expect(b).to.have.property(\"available\");",
-              "    pm.expect(b).to.have.property(\"expiring\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Expirations",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/users/{{user_id}}/balance/expirations?days=30",
+          "host": ["{{base_url}}"],
+          "path": ["users", "{{user_id}}", "balance", "expirations"],
+          "query": [
+            { "key": "days", "value": "30" }
+          ]
+        },
+        "description": "Returns points expiring within N days"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Has expiring field', function () {",
+              "    var b = pm.response.json();",
+              "    pm.expect(b).to.have.property('expiring');",
+              "    pm.expect(typeof b.expiring).to.eql('number');",
+              "    pm.expect(b.expiring).to.be.at.least(0);",
               "});"
             ]
           }
@@ -123,9 +155,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}/v1/users/{{user_id}}/holds",
+          "raw": "{{base_url}}/users/{{user_id}}/holds",
           "host": ["{{base_url}}"],
-          "path": ["v1", "users", "{{user_id}}", "holds"]
+          "path": ["users", "{{user_id}}", "holds"]
         },
         "description": "Returns the total amount of points currently frozen/held for the user."
       },
@@ -160,9 +192,9 @@
           "options": { "raw": { "language": "json" } }
         },
         "url": {
-          "raw": "{{base_url}}/v1/hold",
+          "raw": "{{base_url}}/hold",
           "host": ["{{base_url}}"],
-          "path": ["v1", "hold"]
+          "path": ["hold"]
         },
         "description": "Reserve points for an order (available -> held), FEFO across batches. Expires after `hours` if not confirmed or cancelled. 409 if not enough balance."
       },
@@ -191,9 +223,9 @@
           { "key": "Idempotency-Key", "value": "{{$guid}}" }
         ],
         "url": {
-          "raw": "{{base_url}}/v1/users/{{user_id}}/holds/{{order_id}}/confirm",
+          "raw": "{{base_url}}/users/{{user_id}}/holds/{{order_id}}/confirm",
           "host": ["{{base_url}}"],
-          "path": ["v1", "users", "{{user_id}}", "holds", "{{order_id}}", "confirm"]
+          "path": ["users", "{{user_id}}", "holds", "{{order_id}}", "confirm"]
         },
         "description": "Finalize the reservation made by \"Create Hold\" for {{order_id}}. Held points are spent for good."
       },
@@ -225,9 +257,9 @@
           "options": { "raw": { "language": "json" } }
         },
         "url": {
-          "raw": "{{base_url}}/v1/hold",
+          "raw": "{{base_url}}/hold",
           "host": ["{{base_url}}"],
-          "path": ["v1", "hold"]
+          "path": ["hold"]
         },
         "description": "A second hold on a different order, so the next request has something to cancel."
       },
@@ -253,9 +285,9 @@
           { "key": "Idempotency-Key", "value": "{{$guid}}" }
         ],
         "url": {
-          "raw": "{{base_url}}/v1/users/{{user_id}}/holds/{{order_id_cancel}}/cancel",
+          "raw": "{{base_url}}/users/{{user_id}}/holds/{{order_id_cancel}}/cancel",
           "host": ["{{base_url}}"],
-          "path": ["v1", "users", "{{user_id}}", "holds", "{{order_id_cancel}}", "cancel"]
+          "path": ["users", "{{user_id}}", "holds", "{{order_id_cancel}}", "cancel"]
         },
         "description": "Release the reservation made by \"Create Hold (for cancel)\". Held points return to available."
       },
@@ -279,9 +311,9 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}/v1/users/{{user_id}}/history?limit=50&offset=0",
+          "raw": "{{base_url}}/users/{{user_id}}/history?limit=50&offset=0",
           "host": ["{{base_url}}"],
-          "path": ["v1", "users", "{{user_id}}", "history"],
+          "path": ["users", "{{user_id}}", "history"],
           "query": [
             { "key": "limit", "value": "50" },
             { "key": "offset", "value": "0" }
