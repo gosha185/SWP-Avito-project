@@ -97,6 +97,48 @@ func (r *LedgerRepo) GetByExternalKey(ctx context.Context, externalKey string) (
 	return &entry, nil
 }
 
+// GetByExternalKeyTx checks if an operation with this external_key already exists.
+// Uses FOR UPDATE to lock the row and prevent race conditions.
+// Must be called within a transaction.
+// Returns nil if not found.
+func (r *LedgerRepo) GetByExternalKeyTx(ctx context.Context, tx *sql.Tx, externalKey string) (*models.LedgerEntry, error) {
+	query := `
+        SELECT id, user_id, operation_type, amount, batch_id, external_key, created_at, metadata
+        FROM ledger
+        WHERE external_key = $1
+        FOR UPDATE
+    `
+
+	var entry models.LedgerEntry
+	var batchID sql.NullInt64
+	var metadata []byte
+
+	err := tx.QueryRowContext(ctx, query, externalKey).Scan(
+		&entry.ID,
+		&entry.UserID,
+		&entry.OperationType,
+		&entry.Amount,
+		&batchID,
+		&entry.ExternalKey,
+		&entry.CreatedAt,
+		&metadata,
+	)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("failed to get ledger entry by key %s: %w", externalKey, err)
+	}
+
+	entry.BatchID = batchID
+	if metadata != nil {
+		entry.Metadata = metadata
+	}
+
+	return &entry, nil
+}
+
 // GetHistory returns paginated transaction history for a user.
 // Used by: GET /balance/:user_id/history.
 func (r *LedgerRepo) GetHistory(ctx context.Context, userID uuid.UUID, limit, offset int) ([]models.LedgerEntry, error) {
