@@ -236,6 +236,35 @@ func (h *APIHandler) GetBalanceHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	v := validator.New()
+	v.Check(userId != uuid.Nil, "user_id", "must be provided")
+	if !v.Valid() {
+		h.failedValidationResponse(w, r, v.Errors)
+		return
+	}
+
+	availableBonuses, err := h.service.GetAvailablePoints(r.Context(), userId)
+	if err != nil {
+		h.serverErrorResponse(w, r, err)
+		return
+	}
+
+	response := getBalanceResponse{
+		Available: availableBonuses,
+	}
+
+	if err := h.writeJSON(w, http.StatusOK, response, nil); err != nil {
+		h.serverErrorResponse(w, r, err)
+	}
+}
+
+func (h *APIHandler) GetExpirationsHandler(w http.ResponseWriter, r *http.Request) {
+	userId, err := uuid.Parse(r.PathValue("user_id"))
+	if err != nil {
+		h.badRequestResponse(w, r, err)
+		return
+	}
+
 	q := r.URL.Query()
 	days := q.Get("days")
 
@@ -258,14 +287,8 @@ func (h *APIHandler) GetBalanceHandler(w http.ResponseWriter, r *http.Request) {
 		h.serverErrorResponse(w, r, err)
 		return
 	}
-	availableBonuses, err := h.service.GetAvailablePoints(r.Context(), userId)
-	if err != nil {
-		h.serverErrorResponse(w, r, err)
-		return
-	}
 
-	response := getBalanceResponse{
-		Available: availableBonuses,
+	response := getExpirationsResponse{
 		Expiring:  expiringBonuses,
 	}
 
