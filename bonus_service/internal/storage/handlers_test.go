@@ -61,7 +61,7 @@ func TestHandler_Accrual_Success(t *testing.T) {
 	srv := newTestServer(t)
 	userID := uuid.New()
 
-	resp := post(t, srv, "/v1/accrual", map[string]any{
+	resp := post(t, srv, "/accrual", map[string]any{
 		"user_id": userID,
 		"amount":  500,
 		"days":    30,
@@ -76,7 +76,7 @@ func TestHandler_Accrual_Success(t *testing.T) {
 func TestHandler_Accrual_MissingIdempotencyKey(t *testing.T) {
 	srv := newTestServer(t)
 
-	resp := post(t, srv, "/v1/accrual", map[string]any{
+	resp := post(t, srv, "/accrual", map[string]any{
 		"user_id": uuid.New(),
 		"amount":  100,
 		"days":    7,
@@ -89,7 +89,7 @@ func TestHandler_Accrual_MissingIdempotencyKey(t *testing.T) {
 func TestHandler_Accrual_InvalidBody(t *testing.T) {
 	srv := newTestServer(t)
 
-	resp := post(t, srv, "/v1/accrual", map[string]any{
+	resp := post(t, srv, "/accrual", map[string]any{
 		"amount": -1,
 		"days":   0,
 	}, uuid.NewString())
@@ -103,11 +103,11 @@ func TestHandler_Accrual_DuplicateKey(t *testing.T) {
 	key := uuid.NewString()
 	body := map[string]any{"user_id": uuid.New(), "amount": 100, "days": 7}
 
-	resp1 := post(t, srv, "/v1/accrual", body, key)
+	resp1 := post(t, srv, "/accrual", body, key)
 	assert.Equal(t, http.StatusCreated, resp1.StatusCode)
 	resp1.Body.Close()
 
-	resp2 := post(t, srv, "/v1/accrual", body, key)
+	resp2 := post(t, srv, "/accrual", body, key)
 	assert.Equal(t, http.StatusConflict, resp2.StatusCode)
 	resp2.Body.Close()
 }
@@ -118,13 +118,13 @@ func TestHandler_Hold_Success(t *testing.T) {
 	srv := newTestServer(t)
 	userID := uuid.New()
 
-	resp := post(t, srv, "/v1/accrual", map[string]any{
+	resp := post(t, srv, "/accrual", map[string]any{
 		"user_id": userID, "amount": 1000, "days": 30,
 	}, uuid.NewString())
 	require.Equal(t, http.StatusCreated, resp.StatusCode)
 	resp.Body.Close()
 
-	resp = post(t, srv, "/v1/hold", map[string]any{
+	resp = post(t, srv, "/hold", map[string]any{
 		"user_id":  userID,
 		"order_id": uuid.New(),
 		"amount":   300,
@@ -140,7 +140,7 @@ func TestHandler_Hold_Success(t *testing.T) {
 func TestHandler_Hold_InsufficientBalance(t *testing.T) {
 	srv := newTestServer(t)
 
-	resp := post(t, srv, "/v1/hold", map[string]any{
+	resp := post(t, srv, "/hold", map[string]any{
 		"user_id":  uuid.New(),
 		"order_id": uuid.New(),
 		"amount":   500,
@@ -154,7 +154,7 @@ func TestHandler_Hold_InsufficientBalance(t *testing.T) {
 func TestHandler_Hold_MissingIdempotencyKey(t *testing.T) {
 	srv := newTestServer(t)
 
-	resp := post(t, srv, "/v1/hold", map[string]any{
+	resp := post(t, srv, "/hold", map[string]any{
 		"user_id": uuid.New(), "order_id": uuid.New(), "amount": 100, "hours": 1,
 	}, "")
 
@@ -169,19 +169,19 @@ func TestHandler_ConfirmHold_Success(t *testing.T) {
 	userID := uuid.New()
 	orderID := uuid.New()
 
-	resp := post(t, srv, "/v1/accrual", map[string]any{
+	resp := post(t, srv, "/accrual", map[string]any{
 		"user_id": userID, "amount": 1000, "days": 30,
 	}, uuid.NewString())
 	require.Equal(t, http.StatusCreated, resp.StatusCode)
 	resp.Body.Close()
 
-	resp = post(t, srv, "/v1/hold", map[string]any{
+	resp = post(t, srv, "/hold", map[string]any{
 		"user_id": userID, "order_id": orderID, "amount": 200, "hours": 24,
 	}, uuid.NewString())
 	require.Equal(t, http.StatusCreated, resp.StatusCode)
 	resp.Body.Close()
 
-	path := fmt.Sprintf("/v1/users/%s/holds/%s/confirm", userID, orderID)
+	path := fmt.Sprintf("/users/%s/holds/%s/confirm", userID, orderID)
 	resp = post(t, srv, path, nil, uuid.NewString())
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	var body map[string]any
@@ -191,7 +191,7 @@ func TestHandler_ConfirmHold_Success(t *testing.T) {
 
 func TestHandler_ConfirmHold_MissingKey(t *testing.T) {
 	srv := newTestServer(t)
-	path := fmt.Sprintf("/v1/users/%s/holds/%s/confirm", uuid.New(), uuid.New())
+	path := fmt.Sprintf("/users/%s/holds/%s/confirm", uuid.New(), uuid.New())
 	resp := post(t, srv, path, nil, "")
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 	resp.Body.Close()
@@ -204,19 +204,19 @@ func TestHandler_CancelHold_Success(t *testing.T) {
 	userID := uuid.New()
 	orderID := uuid.New()
 
-	resp := post(t, srv, "/v1/accrual", map[string]any{
+	resp := post(t, srv, "/accrual", map[string]any{
 		"user_id": userID, "amount": 1000, "days": 30,
 	}, uuid.NewString())
 	require.Equal(t, http.StatusCreated, resp.StatusCode)
 	resp.Body.Close()
 
-	resp = post(t, srv, "/v1/hold", map[string]any{
+	resp = post(t, srv, "/hold", map[string]any{
 		"user_id": userID, "order_id": orderID, "amount": 200, "hours": 24,
 	}, uuid.NewString())
 	require.Equal(t, http.StatusCreated, resp.StatusCode)
 	resp.Body.Close()
 
-	path := fmt.Sprintf("/v1/users/%s/holds/%s/cancel", userID, orderID)
+	path := fmt.Sprintf("/users/%s/holds/%s/cancel", userID, orderID)
 	resp = post(t, srv, path, nil, uuid.NewString())
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	var body map[string]any
@@ -230,37 +230,46 @@ func TestHandler_GetBalance_Success(t *testing.T) {
 	srv := newTestServer(t)
 	userID := uuid.New()
 
-	resp := post(t, srv, "/v1/accrual", map[string]any{
+	resp := post(t, srv, "/accrual", map[string]any{
 		"user_id": userID, "amount": 750, "days": 5,
 	}, uuid.NewString())
 	require.Equal(t, http.StatusCreated, resp.StatusCode)
 	resp.Body.Close()
 
-	path := fmt.Sprintf("/v1/users/%s/balance?days=10", userID)
+	path := fmt.Sprintf("/users/%s/balance", userID)
 	resp = get(t, srv, path)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	var body map[string]any
 	decodeJSON(t, resp, &body)
 	assert.Equal(t, float64(750), body["available"])
+}
+
+func TestHandler_GetBalanceExp_Success(t *testing.T) {
+	srv := newTestServer(t)
+	userID := uuid.New()
+
+	resp := post(t, srv, "/accrual", map[string]any{
+		"user_id": userID, "amount": 750, "days": 5,
+	}, uuid.NewString())
+	require.Equal(t, http.StatusCreated, resp.StatusCode)
+	resp.Body.Close()
+
+	path := fmt.Sprintf("/users/%s/balance/expirations?days=10", userID)
+	resp = get(t, srv, path)
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	var body map[string]any
+	decodeJSON(t, resp, &body)
 	assert.Equal(t, float64(750), body["expiring"])
 }
 
 func TestHandler_GetBalance_NewUser(t *testing.T) {
 	srv := newTestServer(t)
-	path := fmt.Sprintf("/v1/users/%s/balance?days=30", uuid.New())
+	path := fmt.Sprintf("/users/%s/balance?days=30", uuid.New())
 	resp := get(t, srv, path)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	var body map[string]any
 	decodeJSON(t, resp, &body)
 	assert.Equal(t, float64(0), body["available"])
-	resp.Body.Close()
-}
-
-func TestHandler_GetBalance_MissingDays(t *testing.T) {
-	srv := newTestServer(t)
-	path := fmt.Sprintf("/v1/users/%s/balance", uuid.New())
-	resp := get(t, srv, path)
-	assert.Equal(t, http.StatusUnprocessableEntity, resp.StatusCode)
 	resp.Body.Close()
 }
 
@@ -271,14 +280,14 @@ func TestHandler_GetHistory_Success(t *testing.T) {
 	userID := uuid.New()
 
 	for i := 0; i < 3; i++ {
-		resp := post(t, srv, "/v1/accrual", map[string]any{
+		resp := post(t, srv, "/accrual", map[string]any{
 			"user_id": userID, "amount": 100, "days": 30,
 		}, uuid.NewString())
 		require.Equal(t, http.StatusCreated, resp.StatusCode)
 		resp.Body.Close()
 	}
 
-	path := fmt.Sprintf("/v1/users/%s/history?limit=10&offset=0", userID)
+	path := fmt.Sprintf("/users/%s/history?limit=10&offset=0", userID)
 	resp := get(t, srv, path)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	var body map[string]any
@@ -289,7 +298,7 @@ func TestHandler_GetHistory_Success(t *testing.T) {
 
 func TestHandler_GetHistory_MissingParams(t *testing.T) {
 	srv := newTestServer(t)
-	path := fmt.Sprintf("/v1/users/%s/history", uuid.New())
+	path := fmt.Sprintf("/users/%s/history", uuid.New())
 	resp := get(t, srv, path)
 	assert.Equal(t, http.StatusUnprocessableEntity, resp.StatusCode)
 	resp.Body.Close()
