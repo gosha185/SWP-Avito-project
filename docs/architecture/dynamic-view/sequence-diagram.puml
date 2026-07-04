@@ -1,0 +1,126 @@
+@startuml Sequence Diagram
+!theme plain
+autonumber
+
+title API Flow
+
+box "Client Side" #White
+  actor "External service" as user
+end box
+
+box "HTTP Layer" #WhiteSmoke
+  participant "Router" as router
+end box
+
+box "Service Layer" #E6F3FF
+  participant "LeaderService" as ls
+  participant "Service" as service
+end box
+
+box "Workers"
+  participant "Workers" as workers
+end box
+
+box "Storage Layer" #FFFFE0
+  participant "BalanceRepo" as balr
+  participant "BatchRepo" as batr
+  participant "HoldRepo" as hr
+  participant "HoldBatchRepo" as hbr
+  participant "LedgerRepo" as ledger
+end box
+
+box "PostgreSQL Database" #MistyRose
+  database "Database" as db
+end box
+
+group #F9F9F9 1. Request
+    user -> router: Accrual
+    user -> router: Hold
+    user -> router: Confirm Hold
+    user -> router: Cancel Hold
+    user -> router: Get Balance
+    user -> router: Get History
+end
+
+group #F0FFF0 2. Processing Request
+    router -> service: Accrue
+    router -> service: Hold
+    router -> service: Confirm Withdrawal
+    router -> service: Cancel Hold
+    router -> service: Get Balance
+    router -> service: Get History
+end
+
+group #FFF0F0 3. Processing Transaction
+    service -> balr: Get Balance
+    balr -> db: Get Balance
+    db -> balr: Balance
+    balr -> service: Balance
+    service -> balr: Update Balance
+    balr -> db: New Balance
+    service -> batr: Get Batches Of Points
+    batr -> db: Get Batches Of Points
+    db -> batr: Batches Of Points
+    batr -> service: Batches Of Points
+    service -> batr: Accrue Batch Of Points
+    batr -> db: New Batch Of Points
+    service -> batr: Update Batch Of Points
+    batr -> db: Update Batch Of Points
+    service -> hr: Get Holds Of Points
+    hr -> db: Get Holds Of Points
+    db -> hr: Holds Of Points
+    hr -> service: Holds Of Points
+    service -> hr: New Hold
+    hr -> db: New Hold
+    hr -> hbr: New Hold Batches
+    hbr -> db: New Hold Batches
+    service -> hr: Cancel Hold
+    hr -> db: Cancel Hold
+    service -> hbr: Get Hold Batches
+    hbr -> db: Get Hold Batches
+    db -> hbr: Hold Batches
+    hbr -> service: Hold Batches
+    service -> hr: Confirm Withdrawal
+    hr -> db: Confirm Withdrawal
+    service -> ledger: New Ledger Entry
+    ledger -> db: New Ledger Entry
+    service -> ledger: Get History
+    ledger -> db: Get History
+    db -> ledger: History
+    ledger -> service: History
+    db -> balr: Errors
+    db -> batr: Errors
+    db -> hr: Errors
+    db -> hbr: Errors
+    db -> ledger: Errors
+    balr -> service: Errors
+    batr -> service: Errors
+    hr -> service: Errors
+    hbr -> service: Errors
+    ledger -> service: Errors
+end
+
+group #F0FFF0 4. Processing Response
+    service -> router: Balance
+    service -> router: History
+    service -> router: Errors
+end
+
+group #F9F9F9 5. Response
+    router -> user: Balance
+    router -> user: History
+    router -> user: Errors
+end
+
+group #F9F9F9 6. Clean up
+    note right of service: 3. Processing Transaction Also Used In Clean Up By Service
+    ls -> workers: Whether Leader Or Not
+    workers -> service: Subtract Expired Points From Balance
+    workers -> service: Cancel Expired Holds
+    workers -> batr: Delete Batches Of Points
+    workers -> hr: Delete Holds
+    batr -> db: Delete Batches Of Points
+    hr -> db: Delete Holds
+end
+
+@enduml
