@@ -39,8 +39,9 @@ func main() {
 	)
 
 	leaderService.RegisterWorker("TTLWorker", 5*time.Minute, bonusService.TTLWorker)
-	leaderService.RegisterWorker("BatchCleanupWorker", 5*time.Minute, bonusService.BatchCleanupWorker)
-	leaderService.RegisterWorker("HoldCleanupWorker", 24*time.Hour, bonusService.HoldCleanupWorker)
+	leaderService.RegisterWorker("BatchExpiryWorker", 5*time.Minute, bonusService.BatchExpiryWorker)
+	leaderService.RegisterWorker("BatchCleanupWorker", 1*time.Hour, bonusService.BatchCleanupWorker)
+	leaderService.RegisterWorker("HoldCleanupWorker", 1*time.Hour, bonusService.HoldCleanupWorker)
 
 	leaderService.Start(ctx)
 	srv := &http.Server{
