@@ -4,6 +4,7 @@ import (
 	"bonus-service/internal/handlers"
 	"bonus-service/internal/service"
 	"bonus-service/internal/storage"
+	"context"
 	"errors"
 	"log"
 	"net/http"
@@ -22,6 +23,26 @@ func main() {
 	apiHandler := handlers.NewAPIHandler(bonusService)
 	router := handlers.NewRouter(apiHandler)
 
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		log.Fatal("Failed to get hostname: ", err)
+	}
+
+	leaderService := service.NewLeaderService(
+		storage.NewLeaderRepo(db),
+		"bonus_worker",
+		hostname+":9091",
+		30,
+	)
+
+	leaderService.RegisterWorker("TTLWorker", 5*time.Minute, bonusService.TTLWorker)
+	leaderService.RegisterWorker("BatchCleanupWorker", 5*time.Minute, bonusService.BatchCleanupWorker)
+	leaderService.RegisterWorker("HoldCleanupWorker", 24*time.Hour, bonusService.HoldCleanupWorker)
+
+	leaderService.Start(ctx)
 	srv := &http.Server{
 		Addr:         ":9091",
 		Handler:      router,
