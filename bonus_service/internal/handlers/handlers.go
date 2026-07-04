@@ -161,6 +161,8 @@ func (h *APIHandler) ConfirmHoldHandler(w http.ResponseWriter, r *http.Request) 
 		switch {
 		case errors.Is(err, storage.ErrLedgerDuplicate):
 			h.errorResponse(w, r, http.StatusConflict, "idempotency key already used for another operation")
+		case errors.Is(err, storage.ErrHoldNotFound):
+			h.badRequestResponse(w, r, err)
 		default:
 			h.serverErrorResponse(w, r, err)
 		}
@@ -214,6 +216,8 @@ func (h *APIHandler) CancelHoldHandler(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case errors.Is(err, storage.ErrLedgerDuplicate):
 			h.errorResponse(w, r, http.StatusConflict, "idempotency key already used for another operation")
+		case errors.Is(err, storage.ErrHoldNotFound):
+			h.badRequestResponse(w, r, err)
 		default:
 			h.serverErrorResponse(w, r, err)
 		}
