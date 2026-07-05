@@ -51,18 +51,17 @@
 | #32 | Technical: Make the TTL worker manage expired held points | Technical | 8 | Done |
 | #177 | Bug: Cancel hold returns HTTP 500 (should be HTTP 400) | Bug | 3 | In Progress |
 | #242 | Architecture: Static view, Dynamic view, Deployment view| Architecture | 8 | Done |
-| # | ADRs: Create 3 Architecture Decision Records | Architecture | 5 | Done |
+| #248 | ADRs: Create 3 Architecture Decision Records | Architecture | 5 | Done |
 | #198 | Docs: Development process documentation with git workflow | Documentation | 3 | Done |
-| # | Docs: Quality requirements link to ADRs | Documentation | 2 | Done |
-| # | Docs: Update testing.md for MVP v2 | Documentation | 2 | Done |
-| # | Docs: Add new UAT scenarios for MVP v2 | Documentation | 3 | Done |
+| #248 | Docs: Quality requirements link to ADRs | Documentation | 1 | Done |
+| #246 | Docs: Update testing.md for MVP v2 | Documentation | 2 | Next Sprint |
+| #245 | Docs: Add new UAT scenarios for MVP v2 | Documentation | 3 | Done |
 
 **Focus areas:**
 - Complete remaining MVP v1 features (TTL workers, expiring points, held points)
 - Document architecture (static, dynamic, deployment views)
 - Create 3 ADRs (Architecture Decision Records)
 - Document development process with Mermaid gitGraph diagram
-- Extend testing and CI for MVP v2
 - Deploy and release MVP v2
 - Conduct UAT and Sprint Review with customer
 
