@@ -186,7 +186,7 @@ All ADRs are linked from `docs/quality-requirements.md`.
 - [Reflection](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/reflection.md)
 - [Retrospective](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/retrospective.md)
 - [LLM Report](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/llm-report.md)
-
+- [Hosted Docs Site](https://gosha185.github.io/SWP-Avito-project/)
 ---
 
 ## Screenshots
