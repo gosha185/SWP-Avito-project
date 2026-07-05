@@ -1,0 +1,50 @@
+@startuml Component Diagram
+!theme plain
+
+title API Component Diagram
+
+[External Service]
+
+package "API" {
+  package "HTTP Layer" {
+    [Router]
+  }
+  
+  package "Service Layer" {
+    [Service]
+    [Leader Service]
+  }
+  
+  package "Storage Layer" {
+    [BalanceRepo]
+    [BatchRepo]
+    [HoldRepo]
+    [HoldBatchRepo]
+    [LedgerRepo]
+  }
+
+  database "PostgreSQL Database" {
+    [Database]
+}
+  [Workers]
+}
+
+[External Service] <--> [Router]
+[Router] <--> [Service]
+[Service] <--> [BalanceRepo]
+[Service] <--> [BatchRepo]
+[Service] <--> [HoldRepo]
+[Service] <--> [HoldBatchRepo]
+[Service] <--> [LedgerRepo]
+[HoldBatchRepo] <-- [HoldRepo]
+[BalanceRepo] <--> [Database]
+[BatchRepo] <--> [Database]
+[HoldRepo] <--> [Database]
+[HoldBatchRepo] <--> [Database]
+[LedgerRepo] <--> [Database]
+[Workers] <-> [Leader Service]
+[Workers] <-> [Service]
+[Workers] <-> [BatchRepo]
+[Workers] <-> [HoldRepo]
+ 
+@enduml

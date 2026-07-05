@@ -34,6 +34,7 @@ The service is written in Go and uses PostgreSQL as the primary data storage.
 
 ### 1. Prepare environment
 ```bash
+cd bonus_service
 cp .env.example .env
 ```
 
@@ -55,7 +56,6 @@ DB_DSN=postgres://admin:admin@db:5432/admindb?sslmode=disable
 
 ### 2. Run the service
 ```bash
-cd bonus_service
 docker compose up --build -d
 ```
 

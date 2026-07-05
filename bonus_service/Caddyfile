@@ -1,7 +1,20 @@
 :8080 {
-    handle /v1/* {
+    handle /swagger/* {
+        reverse_proxy swagger:8080
+    }
+
+    handle /accrual* {
         reverse_proxy api:9091
     }
+
+    handle /hold* {
+        reverse_proxy api:9091
+    }
+
+    handle /users/* {
+        reverse_proxy api:9091
+    }
+
     handle {
         reverse_proxy swagger:8080
     }

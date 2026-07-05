@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 )
 
 type LeaderRepo struct {
@@ -18,8 +19,11 @@ func NewLeaderRepo(db *sql.DB) *LeaderRepo {
 // TryAcquireLock attempts to become the leader for the given role.
 // Returns true if this instance is now the leader.
 func (r *LeaderRepo) TryAcquireLock(ctx context.Context, roleName, instanceID string, ttlSeconds int) (bool, error) {
+	log.Printf("[LeaderRepo] TryAcquireLock: role=%s, instance=%s", roleName, instanceID) 
+	
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
+		log.Printf("[LeaderRepo] BeginTx error: %v", err)
 		return false, err
 	}
 	defer tx.Rollback()
@@ -29,26 +33,31 @@ func (r *LeaderRepo) TryAcquireLock(ctx context.Context, roleName, instanceID st
 			INSERT INTO leaders (role_name, leader_id, updated_at) 
 			VALUES ($1, $2, NOW())
 			ON CONFLICT (role_name) DO UPDATE 
-			SET leader_id = $2, 
+			SET leader_id = EXCLUDED.leader_id, 
 			    updated_at = NOW()
-			WHERE leaders.role_name = $1
-				AND (leaders.updated_at < NOW() - ($3 || ' seconds')::INTERVAL
-			    	OR leaders.leader_id = $2)
+			WHERE 
+			    leaders.updated_at < NOW() - ($3 || ' seconds')::INTERVAL
+			    OR leaders.leader_id = EXCLUDED.leader_id
+			RETURNING leader_id;
 	`
 
 	err = tx.QueryRowContext(ctx, query, roleName, instanceID, ttlSeconds).Scan(&leaderID)
 
 	if errors.Is(err, sql.ErrNoRows) {
+		log.Printf("[LeaderRepo] No rows affected (another leader exists)")
 		return false, nil
 	}
 	if err != nil {
+		log.Printf("[LeaderRepo] Query error: %v", err)
 		return false, fmt.Errorf("failed to acquire lock: %w", err)
 	}
 
 	if err := tx.Commit(); err != nil {
+		log.Printf("[LeaderRepo] Commit error: %v", err)
 		return false, fmt.Errorf("failed to commit: %w", err)
 	}
 
+	log.Printf("[LeaderRepo] Acquired: leaderID=%s, instanceID=%s, result=%v", leaderID, instanceID, leaderID == instanceID) 
 	return leaderID == instanceID, nil
 }
 

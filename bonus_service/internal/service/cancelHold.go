@@ -24,23 +24,28 @@ func (bs *BonusService) CancelHold(ctx context.Context, entry *models.LedgerEntr
 	if err != nil {
 		return 0, err
 	}
+	var sum int64
 	for _, holdBatch := range holdBatches {
-		err = bs.BatchesDB.IncreaseBatchRemaining(ctx, tx, holdBatch.BatchID, holdBatch.Amount)
+		var validness bool
+		validness, err = bs.BatchesDB.IncreaseBatchRemaining(ctx, tx, holdBatch.BatchID, holdBatch.Amount)
 		if err != nil {
 			return 0, err
+		}
+		if validness {
+			sum += holdBatch.Amount
 		}
 	}
 	err = bs.HoldsDB.UpdateHoldStatus(ctx, tx, hold.ID, "cancelled")
 	if err != nil {
 		return 0, err
 	}
-	err = bs.BalancesDB.UpdateBalance(ctx, tx, entry.UserID, hold.Amount, -hold.Amount)
+	err = bs.BalancesDB.UpdateBalance(ctx, tx, entry.UserID, sum, -hold.Amount)
 	if err != nil {
 		return 0, err
 	}
 	entry.Metadata = json.RawMessage(fmt.Sprintf(`{"order_id": "%s", "expires_at": "%s"}`, order.String(), hold.ExpiresAt.Format(time.RFC3339)))
 	entry.Amount = hold.Amount
-	err = bs.LedgersDB.Insert(ctx, tx, entry) //Maintaining ledger
+	err = bs.LedgersDB.Insert(ctx, tx, entry)
 	if err != nil {
 		return 0, err
 	}

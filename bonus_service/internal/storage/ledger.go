@@ -97,6 +97,48 @@ func (r *LedgerRepo) GetByExternalKey(ctx context.Context, externalKey string) (
 	return &entry, nil
 }
 
+// GetByExternalKeyTx checks if an operation with this external_key already exists.
+// Uses FOR UPDATE to lock the row and prevent race conditions.
+// Must be called within a transaction.
+// Returns nil if not found.
+func (r *LedgerRepo) GetByExternalKeyTx(ctx context.Context, tx *sql.Tx, externalKey string) (*models.LedgerEntry, error) {
+	query := `
+        SELECT id, user_id, operation_type, amount, batch_id, external_key, created_at, metadata
+        FROM ledger
+        WHERE external_key = $1
+        FOR UPDATE
+    `
+
+	var entry models.LedgerEntry
+	var batchID sql.NullInt64
+	var metadata []byte
+
+	err := tx.QueryRowContext(ctx, query, externalKey).Scan(
+		&entry.ID,
+		&entry.UserID,
+		&entry.OperationType,
+		&entry.Amount,
+		&batchID,
+		&entry.ExternalKey,
+		&entry.CreatedAt,
+		&metadata,
+	)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("failed to get ledger entry by key %s: %w", externalKey, err)
+	}
+
+	entry.BatchID = batchID
+	if metadata != nil {
+		entry.Metadata = metadata
+	}
+
+	return &entry, nil
+}
+
 // GetHistory returns paginated transaction history for a user.
 // Used by: GET /balance/:user_id/history.
 func (r *LedgerRepo) GetHistory(ctx context.Context, userID uuid.UUID, limit, offset int) ([]models.LedgerEntry, error) {
@@ -221,6 +263,68 @@ func (r *LedgerRepo) GetLedgerByOrderID(ctx context.Context, orderID uuid.UUID) 
 	}
 
 	return entries, nil
+}
+
+// InsertExpiryEntries inserts ledger entries for expired batches.
+// Must be called within a transaction.
+// Returns number of inserted rows.
+func (r *LedgerRepo) InsertExpiryEntries(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        INSERT INTO ledger (user_id, operation_type, amount, batch_id, external_key, created_at, metadata)
+        SELECT
+            user_id,
+            'expiry' AS operation_type,
+            remaining AS amount,
+            id AS batch_id,
+            'expiry-' || id || '-' || EXTRACT(EPOCH FROM NOW())::TEXT AS external_key,
+            NOW() AS created_at,
+            jsonb_build_object('reason', 'ttl_expiry') AS metadata
+        FROM batches
+        WHERE remaining > 0 AND expires_at < NOW()
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to insert expiry entries: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
+}
+
+// InsertCancelEntries inserts ledger entries for cancelled holds.
+// Must be called within a transaction.
+// Returns number of inserted rows.
+func (r *LedgerRepo) InsertCancelEntries(ctx context.Context, tx *sql.Tx) (int64, error) {
+	query := `
+        INSERT INTO ledger (user_id, operation_type, amount, batch_id, external_key, created_at, metadata)
+        SELECT
+            user_id,
+            'cancel' AS operation_type,
+            amount,
+            NULL AS batch_id,
+            'cancel-' || id || '-' || EXTRACT(EPOCH FROM NOW())::TEXT AS external_key,
+            NOW() AS created_at,
+            jsonb_build_object('reason', 'ttl_expiry') AS metadata
+        FROM holds
+        WHERE status = 'active' AND expires_at < NOW()
+    `
+
+	result, err := tx.ExecContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to insert cancel entries: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	return rowsAffected, nil
 }
 
 // isDuplicateKeyError checks if the error is a PostgreSQL unique violation (23505).
