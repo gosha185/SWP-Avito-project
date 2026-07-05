@@ -72,7 +72,7 @@
 **Dates:** 6–12 July 2026  
 **Sprint Goal:** Enhance system flexibility and observability for production readiness.
 
-**Milestone:** [Sprint 4 – Post-MVP Improvements](https://github.com/gosha185/SWP-Avito-project/milestone/4)
+**Milestone:** [Sprint 4](https://github.com/gosha185/SWP-Avito-project/milestone/4)
 
 **Planned items:**
 - Flexible TTL per accrual – allow specifying TTL days in the accrual request
