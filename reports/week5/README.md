@@ -104,7 +104,7 @@ All ADRs are linked from `docs/quality-requirements.md`.
 ## Deployment and Release
 
 - [Deployment URL](http://10.93.26.189:8080/)
-- [SemVer Release MVP v2]() 
+- [SemVer Release MVP v2](https://github.com/gosha185/SWP-Avito-project/releases#release-v2.0.0) 
 - [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
 - [Public Demo Video](https://drive.google.com/drive/folders/1ErYiGQRrbtJMk0coST_A4IIJJGk0-AWv)
 
