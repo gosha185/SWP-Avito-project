@@ -70,10 +70,17 @@ Three architecture views were documented:
 - **Dynamic View:** Sequence diagram for hold/confirm/cancel flows
 - **Deployment View:** Deployment diagram showing Go API service, PostgreSQL, and Docker Compose
 
-Three ADRs were created:
-- ADR-001: Go as backend language
-- ADR-002: PostgreSQL as primary database
-- ADR-003: Idempotency via `external_key`
+### Architecture Decision Records (ADRs)
+
+Three ADRs were created to document key architecture decisions:
+
+| ADR | Decision | Quality Requirements Addressed |
+|-----|----------|-------------------------------|
+| [ADR-001](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/architecture/adr/ADR-001-leader-election.md) | PostgreSQL-based Leader Election for Background Workers | QR-002, QR-005 |
+| [ADR-002](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/architecture/adr/ADR-002-soft-expiration-cleanup.md) | Soft Expiration and Background Cleanup of Domain Data | QR-001, QR-004 |
+| [ADR-003](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/architecture/adr/ADR-003-transaction-isolation.md) | Transaction Isolation Strategy for Financial Operations | QR-001, QR-005 |
+
+All ADRs are linked from `docs/quality-requirements.md`.
 
 ---
 
@@ -90,7 +97,7 @@ Three ADRs were created:
 
 - [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions)
 - [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions)
-- [Branch Protection Rules](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week4/images/branch-protection.jpg)
+- [Branch Protection Rules](https://github.com/gosha185/SWP-Avito-project/settings/branches)
 
 ---
 
@@ -99,7 +106,7 @@ Three ADRs were created:
 - [Deployment URL](http://10.93.26.189:8080/)
 - [SemVer Release MVP v2]() 
 - [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
-- [Public Demo Video](https://drive.google.com/drive/folders/1_BCvUGtGOnKfKZm3BT7sPrfhnj7yD0BC?usp=sharing)
+- [Public Demo Video](https://drive.google.com/drive/folders/1ErYiGQRrbtJMk0coST_A4IIJJGk0-AWv)
 
 ---
 
@@ -121,9 +128,11 @@ Three ADRs were created:
 
 | Feedback point | Resulting PBI or issue | Status | Response |
 |---|---|---|---|
-| Cancel hold should return HTTP 400, not HTTP 500 | [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) | Done | Fixed in Sprint 3 |
+| Cancel hold should return HTTP 400, not HTTP 500 | [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) | Done | Fixed in Sprint 3 — now returns HTTP 400 |
+| FEFO should be verified | — | Planned | Will be tested in Sprint 4 |
+| Architecture should be documented | — | Done | Architecture docs and 3 ADRs created |
 | Sequence diagrams should be scenario-specific | — | Planned | Will be refactored in Sprint 4 |
-| Add DoD/DoR checklists to Issue templates | — | Planned | Will be added to templates |
+| Add DoD/DoR checklists to Issue templates | — | Planned | Will be added to GitHub Issue templates |
 | Use unit tests instead of manual testing for workers | — | Planned | Will be implemented in Sprint 4 |
 
 ---
@@ -138,9 +147,9 @@ Three ADRs were created:
 | UAT-004: Place hold | ✅ Passed | — | — |
 | UAT-005: Confirm hold | ✅ Passed | — | — |
 | UAT-006: Cancel hold | ✅ Passed | — | — |
-| UAT-007: Cancel already cancelled hold | ✅ Passed | Fixed in Sprint 3 | [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) |
-| UAT-008: TTL worker — expired points burned | ✅ Passed | — | — |
-| UAT-009: TTL worker — stale holds released | ✅ Passed | — | — |
+| UAT-007: Cancel already cancelled hold | ✅ Passed | Fixed in Sprint 3 — now returns HTTP 400 | [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) |
+| UAT-008: TTL worker — expired points burned | ✅ Passed | "Workers demonstrated working correctly." | — |
+| UAT-009: TTL worker — stale holds released | ✅ Passed | "Workers demonstrated working correctly." | — |
 
 ---
 
@@ -153,16 +162,16 @@ Three ADRs were created:
 - ✅ View points expiring in given time (#8)
 - ✅ View all current held points (#23)
 - ✅ Architecture documentation (static, dynamic, deployment views)
-- ✅ 3 ADRs created
+- ✅ 3 ADRs created (ADR-001, ADR-002, ADR-003)
 - ✅ Development process documentation
 - ✅ UAT scenarios (9 scenarios, all passed)
 - ✅ Sprint Review with customer (4 July 2026)
 
 ### In Progress
-- ⏳ HTTP 500 → HTTP 400 error handling (#177)
-- ⏳ SemVer release for MVP v2
+- testing for MVP v2
 
 ### Next Steps
+- Complete SemVer release for MVP v2
 - Refactor sequence diagrams into scenario-specific views
 - Add DoD/DoR checklists to Issue templates
 - Replace manual worker testing with unit tests
@@ -192,10 +201,10 @@ Three ADRs were created:
 ![Latest CI Run]()
 
 ### SemVer Release
-![SemVer Release]() 
+![SemVer Release]()
 
 ### Reviewed PR
 ![Reviewed PR]()
 
 ### Hosted Docs Site
-![Hosted Docs]() 
+![Hosted Docs]()
