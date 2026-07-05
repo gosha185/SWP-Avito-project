@@ -195,4 +195,4 @@ Persistent storage is configured for PostgreSQL data.
 - [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md)
 - [User Acceptance Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/user-acceptance-tests.md)
 - [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/testing.md)
-- [Hosted Documentation]()
+- [Hosted Documentation](https://gosha185.github.io/SWP-Avito-project/)
