@@ -3,7 +3,7 @@
 ## Project
 [SWP-Avito-project](https://github.com/gosha185/SWP-Avito-project) – Bonus System
 
-**License:** [MIT](LICENSE)
+**License:** [MIT](https://github.com/gosha185/SWP-Avito-project/blob/main/LICENSE)
 
 ---
 
@@ -97,7 +97,7 @@ All ADRs are linked from `docs/quality-requirements.md`.
 
 - [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions)
 - [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions)
-- [Branch Protection Rules](https://github.com/gosha185/SWP-Avito-project/settings/branches)
+- [Branch Protection Rules](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/images/branch-protection.jpg)
 
 ---
 
