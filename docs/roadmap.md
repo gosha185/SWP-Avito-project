@@ -27,17 +27,10 @@
 - Quality requirement tests (QRT-001 to QRT-005)
 - Unit and integration tests (coverage 53.2%)
 - CI pipeline with linting, tests, coverage, QRTs, additional QA
-- UAT scenarios (7 scenarios, 6 passed, 1 failed)
+- UAT scenarios (7 scenarios, 6 passed, 1 failed — fixed in Sprint 3)
 - Updated Definition of Done
 - Updated Roadmap
 - Week 4 reports and documentation
-
-**Focus areas:**
-- Quality requirements definition
-- Automated testing (unit, integration, concurrency)
-- CI pipeline configuration with quality gates
-- UAT with customer
-- Documentation and reporting
 
 ---
 
@@ -50,23 +43,19 @@
 
 **Planned items:**
 
-| # | Title | Type | SP | Assignee |
-|---|-------|------|----|----------|
-| #8 | Technical: Make possible to see points expiring in giving time | Technical | 13 | Georgii, Ekaterina, Stepan |
-| #9 | Technical: Make the TTL worker manage expired points batches | Technical | 8 | Ekaterina |
-| #23 | Technical: Make possible to see all current held points | Technical | 1 | Georgii, Ekaterina, Stepan |
-| #32 | Technical: Make the TTL worker manage expired held points | Technical | 8 | Ekaterina |
-| #177 | Bug: Cancel hold returns HTTP 500 (should be HTTP 400) | Bug | 3 | Stepan |
-| #— | Architecture: Static view (component diagram) | Architecture | 5 | Ekaterina |
-| #— | Architecture: Dynamic view (sequence diagram) | Architecture | 5 | Georgii |
-| #— | Architecture: Deployment view | Architecture | 5 | Stepan |
-| #— | ADRs: Create 3 Architecture Decision Records | Architecture | 5 | Georgii |
-| #198 | Docs: Development process documentation with git workflow | Documentation | 3 | Leilia |
-| #— | Docs: Quality requirements link to ADRs | Documentation | 2 | Leilia |
-| #— | Docs: Update testing.md for MVP v2 | Documentation | 2 | Ivan |
-| #— | Docs: Add 2 new UAT scenarios for MVP v2 | Documentation | 3 | Ivan |
-
-**Total Sprint Size:** ~70 Story Points
+| # | Title | Type | SP | Status |
+|---|-------|------|----|--------|
+| #8 | Technical: Make possible to see points expiring in giving time | Technical | 13 | Done |
+| #9 | Technical: Make the TTL worker manage expired points batches | Technical | 8 | Done |
+| #23 | Technical: Make possible to see all current held points | Technical | 1 | Done |
+| #32 | Technical: Make the TTL worker manage expired held points | Technical | 8 | Done |
+| #177 | Bug: Cancel hold returns HTTP 500 (should be HTTP 400) | Bug | 3 | In Progress |
+| #242 | Architecture: Static view, Dynamic view, Deployment view| Architecture | 8 | Done |
+| # | ADRs: Create 3 Architecture Decision Records | Architecture | 5 | Done |
+| #198 | Docs: Development process documentation with git workflow | Documentation | 3 | Done |
+| # | Docs: Quality requirements link to ADRs | Documentation | 2 | Done |
+| # | Docs: Update testing.md for MVP v2 | Documentation | 2 | Done |
+| # | Docs: Add new UAT scenarios for MVP v2 | Documentation | 3 | Done |
 
 **Focus areas:**
 - Complete remaining MVP v1 features (TTL workers, expiring points, held points)
@@ -94,3 +83,5 @@
   - Prometheus metrics (goroutines, memory, DB pool stats, request latency)
 - OpenAPI spec + deployment documentation
 - Optional Redis caching for frequently accessed balances (invalidation strategy required)
+
+---
