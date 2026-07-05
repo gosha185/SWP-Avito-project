@@ -11,7 +11,7 @@
 
 ### Sprint Goal
 
-**Deliver MVP v2, document architecture, create ADRs, document development process.**
+**Deliver MVP v2, document architecture (static, dynamic, deployment views), create 3 ADRs, and document development process with git workflow diagram.**
 
 ### Sprint Dates
 
@@ -31,24 +31,13 @@
 - [Sprint 2 Backlog](https://github.com/users/gosha185/projects/3)
 - [Sprint 3 Backlog](https://github.com/users/gosha185/projects/4)
 
-## Links 
-
-- [SemVer Release MVP v2]()
-
 ### Sprint
 - [MVP v2 Scope](https://github.com/gosha185/SWP-Avito-project/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Sprint+3+–+MVP+v2%22)
 
 ---
 
-## Deployment and Release
-
-- [Deployment URL](http://10.93.26.189:8080/)
-- [SemVer Release MVP v2]()
-- [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
-- [Public Demo Video]()
----
-
 ## Quality Documentation
+
 - [Quality Requirements](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md)
 - [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md)
 - [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/testing.md)
@@ -57,19 +46,40 @@
 ---
 
 ## Architecture Documentation
-- [Architecture README]()
-- [Static View]()
-- [Dynamic View]()
-- [Deployment View]()
-- [ADRs]()
+
+- [Architecture README](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/architecture/README.md)
+- [Static View (Component Diagram)](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/static-view)
+- [Dynamic View (Sequence Diagram)](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/dynamic-view)
+- [Deployment View](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/deployment-view)
+- [ADRs](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/adr)
 
 ---
 
 ## Architecture Summary
+
+The system follows a layered architecture:
+
+- **HTTP Layer** – handles requests and responses
+- **Service/Business Logic Layer** – implements core algorithms
+- **Storage Layer** – manages database operations
+- **PostgreSQL** – persistent storage
+- **TTL Workers** – background processes for expired points and holds
+
+Three architecture views were documented:
+- **Static View:** Component diagram showing system structure and external dependencies
+- **Dynamic View:** Sequence diagram for hold/confirm/cancel flows
+- **Deployment View:** Deployment diagram showing Go API service, PostgreSQL, and Docker Compose
+
+Three ADRs were created:
+- ADR-001: Go as backend language
+- ADR-002: PostgreSQL as primary database
+- ADR-003: Idempotency via `external_key`
+
 ---
 
 ## Process Documentation
-- [Development Process]()
+
+- [Development Process](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/development-process.md)
 - [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/definition-of-done.md)
 - [Roadmap](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/roadmap.md)
 - [Process Requirements](https://github.com/gosha185/SWP-Avito-project/blob/main/Process_Requirements.md)
@@ -77,12 +87,21 @@
 ---
 
 ## CI and Quality Gates
-- [CI Pipeline]()
-- [Latest CI Run]()
-- [Branch Protection Rules]()
+
+- [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions)
+- [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions)
+- [Branch Protection Rules](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week4/images/branch-protection.jpg)
 
 ---
 
+## Deployment and Release
+
+- [Deployment URL](http://10.93.26.189:8080/)
+- [SemVer Release MVP v2]() 
+- [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
+- [Public Demo Video](https://drive.google.com/drive/folders/1_BCvUGtGOnKfKZm3BT7sPrfhnj7yD0BC?usp=sharing)
+
+---
 
 ## Testing and CI Status
 
@@ -92,17 +111,9 @@
 | Build | ✅ Passing |
 | Unit tests | ✅ Passing |
 | Integration tests | ✅ Passing |
-| Coverage | ???% |
+| Coverage | 53.2% |
 | QRTs | ✅ Passing |
 | Additional QA | ✅ Passing |
-
----
-
-## Deployment and Release
-- [Deployment URL]()
-- [SemVer Release MVP v2]()
-- [CHANGELOG.md]()
-- [Public Demo Video]()
 
 ---
 
@@ -110,6 +121,10 @@
 
 | Feedback point | Resulting PBI or issue | Status | Response |
 |---|---|---|---|
+| Cancel hold should return HTTP 400, not HTTP 500 | [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) | Done | Fixed in Sprint 3 |
+| Sequence diagrams should be scenario-specific | — | Planned | Will be refactored in Sprint 4 |
+| Add DoD/DoR checklists to Issue templates | — | Planned | Will be added to templates |
+| Use unit tests instead of manual testing for workers | — | Planned | Will be implemented in Sprint 4 |
 
 ---
 
@@ -117,27 +132,54 @@
 
 | UAT Scenario | Status | Customer Feedback | Resulting PBI |
 |---|---|---|---|
+| UAT-001: View balance | ✅ Passed | — | — |
+| UAT-002: View holds | ✅ Passed | — | — |
+| UAT-003: Award points | ✅ Passed | — | — |
+| UAT-004: Place hold | ✅ Passed | — | — |
+| UAT-005: Confirm hold | ✅ Passed | — | — |
+| UAT-006: Cancel hold | ✅ Passed | — | — |
+| UAT-007: Cancel already cancelled hold | ✅ Passed | Fixed in Sprint 3 | [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) |
+| UAT-008: TTL worker — expired points burned | ✅ Passed | — | — |
+| UAT-009: TTL worker — stale holds released | ✅ Passed | — | — |
+
+---
+
+## Current Product Status
+
+### Completed
+- ✅ MVP v1 (Sprint 1)
+- ✅ Quality and Testing (Sprint 2)
+- ✅ TTL workers for expired points and holds (#9, #32)
+- ✅ View points expiring in given time (#8)
+- ✅ View all current held points (#23)
+- ✅ Architecture documentation (static, dynamic, deployment views)
+- ✅ 3 ADRs created
+- ✅ Development process documentation
+- ✅ UAT scenarios (9 scenarios, all passed)
+- ✅ Sprint Review with customer (4 July 2026)
+
+### In Progress
+- ⏳ HTTP 500 → HTTP 400 error handling (#177)
+- ⏳ SemVer release for MVP v2
+
+### Next Steps
+- Refactor sequence diagrams into scenario-specific views
+- Add DoD/DoR checklists to Issue templates
+- Replace manual worker testing with unit tests
+- Sprint 4: Post-MVP improvements (flexible TTL, resource management)
 
 ---
 
 ## Week 5 Files
 
-- [Sprint Review Summary]()
-- [Sprint Review Transcript]()
-- [Reflection]()
-- [Retrospective]()
+- [Sprint Review Summary](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/sprint-review-summary.md)
+- [Sprint Review Transcript](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/sprint-review-transcript.md)
+- [Reflection](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/reflection.md)
+- [Retrospective](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/retrospective.md)
 - [LLM Report](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/llm-report.md)
 
 ---
-## Current Product Status
 
-### Completed
-
-### In Progress
-
-### Next Steps
-
----
 ## Screenshots
 
 ### Sprint Milestone
@@ -150,10 +192,10 @@
 ![Latest CI Run]()
 
 ### SemVer Release
-![SemVer Release]()
+![SemVer Release]() 
 
 ### Reviewed PR
 ![Reviewed PR]()
 
 ### Hosted Docs Site
-![Hosted Docs]()
+![Hosted Docs]() 
