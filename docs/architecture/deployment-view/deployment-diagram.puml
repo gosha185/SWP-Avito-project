@@ -1,0 +1,57 @@
+@startuml Deployment Diagram
+!theme plain
+
+skinparam node {
+  BackgroundColor WhiteSmoke
+  BorderColor DarkBlue
+  ArrowColor #444444
+}
+
+skinparam component {
+  BackgroundColor White
+  BorderColor Black
+}
+
+skinparam cloud {
+  BackgroundColor LightCyan
+  BorderColor DarkCyan
+}
+
+skinparam database {
+  BackgroundColor White
+  BorderColor Black
+}
+
+title API Deployment Diagram (Physical View)
+
+node "API User Servers" << server >> {
+  component [Servers] as user
+}
+
+node "End-User Devices" << device >> {
+  component [Devices] as end_user
+}
+
+cloud "API" {
+  node "Workers" {
+    component "Workers" as workers
+  }
+
+  node "Servers" << server >> {
+    component "Usual Servers" as sv
+    component "Leader Server" as lsv
+  }
+
+  node "PostgreSQL Database" << database >> {
+    database "database" as db
+  }
+}
+
+end_user <--> user
+user <---> lsv
+user <---> sv
+lsv <-> workers
+lsv <--> db
+sv <--> db
+
+@enduml
