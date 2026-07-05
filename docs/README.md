@@ -97,4 +97,4 @@ The service is written in Go and uses PostgreSQL as the primary data storage.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](https://github.com/gosha185/SWP-Avito-project/blob/main/LICENSE).
