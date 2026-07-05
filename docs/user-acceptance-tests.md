@@ -231,14 +231,88 @@ is invalid rather than the server encountering an internal error."
 
 ---
 
-## Summary of UAT Results (25 June 2026)
+---
 
-| UAT     | Scenario                                          | Status                                                                          |
-|---------|---------------------------------------------------|---------------------------------------------------------------------------------|
-| UAT-001 | View current available balance                    | ✅ Passed                                                                        |
-| UAT-002 | View points held for a concrete order             | ✅ Passed                                                                        |
-| UAT-003 | Award points with TTL                             | ✅ Passed                                                                        |
-| UAT-004 | Place points on hold                              | ✅ Passed                                                                        |
-| UAT-005 | Confirm a hold                                    | ✅ Passed                                                                        |
-| UAT-006 | Cancel a hold                                     | ✅ Passed                                                                        |
-| UAT-007 | Cancel an already cancelled hold (error handling) | ❌ Failed — see [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) |
+## UAT-008: TTL worker — expired points are automatically burned
+
+| Field | Value |
+|-------|-------|
+| **Scenario ID** | UAT-008 |
+| **Scenario status** | Active |
+| **User goal** | As an end user, I want expired points to be automatically removed from my balance so that I only see valid points. |
+
+**Preconditions:**
+
+- User is registered in the system
+- User has points that are set to expire (e.g., TTL = 30 days)
+- Points have passed their expiration date
+
+**Step-by-step instructions:**
+
+1. Award points with a TTL of 30 days to a test user.
+2. Wait for the TTL worker to run (or simulate time passing).
+3. Send `GET /v1/users/{user_id}/balance`.
+4. Observe the response.
+
+**Expected outcome:**
+
+- HTTP 200 OK
+- Expired points are no longer included in the balance
+- Balance reflects only active (non-expired) points
+
+**Execution result (4 July 2026):** ✅ Passed
+
+**Customer comments:** "Workers demonstrated working correctly."
+
+**Resulting PBIs or issues:** None
+
+---
+
+## UAT-009: TTL worker — stale holds are automatically released
+
+| Field | Value |
+|-------|-------|
+| **Scenario ID** | UAT-009 |
+| **Scenario status** | Active |
+| **User goal** | As an end user, I want stale holds to be automatically released so that my points are not blocked indefinitely. |
+
+**Preconditions:**
+
+- User is registered in the system
+- User has an active hold (e.g., 200 points held for an order)
+- Hold has exceeded its TTL (e.g., 24 hours + 1 hour grace)
+
+**Step-by-step instructions:**
+
+1. Create a hold for a test user.
+2. Wait for the TTL worker to run (or simulate time passing).
+3. Send `GET /v1/users/{user_id}/holds`.
+4. Send `GET /v1/users/{user_id}/balance`.
+
+**Expected outcome:**
+
+- HTTP 200 OK
+- Hold is removed from the holds list
+- Points are returned to the available balance
+
+**Execution result (4 July 2026):** ✅ Passed
+
+**Customer comments:** "Workers demonstrated working correctly."
+
+**Resulting PBIs or issues:** None
+
+---
+
+## Summary of UAT Results (4 July 2026)
+
+| UAT     | Scenario                                          | Status |
+|---------|---------------------------------------------------|--------|
+| UAT-001 | View current available balance                    | ✅ Passed |
+| UAT-002 | View points held for a concrete order             | ✅ Passed |
+| UAT-003 | Award points with TTL                             | ✅ Passed |
+| UAT-004 | Place points on hold                              | ✅ Passed |
+| UAT-005 | Confirm a hold                                    | ✅ Passed |
+| UAT-006 | Cancel a hold                                     | ✅ Passed |
+| UAT-007 | Cancel an already cancelled hold (error handling) | ✅ Passed — fixed in Sprint 3 |
+| UAT-008 | TTL worker — expired points are burned            | ✅ Passed |
+| UAT-009 | TTL worker — stale holds are released             | ✅ Passed |
