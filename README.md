@@ -182,3 +182,17 @@ Persistent storage is configured for PostgreSQL data.
 - TTL worker for automatic cleanup and expiration
 - Immutable ledger for auditability
 - Idempotency protection at database level
+
+---
+
+## Documentation
+
+- [Development Process](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/development-process.md)
+- [Architecture Documentation](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/architecture/README.md)
+- [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/definition-of-done.md)
+- [Roadmap](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/roadmap.md)
+- [Quality Requirements](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md)
+- [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md)
+- [User Acceptance Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/user-acceptance-tests.md)
+- [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/testing.md)
+- [Hosted Documentation]()
