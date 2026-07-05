@@ -192,19 +192,22 @@ All ADRs are linked from `docs/quality-requirements.md`.
 ## Screenshots
 
 ### Sprint Milestone
-![Sprint Milestone]()
+![Sprint Milestone](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/images/sprint-milestone.jpg)
 
 ### Board/Project Workflow View
-![Board View]()
+![Board View](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/images/board-view.jpg)
 
 ### Latest CI Run
-![Latest CI Run]()
+![Latest CI Run](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/images/ci-run.jpg)
 
 ### SemVer Release
-![SemVer Release]()
+![SemVer Release](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/images/release.jpg)
 
 ### Reviewed PR
-![Reviewed PR]()
+![Reviewed PR](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/images/reviewed-pr.jpg)
 
 ### Hosted Docs Site
-![Hosted Docs]()
+![Hosted Docs](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/images/hosted-site.jpg)
+
+### Branch Protection
+![Branch Protection](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week5/images/branch-protection.jpg)
