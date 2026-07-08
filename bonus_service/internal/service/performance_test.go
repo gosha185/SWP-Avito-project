@@ -164,7 +164,7 @@ func TestService_IntegrationPerformance(t *testing.T) {
 	results := []IntegrationPerfResult{}
 
 	const userCount = 1000
-	const operationCount = 50
+	const operationCount = 100
 
 	fmt.Println("Starting integration performance test...")
 	fmt.Printf("Users: %d, Operations per type: %d\n\n", userCount, operationCount)
@@ -332,7 +332,7 @@ func TestService_IntegrationPerformance(t *testing.T) {
 
 	fmt.Println("\nPhase 8: Testing ConfirmWithdraw...")
 	start = time.Now()
-	for i := 0; i < 25; i++ {
+	for i := 0; i < operationCount/2; i++ {
 		entry := &models.LedgerEntry{
 			UserID:        userIDs[i%userCount],
 			OperationType: models.OpConfirm,
@@ -348,15 +348,15 @@ func TestService_IntegrationPerformance(t *testing.T) {
 	results = append(results, IntegrationPerfResult{
 		Phase:        "CONFIRM",
 		Operation:    "ConfirmWithdraw",
-		Count:        25,
+		Count:        operationCount / 2,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / 25,
-		OpsPerSecond: 25.0 / totalTime.Seconds(),
+		AvgTime:      totalTime / (operationCount / 2),
+		OpsPerSecond: (operationCount / 2) / totalTime.Seconds(),
 	})
 
 	fmt.Println("\nPhase 9: Testing CancelHold...")
 	start = time.Now()
-	for i := 25; i < 50; i++ {
+	for i := operationCount / 2; i < operationCount; i++ {
 		entry := &models.LedgerEntry{
 			UserID:        userIDs[i%userCount],
 			OperationType: models.OpCancel,
@@ -372,15 +372,15 @@ func TestService_IntegrationPerformance(t *testing.T) {
 	results = append(results, IntegrationPerfResult{
 		Phase:        "CANCEL",
 		Operation:    "CancelHold",
-		Count:        25,
+		Count:        operationCount / 2,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / 25,
-		OpsPerSecond: 25.0 / totalTime.Seconds(),
+		AvgTime:      totalTime / (operationCount / 2),
+		OpsPerSecond: (operationCount / 2) / totalTime.Seconds(),
 	})
 
 	fmt.Println("\nPhase 10: Testing full scenario (Accrue->Hold->Confirm)...")
 	start = time.Now()
-	for i := 0; i < 25; i++ {
+	for i := 0; i < operationCount/2; i++ {
 		userID := uuid.New()
 		orderID := uuid.New()
 
@@ -424,10 +424,10 @@ func TestService_IntegrationPerformance(t *testing.T) {
 	results = append(results, IntegrationPerfResult{
 		Phase:        "FULL SCENARIO",
 		Operation:    "Accrue -> Hold -> Confirm",
-		Count:        25,
+		Count:        operationCount / 2,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / 25,
-		OpsPerSecond: 25.0 / totalTime.Seconds(),
+		AvgTime:      totalTime / (operationCount / 2),
+		OpsPerSecond: (operationCount / 2) / totalTime.Seconds(),
 	})
 
 	// Final statistics
