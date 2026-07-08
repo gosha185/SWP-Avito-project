@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"sort"
 	"testing"
 	"time"
 
@@ -16,6 +17,9 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
+
+const USER_COUNT = 999
+const OPERATIONS = 200
 
 const fullSchema = `
 CREATE TABLE IF NOT EXISTS balances (
@@ -86,25 +90,41 @@ type IntegrationPerfResult struct {
 	Operation    string
 	Count        int
 	TotalTime    time.Duration
+	MinTime      time.Duration
+	MaxTime      time.Duration
 	AvgTime      time.Duration
+	P50Time      time.Duration
+	P95Time      time.Duration
+	P99Time      time.Duration
 	OpsPerSecond float64
 }
 
 func printIntegrationResults(results []IntegrationPerfResult) {
 	fmt.Println("\n=== Integration Performance Test ===")
-	fmt.Println("=====================================")
 
 	for _, r := range results {
 		if r.Phase != "" {
 			fmt.Printf("\n[%s]\n", r.Phase)
 		}
-		fmt.Printf("%-45s : count=%d, total=%v, avg=%v, ops/sec=%.2f\n",
-			r.Operation,
-			r.Count,
-			r.TotalTime.Round(time.Millisecond),
-			r.AvgTime.Round(time.Microsecond),
-			r.OpsPerSecond)
+		fmt.Printf("%-45s : count=%d\n", r.Operation, r.Count)
+		fmt.Printf("  Total: %v\n", r.TotalTime.Round(time.Millisecond))
+		fmt.Printf("  Min:   %v\n", r.MinTime.Round(time.Microsecond))
+		fmt.Printf("  Max:   %v\n", r.MaxTime.Round(time.Microsecond))
+		fmt.Printf("  Avg:   %v\n", r.AvgTime.Round(time.Microsecond))
+		fmt.Printf("  P50:   %v\n", r.P50Time.Round(time.Microsecond))
+		fmt.Printf("  P95:   %v\n", r.P95Time.Round(time.Microsecond))
+		fmt.Printf("  P99:   %v\n", r.P99Time.Round(time.Microsecond))
+		fmt.Printf("  RPS:   %.2f ops/sec\n", r.OpsPerSecond)
 	}
+}
+
+func calculatePercentile(times []time.Duration, percentile float64) time.Duration {
+	if len(times) == 0 {
+		return 0
+	}
+	sort.Slice(times, func(i, j int) bool { return times[i] < times[j] })
+	index := int(float64(len(times)-1) * percentile)
+	return times[index]
 }
 
 func newTestDB(t *testing.T) *sql.DB {
@@ -163,14 +183,16 @@ func TestService_IntegrationPerformance(t *testing.T) {
 	ctx := context.Background()
 	results := []IntegrationPerfResult{}
 
-	const userCount = 1000
-	const operationCount = 100
+	const userCount = USER_COUNT
+	const operationCount = OPERATIONS
 
 	fmt.Println("Starting integration performance test...")
 	fmt.Printf("Users: %d, Operations per type: %d\n\n", userCount, operationCount)
 
-	fmt.Println("Phase 1: Creating 1000 users with balance...")
+	// SETUP
+	fmt.Println("Phase 1: Creating users with balance...")
 	userIDs := make([]uuid.UUID, userCount)
+	times := make([]time.Duration, 0, userCount)
 
 	start := time.Now()
 	for i := 0; i < userCount; i++ {
@@ -183,7 +205,11 @@ func TestService_IntegrationPerformance(t *testing.T) {
 			Amount:        5000,
 			ExternalKey:   uuid.New().String(),
 		}
+
+		opStart := time.Now()
 		_, err := svc.Accrue(ctx, entry, int64(i%30+1))
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to accrue for user %d: %v", i, err)
 		}
@@ -192,14 +218,22 @@ func TestService_IntegrationPerformance(t *testing.T) {
 
 	results = append(results, IntegrationPerfResult{
 		Phase:        "SETUP",
-		Operation:    "Create 1000 users with balance",
+		Operation:    "Create users with balance",
 		Count:        userCount,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / time.Duration(userCount),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
 		OpsPerSecond: float64(userCount) / totalTime.Seconds(),
 	})
 
+	// ACCRUE
 	fmt.Println("\nPhase 2: Testing Accrue operations...")
+	times = make([]time.Duration, 0, operationCount)
+
 	start = time.Now()
 	for i := 0; i < operationCount; i++ {
 		entry := &models.LedgerEntry{
@@ -208,7 +242,11 @@ func TestService_IntegrationPerformance(t *testing.T) {
 			Amount:        100,
 			ExternalKey:   uuid.New().String(),
 		}
+
+		opStart := time.Now()
 		_, err := svc.Accrue(ctx, entry, 30)
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to accrue: %v", err)
 		}
@@ -220,12 +258,19 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "Accrue additional points",
 		Count:        operationCount,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / time.Duration(operationCount),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
 		OpsPerSecond: float64(operationCount) / totalTime.Seconds(),
 	})
 
+	// HOLD
 	fmt.Println("\nPhase 3: Testing Hold operations...")
 	orderIDs := make([]uuid.UUID, operationCount)
+	times = make([]time.Duration, 0, operationCount)
 
 	start = time.Now()
 	for i := 0; i < operationCount; i++ {
@@ -238,7 +283,10 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		orderID := uuid.New()
 		orderIDs[i] = orderID
 
+		opStart := time.Now()
 		_, err := svc.Hold(ctx, entry, orderID, 24)
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to hold: %v", err)
 		}
@@ -250,14 +298,25 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "Hold points for orders",
 		Count:        operationCount,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / time.Duration(operationCount),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
 		OpsPerSecond: float64(operationCount) / totalTime.Seconds(),
 	})
 
+	// QUERY: GetAvailablePoints
 	fmt.Println("\nPhase 4: Testing GetAvailablePoints...")
+	times = make([]time.Duration, 0, operationCount)
+
 	start = time.Now()
 	for i := 0; i < operationCount; i++ {
+		opStart := time.Now()
 		_, err := svc.GetAvailablePoints(ctx, userIDs[i%userCount])
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to get available points: %v", err)
 		}
@@ -269,14 +328,25 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "GetAvailablePoints",
 		Count:        operationCount,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / time.Duration(operationCount),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
 		OpsPerSecond: float64(operationCount) / totalTime.Seconds(),
 	})
 
+	// QUERY: GetExpiringAvailablePoints
 	fmt.Println("\nPhase 5: Testing GetExpiringAvailablePoints...")
+	times = make([]time.Duration, 0, operationCount)
+
 	start = time.Now()
 	for i := 0; i < operationCount; i++ {
+		opStart := time.Now()
 		_, err := svc.GetExpiringAvailablePoints(ctx, userIDs[i%userCount], 30)
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to get expiring points: %v", err)
 		}
@@ -288,14 +358,25 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "GetExpiringAvailablePoints",
 		Count:        operationCount,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / time.Duration(operationCount),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
 		OpsPerSecond: float64(operationCount) / totalTime.Seconds(),
 	})
 
+	// QUERY: GetHeld
 	fmt.Println("\nPhase 6: Testing GetHeld...")
+	times = make([]time.Duration, 0, operationCount)
+
 	start = time.Now()
 	for i := 0; i < operationCount; i++ {
+		opStart := time.Now()
 		_, err := svc.GetHeld(ctx, userIDs[i%userCount])
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to get held: %v", err)
 		}
@@ -307,14 +388,25 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "GetHeld",
 		Count:        operationCount,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / time.Duration(operationCount),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
 		OpsPerSecond: float64(operationCount) / totalTime.Seconds(),
 	})
 
+	// QUERY: GetHistory
 	fmt.Println("\nPhase 7: Testing GetHistory...")
+	times = make([]time.Duration, 0, operationCount)
+
 	start = time.Now()
 	for i := 0; i < operationCount; i++ {
+		opStart := time.Now()
 		_, err := svc.GetHistory(ctx, userIDs[i%userCount], 50, 0)
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to get history: %v", err)
 		}
@@ -326,11 +418,19 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "GetHistory",
 		Count:        operationCount,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / time.Duration(operationCount),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
 		OpsPerSecond: float64(operationCount) / totalTime.Seconds(),
 	})
 
+	// CONFIRM
 	fmt.Println("\nPhase 8: Testing ConfirmWithdraw...")
+	times = make([]time.Duration, 0, operationCount/2)
+
 	start = time.Now()
 	for i := 0; i < operationCount/2; i++ {
 		entry := &models.LedgerEntry{
@@ -338,7 +438,11 @@ func TestService_IntegrationPerformance(t *testing.T) {
 			OperationType: models.OpConfirm,
 			ExternalKey:   uuid.New().String(),
 		}
+
+		opStart := time.Now()
 		_, err := svc.ConfirmWithdraw(ctx, entry, orderIDs[i])
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to confirm: %v", err)
 		}
@@ -350,11 +454,19 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "ConfirmWithdraw",
 		Count:        operationCount / 2,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / (operationCount / 2),
-		OpsPerSecond: (operationCount / 2) / totalTime.Seconds(),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
+		OpsPerSecond: float64(operationCount/2) / totalTime.Seconds(),
 	})
 
+	// CANCEL
 	fmt.Println("\nPhase 9: Testing CancelHold...")
+	times = make([]time.Duration, 0, operationCount/2)
+
 	start = time.Now()
 	for i := operationCount / 2; i < operationCount; i++ {
 		entry := &models.LedgerEntry{
@@ -362,7 +474,11 @@ func TestService_IntegrationPerformance(t *testing.T) {
 			OperationType: models.OpCancel,
 			ExternalKey:   uuid.New().String(),
 		}
+
+		opStart := time.Now()
 		_, err := svc.CancelHold(ctx, entry, orderIDs[i])
+		times = append(times, time.Since(opStart))
+
 		if err != nil {
 			t.Fatalf("failed to cancel: %v", err)
 		}
@@ -374,17 +490,26 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "CancelHold",
 		Count:        operationCount / 2,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / (operationCount / 2),
-		OpsPerSecond: (operationCount / 2) / totalTime.Seconds(),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
+		OpsPerSecond: float64(operationCount/2) / totalTime.Seconds(),
 	})
 
+	// FULL SCENARIO
 	fmt.Println("\nPhase 10: Testing full scenario (Accrue->Hold->Confirm)...")
+	times = make([]time.Duration, 0, operationCount/2)
+
 	start = time.Now()
 	for i := 0; i < operationCount/2; i++ {
 		userID := uuid.New()
 		orderID := uuid.New()
 
-		// Accrue
+		scenarioStart := time.Now()
+
 		entry := &models.LedgerEntry{
 			UserID:        userID,
 			OperationType: models.OpAccrual,
@@ -396,7 +521,6 @@ func TestService_IntegrationPerformance(t *testing.T) {
 			t.Fatalf("failed to accrue: %v", err)
 		}
 
-		// Hold
 		entry = &models.LedgerEntry{
 			UserID:        userID,
 			OperationType: models.OpHold,
@@ -408,7 +532,6 @@ func TestService_IntegrationPerformance(t *testing.T) {
 			t.Fatalf("failed to hold: %v", err)
 		}
 
-		// Confirm
 		entry = &models.LedgerEntry{
 			UserID:        userID,
 			OperationType: models.OpConfirm,
@@ -418,6 +541,8 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to confirm: %v", err)
 		}
+
+		times = append(times, time.Since(scenarioStart))
 	}
 	totalTime = time.Since(start)
 
@@ -426,11 +551,14 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		Operation:    "Accrue -> Hold -> Confirm",
 		Count:        operationCount / 2,
 		TotalTime:    totalTime,
-		AvgTime:      totalTime / (operationCount / 2),
-		OpsPerSecond: (operationCount / 2) / totalTime.Seconds(),
+		MinTime:      calculatePercentile(times, 0.0),
+		MaxTime:      calculatePercentile(times, 1.0),
+		AvgTime:      calculatePercentile(times, 0.5),
+		P50Time:      calculatePercentile(times, 0.5),
+		P95Time:      calculatePercentile(times, 0.95),
+		P99Time:      calculatePercentile(times, 0.99),
+		OpsPerSecond: float64(operationCount/2) / totalTime.Seconds(),
 	})
 
-	// Final statistics
 	printIntegrationResults(results)
-
 }
