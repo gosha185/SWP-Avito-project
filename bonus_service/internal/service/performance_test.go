@@ -1,4 +1,3 @@
-// bonus_service/internal/service/integration_performance_test.go
 package service_test
 
 import (
@@ -431,9 +430,7 @@ func TestService_IntegrationPerformance(t *testing.T) {
 		OpsPerSecond: 25.0 / totalTime.Seconds(),
 	})
 
-	// ============================================
 	// Final statistics
-	// ============================================
 	printIntegrationResults(results)
 
 }
