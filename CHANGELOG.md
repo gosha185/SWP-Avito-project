@@ -5,6 +5,33 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.0.0] - 2026-07-05
+
+### Added
+
+**API**
+* GET /v1/balance now returns only the balance (without extra fields)
+* GET /v1/balance?days=30 — returns the number of points that will expire in the next N days
+* Background workers for automatic clearing of expired holds and points (launched by a separate process)
+
+Infrastructure
+
+* Leader election via PostgreSQL — ensures that workers are launched on only one instance
+* GitHub Pages with published documentation
+* Handover-documentation for the customer has been published
+
+Changed
+
+* POST /v1/cancel now returns HTTP 400 instead of 500 when canceling a hold again
+* API documentation (OpenAPI) has been updated to match the current endpoints
+
+Fixed
+
+* Fixed the operation of IncreaseBatchRemaining to correctly skip expired batches
+* Fixed data races in parallel hold requests
+* Removed duplicate and unused files and imports.
+---
+
 ## [1.1.0] - 2026-06-28
 
 ### Added
