@@ -98,3 +98,4 @@ with interactive API documentation.
 
 [1.0.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.0.0
 [1.1.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.1.0
+[2.0.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v2.0.0
