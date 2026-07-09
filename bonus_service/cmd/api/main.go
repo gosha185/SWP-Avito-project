@@ -9,10 +9,37 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
+func getWorkerInterval(envKey string, defaultMinutes int) time.Duration {
+	val := os.Getenv(envKey)
+	if val == "" {
+
+		return time.Duration(defaultMinutes) * time.Minute
+	}
+	minutes, err := strconv.Atoi(val)
+
+	if err != nil {
+		log.Printf("Invalid %s: %s, using default %d minutes", envKey, val, defaultMinutes)
+		return time.Duration(defaultMinutes) * time.Minute
+	}
+	if minutes <= 0 {
+		log.Printf("%s must be positive (%d), using default %d minutes", envKey, minutes, defaultMinutes)
+		return time.Duration(defaultMinutes) * time.Minute
+	}
+	return time.Duration(minutes) * time.Minute
+}
+
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("No .env file found, using system environment variables")
+	}
+
 	db, err := storage.NewDB(os.Getenv("DB_DSN"))
 	if err != nil {
 		log.Fatal("Failed to connect to database: ", err)
@@ -38,10 +65,26 @@ func main() {
 		30,
 	)
 
-	leaderService.RegisterWorker("TTLWorker", 5*time.Minute, bonusService.TTLWorker)
-	leaderService.RegisterWorker("BatchExpiryWorker", 5*time.Minute, bonusService.BatchExpiryWorker)
-	leaderService.RegisterWorker("BatchCleanupWorker", 1*time.Hour, bonusService.BatchCleanupWorker)
-	leaderService.RegisterWorker("HoldCleanupWorker", 1*time.Hour, bonusService.HoldCleanupWorker)
+	leaderService.RegisterWorker(
+		"TTLWorker",
+		getWorkerInterval("WORKER_TTL_INTERVAL", 5),
+		bonusService.TTLWorker,
+	)
+	leaderService.RegisterWorker(
+		"BatchExpiryWorker",
+		getWorkerInterval("WORKER_BATCH_EXPIRY_INTERVAL", 5),
+		bonusService.BatchExpiryWorker,
+	)
+	leaderService.RegisterWorker(
+		"BatchCleanupWorker",
+		getWorkerInterval("WORKER_BATCH_CLEANUP_INTERVAL", 60),
+		bonusService.BatchCleanupWorker,
+	)
+	leaderService.RegisterWorker(
+		"HoldCleanupWorker",
+		getWorkerInterval("WORKER_HOLD_CLEANUP_INTERVAL", 60),
+		bonusService.HoldCleanupWorker,
+	)
 
 	leaderService.Start(ctx)
 	srv := &http.Server{

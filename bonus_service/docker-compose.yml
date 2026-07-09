@@ -24,6 +24,10 @@ services:
     build: .
     environment:
       DB_DSN: ${DB_DSN}
+      WORKER_TTL_INTERVAL: ${WORKER_TTL_INTERVAL:-5}
+      WORKER_BATCH_EXPIRY_INTERVAL: ${WORKER_BATCH_EXPIRY_INTERVAL:-5}
+      WORKER_BATCH_CLEANUP_INTERVAL: ${WORKER_BATCH_CLEANUP_INTERVAL:-60}
+      WORKER_HOLD_CLEANUP_INTERVAL: ${WORKER_HOLD_CLEANUP_INTERVAL:-60}
     depends_on:
       db:
         condition: service_healthy
