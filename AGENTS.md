@@ -80,7 +80,7 @@ CI runs the same checks. Do not open PRs that fail these commands.
 - All changes go through a Pull Request linked to a GitHub Issue.
 - At least one human approval is required before merging.
 - Use **Merge Commit** as the merge strategy.
-- Every PR must include a changelog checklist item (see [`CONTRIBUTING.md`](CONTRIBUTING.md)).
+- Every PR must include a changelog checklist item.
 
 ---
 
