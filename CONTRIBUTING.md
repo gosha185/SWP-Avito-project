@@ -2,7 +2,7 @@
 
 Thank you for contributing to this project. This guide covers the workflow, setup, and review expectations for human contributors.
 
-See [`README.md`](README.md) for a project overview and [`AGENTS.md`](AGENTS.md) for agent-specific guidance.
+See [`README.md`](README.md) for a project overview.
 
 ---
 
