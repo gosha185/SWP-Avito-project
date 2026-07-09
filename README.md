@@ -33,7 +33,7 @@ The service is written in Go and uses PostgreSQL as the primary data storage.
 ### Current feature status
 
 **Ready for independent use**
-The customer can deploy and operate the service independently. See [`docs/customer-handover.md`](../../docs/customer-handover.md) for full handover details including remaining actions
+The customer can deploy and operate the service independently. See [`docs/customer-handover.md`](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/customer-handover.md) for full handover details including remaining actions
 ---
 
 ## Quick start (Docker)
