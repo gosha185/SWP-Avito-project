@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Agent-facing guide for coding agents working in this repository.  
-Human contributor guidance is in [`CONTRIBUTING.md`](CONTRIBUTING.md). Project overview is in [`README.md`](README.md).
+Project overview is in [`README.md`](README.md).
 
 ---
 
