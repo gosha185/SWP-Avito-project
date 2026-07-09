@@ -7,51 +7,56 @@ assignees: ''
 ---
 
 ## Type
-
 - [ ] Technical PBI
 - [ ] Infrastructure PBI
 - [ ] Documentation PBI
 
 ## Description
-
 [Describe the task in detail — what needs to be done and why]
 
 ## MoSCoW Priority
-
 - [ ] Must Have
 - [ ] Should Have
 - [ ] Could Have
 - [ ] Won't Have
 
 ## Acceptance Criteria
-
 - [ ] Criterion 1
 - [ ] Criterion 2
 - [ ] Criterion 3
 
-## Notes
+## Definition of Ready
+- [ ] Acceptance criteria are defined
+- [ ] Story Points estimated
+- [ ] Dependencies are resolved
+- [ ] All questions are answered
 
+## Definition of Done
+- [ ] All acceptance criteria are satisfied
+- [ ] Code is reviewed by another team member
+- [ ] PR is merged into `main`
+- [ ] CI checks pass
+- [ ] `CHANGELOG.md` is updated (if user-visible)
+- [ ] Customer-facing documentation is updated (if applicable)
+- [ ] `docs/customer-handover.md` is reviewed (if applicable)
+
+## Notes
 [Additional context, constraints, or open questions]
 
 ## Assignee
-
 @username
 
 ## Reviewer
-
 @username
 
 ## Story Points
-
 [1, 2, 3, 5, 8, 13, 20, 40, 100]
 
 ## Requirement Status
-
 - [ ] Active
 - [ ] Removed
 
 ## Work Status
-
 - [ ] To Do
 - [ ] Ready
 - [ ] In Progress
