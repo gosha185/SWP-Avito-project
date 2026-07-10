@@ -16,7 +16,7 @@ func (bs *BonusService) CancelAllExpiredHolds(ctx context.Context) error {
 		return err
 	}
 
-	_, err = bs.LedgersDB.InsertExpiryEntries(ctx, tx)
+	_, err = bs.LedgersDB.InsertCancelEntries(ctx, tx)
 	if err != nil {
 		return err
 	}
