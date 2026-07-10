@@ -16,6 +16,11 @@ func (bs *BonusService) ExpireAllBatches(ctx context.Context) error {
 		return err
 	}
 
+	_, err = bs.LedgersDB.InsertExpiryEntries(ctx, tx)
+	if err != nil {
+		return err
+	}
+
 	_, err = bs.BatchesDB.ExpireAllBatches(ctx, tx)
 	if err != nil {
 		return err
