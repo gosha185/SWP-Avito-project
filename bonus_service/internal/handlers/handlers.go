@@ -108,6 +108,8 @@ func (h *APIHandler) CreateHoldHandler(w http.ResponseWriter, r *http.Request) {
 			h.errorResponse(w, r, http.StatusConflict, "idempotency key already used for another operation")
 		case errors.Is(err, storage.ErrInsufficientBalance):
 			h.errorResponse(w, r, http.StatusConflict, "not enough balance to hold the order")
+		case errors.Is(err, storage.ErrOrderAlreadyHeld):
+			h.badRequestResponse(w, r, err)
 		default:
 			h.serverErrorResponse(w, r, err)
 		}
