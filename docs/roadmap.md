@@ -11,7 +11,6 @@
 - US-06: View points held for a concrete order
 - US-07: View current available point balance
 - 18 technical and infrastructure PBIs completed
-- 7 tasks moved to Sprint 2
 
 ---
 
@@ -29,58 +28,83 @@
 - CI pipeline with linting, tests, coverage, QRTs, additional QA
 - UAT scenarios (7 scenarios, 6 passed, 1 failed — fixed in Sprint 3)
 - Updated Definition of Done
-- Updated Roadmap
 - Week 4 reports and documentation
 
 ---
 
-## Sprint 3 – MVP v2 (Current)
+## Sprint 3 – MVP v2 (Completed)
 
 **Dates:** 29 June – 5 July 2026  
 **Sprint Goal:** Deliver MVP v2: complete remaining features, document architecture (static, dynamic, deployment views), create 3 ADRs, and document development process with git workflow diagram.
 
 **Milestone:** [Sprint 3 – MVP v2](https://github.com/gosha185/SWP-Avito-project/milestone/3)
 
+**Completed:**
+- TTL workers for expired points and holds (#9, #32)
+- View points expiring in given time (#8)
+- View all current held points (#23)
+- HTTP 500 → HTTP 400 error handling (#177)
+- Architecture documentation (static, dynamic, deployment views)
+- 3 ADRs created (ADR-001, ADR-002, ADR-003)
+- Development process documentation with git workflow diagram
+- UAT scenarios (9 scenarios, all passed)
+- Sprint Review with customer
+
+---
+
+## Sprint 4 – Trial Release and Handover Preparation (Current)
+
+**Dates:** 6–12 July 2026  
+**Sprint Goal:** Deliver a stable trial release, complete customer-facing documentation (README, customer-handover, CONTRIBUTING, AGENTS), and conduct a transition-readiness meeting with the customer.
+
+**Milestone:** [Sprint 4 – Trial Release](https://github.com/gosha185/SWP-Avito-project/milestone/4)
+
 **Planned items:**
 
 | # | Title | Type | SP | Status |
 |---|-------|------|----|--------|
-| #8 | Technical: Make possible to see points expiring in giving time | Technical | 13 | Done |
-| #9 | Technical: Make the TTL worker manage expired points batches | Technical | 8 | Done |
-| #23 | Technical: Make possible to see all current held points | Technical | 1 | Done |
-| #32 | Technical: Make the TTL worker manage expired held points | Technical | 8 | Done |
-| #177 | Bug: Cancel hold returns HTTP 500 (should be HTTP 400) | Bug | 3 | In Progress |
-| #242 | Architecture: Static view, Dynamic view, Deployment view| Architecture | 8 | Done |
-| #248 | ADRs: Create 3 Architecture Decision Records | Architecture | 5 | Done |
-| #198 | Docs: Development process documentation with git workflow | Documentation | 3 | Done |
-| #248 | Docs: Quality requirements link to ADRs | Documentation | 1 | Done |
-| #246 | Docs: Update testing.md for MVP v2 | Documentation | 2 | Next Sprint |
-| #245 | Docs: Add new UAT scenarios for MVP v2 | Documentation | 3 | Done |
+| #261 | Docs: Update roadmap for Sprint 4 | Documentation | 1 | Done |
+| #262 | Docs: Update roadmap for Sprint 5 | Documentation | 1 | Done |
+| #263 | Docs: Update README.md for customer handover | Documentation | 3 | Done |
+| #264 | Docs: Create customer-handover.md | Documentation | 5 | Done |
+| #265 | Docs: Create CONTRIBUTING.md | Documentation | 2 | Done |
+| #266 | Docs: Create AGENTS.md | Documentation | 2 | Done |
+| #267 | Infra: Deploy Week 6 trial release | Infrastructure | 3 | Done |
+| #268 | Docs: Update CHANGELOG.md for Week 6 | Documentation | 1 | Done |
+| #269 | Docs: Add Week 6 report index | Documentation | 5 | Done |
+| #270 | Docs: Add Week 6 reflection | Documentation | 2 | Done |
+| #271 | Docs: Add Week 6 retrospective | Documentation | 2 | Done |
+| #272 | Docs: Add LLM usage report for Week 6 | Documentation | 1 | Done |
+| #273 | Docs: Add Week 6 sprint-review-summary and meeting transcript | Documentation | 3 | Done |
 
 **Focus areas:**
-- Complete remaining MVP v1 features (TTL workers, expiring points, held points)
-- Document architecture (static, dynamic, deployment views)
-- Create 3 ADRs (Architecture Decision Records)
-- Document development process with Mermaid gitGraph diagram
-- Deploy and release MVP v2
-- Conduct UAT and Sprint Review with customer
+- Deploy trial release for customer testing
+- Update README.md as the main entry point
+- Create customer-handover.md with handover status
+- Create CONTRIBUTING.md and AGENTS.md
+- Conduct transition-readiness meeting with customer
+- Gather customer feedback for Week 7 follow-up
 
 ---
 
-## Sprint 4 – Post-MVP Improvements (Planned)
+## Sprint 5 – Final Transition and MVP v3 (Planned)
 
-**Dates:** 6–12 July 2026  
-**Sprint Goal:** Enhance system flexibility and observability for production readiness.
+**Dates:** 13–19 July 2026  
+**Sprint Goal:** Address trial feedback, complete final transition, deliver MVP v3, and prepare for Demo Day.
 
-**Milestone:** [Sprint 4](https://github.com/gosha185/SWP-Avito-project/milestone/4)
+**Milestone:** [Sprint 5 – MVP v3](https://github.com/gosha185/SWP-Avito-project/milestone/5)
 
-**Planned items:**
-- Flexible TTL per accrual – allow specifying TTL days in the accrual request
-- Resource management:
-  - Connection pool tuning (MaxOpenConns/MaxIdleConns based on load)
-  - Graceful shutdown (SIGTERM handling with in-flight request completion)
-  - Prometheus metrics (goroutines, memory, DB pool stats, request latency)
-- OpenAPI spec + deployment documentation
-- Optional Redis caching for frequently accessed balances (invalidation strategy required)
+**Expected items:**
+- Follow-up fixes and improvements based on Week 6 trial feedback
+- Final deployment and SemVer release for MVP v3
+- Updated customer-handover.md with final handover status
+- Final transition confirmation with customer
+- Week 7 public report (reports/week7/README.md)
+- Updated presentation slides and Demo Day preparation
+- Public sanitized demo video for MVP v3
 
----
+**Focus areas:**
+- Resolve all remaining issues identified during the trial
+- Confirm handover status with customer
+- Deliver MVP v3 as the final course version
+- Prepare for Demo Day presentation
