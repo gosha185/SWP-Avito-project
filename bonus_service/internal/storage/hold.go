@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 type HoldRepo struct {
@@ -142,6 +143,11 @@ func (r *HoldRepo) CreateHold(ctx context.Context, tx *sql.Tx, hold *models.Hold
 	).Scan(&hold.ID, &hold.CreatedAt)
 
 	if err != nil {
+		var pqErr *pq.Error
+		if errors.As(err, &pqErr) && pqErr.Code == "23505" {
+			return ErrOrderAlreadyHeld
+		}
+
 		return fmt.Errorf("failed to create hold for user %s, order %s: %w", hold.UserID, hold.OrderID, err)
 	}
 
