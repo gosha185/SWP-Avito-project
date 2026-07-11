@@ -10,4 +10,5 @@ var (
 	ErrLedgerDuplicate     = errors.New("duplicate external key")
 	ErrIncorrectInput      = errors.New("incorrect input")
 	ErrInsufficientBalance = errors.New("insufficient balance")
+	ErrOrderAlreadyHeld    = errors.New("order already has a hold")
 )
