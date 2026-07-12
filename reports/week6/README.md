@@ -3,7 +3,7 @@
 ## Project
 [SWP-Avito-project](https://github.com/gosha185/SWP-Avito-project) – Bonus System
 
-**License:** [MIT](LICENSE)
+**License:** [MIT](https://github.com/gosha185/SWP-Avito-project/blob/main/LICENSE)
 
 ---
 
