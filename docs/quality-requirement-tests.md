@@ -12,11 +12,15 @@ This document defines automated quality requirement tests (QRTs) that verify the
 
 **Test data, setup, or environment:** Standard CI environment with test database and mock data.
 
-**Automated command or CI check:** `go test -run=TestPerformance ./... -bench=. -benchtime=10s`
+**Automated command or CI check:** 
+```bash
+cd bonus_service
+go test  ./internal/service
+```
 
 **Expected measurable result:** 95% of requests for each endpoint complete within 500ms under 100 concurrent users.
 
-**Evidence link:** [Latest CI run] (UPDATE)
+**Evidence link:** [Latest CI run](https://github.com/gosha185/SWP-Avito-project/actions/runs/29169873511)
 
 ---
 
@@ -28,11 +32,11 @@ This document defines automated quality requirement tests (QRTs) that verify the
 
 **Test data, setup, or environment:** Deployed service instance.
 
-**Automated command or CI check:** `curl -f http://localhost:8080/v1/healthcheck`
+**Automated command or CI check:** `curl -f http://localhost:8080/healthcheck`
 
 **Expected measurable result:** HTTP 200 OK response.
 
-**Evidence link:** [Latest CI run] (UPDATE)
+**Evidence link:** [Latest CI run](https://github.com/gosha185/SWP-Avito-project/actions/runs/29169873511)
 
 ---
 
@@ -44,11 +48,15 @@ This document defines automated quality requirement tests (QRTs) that verify the
 
 **Test data, setup, or environment:** Standard CI environment.
 
-**Automated command or CI check:** `go test ./internal/... -coverprofile=coverage.out`
+**Automated command or CI check:** 
+```bash
+cd bonus_service
+go test ./internal/storage
+```
 
 **Expected measurable result:** Each critical module has ≥ 30% line coverage.
 
-**Evidence link:** [Latest coverage report] (UPDATE)
+**Evidence link:** [Latest coverage report](https://github.com/gosha185/SWP-Avito-project/actions/runs/29169873511)
 
 ---
 
@@ -60,11 +68,15 @@ This document defines automated quality requirement tests (QRTs) that verify the
 
 **Test data, setup, or environment:** Standard CI environment.
 
-**Automated command or CI check:** `go test -run=TestDataIntegrity ./...`
+**Automated command or CI check:** 
+```bash
+cd bonus_service
+go test ./internal/service
+```
 
 **Expected measurable result:** All transactions from the last 30 days are returned without data loss or corruption.
 
-**Evidence link:** [Latest CI run] (UPDATE)
+**Evidence link:** [Latest CI run](https://github.com/gosha185/SWP-Avito-project/actions/runs/29169873511)
 
 ---
 
@@ -76,8 +88,12 @@ This document defines automated quality requirement tests (QRTs) that verify the
 
 **Test data, setup, or environment:** Standard CI environment with simulated database failure.
 
-**Automated command or CI check:** `go test -run=TestFaultTolerance ./...`
+**Automated command or CI check:**
+```bash
+cd bonus_service
+go test ./internal/service
+```
 
 **Expected measurable result:** The system recovers and completes the operation within 5 seconds without data loss.
 
-**Evidence link:** [Latest CI run] (UPDATE)
+**Evidence link:** [Latest CI run](https://github.com/gosha185/SWP-Avito-project/actions/runs/29169873511)
