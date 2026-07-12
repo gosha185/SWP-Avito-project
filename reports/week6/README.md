@@ -149,25 +149,25 @@ The customer reviewed the following documentation during the Week 6 meeting:
 ## Screenshots
 
 ### Sprint Milestone
-![Sprint Milestone](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/sprint-milestone.png)
+![Sprint Milestone](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/sprint-milestone.jpg)
 
 ### Sprint 4 Backlog
-![Sprint 4 Backlog](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/sprint4-backlog.png)
+![Sprint 4 Backlog](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/sprint4-backlog.jpg)
 
 ### Latest CI Run
-![Latest CI Run](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/ci-run.png)
+![Latest CI Run](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/ci-run.jpg)
 
 ### Week 6 Trial Release
-![Week 6 Trial Release](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/release-week6.png)
+![Week 6 Trial Release](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/release-week6.jpg)
 
 ### Reviewed PR
-![Reviewed PR](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/reviewed-pr.png)
+![Reviewed PR](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/reviewed-pr.jpg)
 
 ### Hosted Docs Site
-![Hosted Docs](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/hosted-docs.png)
+![Hosted Docs](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/hosted-docs.jpg)
 
 ### Trial Deployment
-![Trial Deployment](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/trial-deployment.png)
+![Trial Deployment](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/images/trial-deployment.jpg)
 
 ---
 
