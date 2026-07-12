@@ -66,7 +66,7 @@
 ## Deployment and Release
 
 - [Deployment URL](http://10.93.26.189:8080/)
-- [Week 6 Trial Release](https://github.com/gosha185/SWP-Avito-project/releases/tag/v0.5.0)
+- [Week 6 Trial Release](https://github.com/gosha185/SWP-Avito-project/releases/tag/v2.1.0)
 - [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
 
 ---
@@ -174,7 +174,7 @@ The customer reviewed the following documentation during the Week 6 meeting:
 ## Week 6 Files
 
 - [Sprint Review Summary](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/sprint-review-summary.md)
-- [Sprint Review Transcript](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/sprint-review-transcript.md)
+- [Sprint Review Transcript](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/customer-review-transcript.md)
 - [Reflection](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/reflection.md)
 - [Retrospective](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/retrospective.md)
 - [LLM Report](https://github.com/gosha185/SWP-Avito-project/blob/main/reports/week6/llm-report.md)
