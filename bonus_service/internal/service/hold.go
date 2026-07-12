@@ -11,7 +11,7 @@ import (
 )
 
 func (bs *BonusService) Hold(ctx context.Context, entry *models.LedgerEntry, order uuid.UUID, hours int64) (int64, error) {
-	tx, _, err := bs.validate(ctx, entry.UserID, entry.Amount, entry.ExternalKey, entry.Amount, hours)
+	tx, _, err := bs.validate(ctx, entry.UserID, entry.Amount, entry.ExternalKey, entry.Amount, hours) //Validation can not be omitted
 	if err != nil {
 		return 0, err
 	}
@@ -25,19 +25,15 @@ func (bs *BonusService) Hold(ctx context.Context, entry *models.LedgerEntry, ord
 	if err != nil {
 		return 0, err
 	}
-	hold, err = bs.HoldsDB.GetHoldByOrderID(ctx, tx, entry.UserID, order)
-	if err != nil {
-		return 0, err
-	}
 	rest := entry.Amount
 	for _, batch := range batches {
 		d := min(batch.Remaining, rest)
 		rest -= d
-		err = bs.BatchesDB.DecreaseBatchRemaining(ctx, tx, batch.ID, d)
+		err = bs.BatchesDB.DecreaseBatchRemaining(ctx, tx, batch.ID, d) //One of the main features of the method
 		if err != nil {
 			return 0, err
 		}
-		err = bs.HoldBatchesDB.CreateHoldBatch(ctx, tx, hold.ID, entry.UserID, batch.ID, d)
+		err = bs.HoldBatchesDB.CreateHoldBatch(ctx, tx, hold.ID, entry.UserID, batch.ID, d) //One of the main features of the method
 		if err != nil {
 			return 0, err
 		}
@@ -45,12 +41,12 @@ func (bs *BonusService) Hold(ctx context.Context, entry *models.LedgerEntry, ord
 			break
 		}
 	}
-	err = bs.BalancesDB.UpdateBalance(ctx, tx, entry.UserID, -entry.Amount, entry.Amount)
+	err = bs.BalancesDB.UpdateBalance(ctx, tx, entry.UserID, -entry.Amount, entry.Amount) //One of the main features of the method
 	if err != nil {
 		return 0, err
 	}
 	entry.Metadata = json.RawMessage(fmt.Sprintf(`{"order_id": "%s", "expires_at": "%s"}`, order.String(), hold.ExpiresAt.Format(time.RFC3339)))
-	err = bs.LedgersDB.Insert(ctx, tx, entry) //Maintaining ledger
+	err = bs.LedgersDB.Insert(ctx, tx, entry) //Maintaining ledger can not be omitted
 	if err != nil {
 		return 0, err
 	}
