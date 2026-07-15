@@ -11,18 +11,7 @@ func (bs *BonusService) ExpireAllBatches(ctx context.Context) error {
 	}
 	defer tx.Rollback()
 
-	_, err = bs.BalancesDB.UpdateBalancesForExpiredBatches(ctx, tx)
-	if err != nil {
-		return err
-	}
-
-	_, err = bs.LedgersDB.InsertExpiryEntries(ctx, tx)
-	if err != nil {
-		return err
-	}
-
-	_, err = bs.BatchesDB.ExpireAllBatches(ctx, tx)
-	if err != nil {
+	if _, err := bs.BatchesDB.ExpireAllBatches(ctx, tx); err != nil {
 		return err
 	}
 

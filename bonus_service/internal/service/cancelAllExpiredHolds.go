@@ -11,18 +11,7 @@ func (bs *BonusService) CancelAllExpiredHolds(ctx context.Context) error {
 	}
 	defer tx.Rollback()
 
-	_, err = bs.BalancesDB.UpdateBalancesForExpiredHolds(ctx, tx)
-	if err != nil {
-		return err
-	}
-
-	_, err = bs.LedgersDB.InsertCancelEntries(ctx, tx)
-	if err != nil {
-		return err
-	}
-
-	_, err = bs.HoldsDB.CancelAllExpiredHolds(ctx, tx)
-	if err != nil {
+	if _, err := bs.HoldsDB.CancelAllExpiredHolds(ctx, tx); err != nil {
 		return err
 	}
 
