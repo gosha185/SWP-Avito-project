@@ -14,6 +14,7 @@ type BonusService struct {
 	DB            *sql.DB
 }
 
+// NewBonusService takes database reference, creates new service instance and returns a reference to it
 func NewBonusService(DB *sql.DB) *BonusService {
 	return &BonusService{storage.NewBalanceRepo(DB), storage.NewBatchRepo(DB), storage.NewHoldRepo(DB), storage.NewLedgerRepo(DB), storage.NewHoldBatchRepo(DB), DB}
 }

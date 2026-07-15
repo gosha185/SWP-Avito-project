@@ -4,6 +4,11 @@ import (
 	"context"
 )
 
+/*
+CancelAllExpiredHolds takes context, performs cancelling for each expired hold,
+updates balances, inserts ledger entries, and returns error (nil if transaction
+is successful).
+*/
 func (bs *BonusService) CancelAllExpiredHolds(ctx context.Context) error {
 	tx, err := bs.DB.BeginTx(ctx, nil)
 	if err != nil {
