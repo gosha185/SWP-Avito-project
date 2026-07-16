@@ -3,6 +3,7 @@ package service
 import (
 	"bonus-service/internal/models"
 	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -35,6 +36,7 @@ func (bs *BonusService) Accrue(ctx context.Context, entry *models.LedgerEntry, d
 	}
 
 	entry.Metadata = json.RawMessage(fmt.Sprintf(`{"ttl_days": "%d", "expires_at": "%s"}`, days, batch.ExpiresAt.Format(time.RFC3339)))
+	entry.BatchID = sql.NullInt64{batch.ID, true}
 	err = bs.LedgersDB.Insert(ctx, tx, entry) //Maintaining ledger can not be omitted
 	if err != nil {
 		return 0, err
