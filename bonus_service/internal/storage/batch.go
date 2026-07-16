@@ -337,21 +337,38 @@ func (r *BatchRepo) GetExpiredBatches(ctx context.Context) ([]models.BonusBatch,
 // Returns number of updated rows.
 func (r *BatchRepo) ExpireAllBatches(ctx context.Context, tx *sql.Tx) (int64, error) {
 	query := `
-        UPDATE batches
-        SET remaining = 0
-        WHERE remaining > 0
-          AND expires_at < NOW()
+        WITH expired AS (
+            SELECT id, user_id, remaining
+            FROM batches
+            WHERE remaining > 0 AND expires_at < NOW()
+            FOR UPDATE
+        ),
+        sums AS (
+            SELECT user_id, SUM(remaining) AS amt FROM expired GROUP BY user_id
+        ),
+        balance_upd AS (
+            UPDATE balances b
+            SET available = available - s.amt, updated_at = NOW()
+            FROM sums s
+            WHERE b.user_id = s.user_id
+        ),
+        ledger_ins AS (
+            INSERT INTO ledger (user_id, operation_type, amount, batch_id, external_key, created_at, metadata)
+            SELECT user_id, 'expiry', remaining, id,
+                   'expiry-' || id || '-' || EXTRACT(EPOCH FROM NOW())::TEXT,
+                   NOW(), jsonb_build_object('reason', 'ttl_expiry')
+            FROM expired
+        )
+        UPDATE batches SET remaining = 0 WHERE id IN (SELECT id FROM expired)
     `
 
 	result, err := tx.ExecContext(ctx, query)
 	if err != nil {
 		return 0, fmt.Errorf("failed to expire batches: %w", err)
 	}
-
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return 0, fmt.Errorf("failed to get rows affected: %w", err)
 	}
-
 	return rowsAffected, nil
 }

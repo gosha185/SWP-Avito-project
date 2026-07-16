@@ -242,27 +242,48 @@ func (r *HoldRepo) DeleteOldHolds(ctx context.Context, daysOld int) (int64, erro
 	return rowsAffected, nil
 }
 
-// CancelAllExpiredHolds cancels all holds with status = 'active' and expires_at < NOW().
-// This is a mass operation used by the TTL worker.
-// Must be called within a transaction.
-// Returns number of updated rows.
+// CancelAllExpiredHolds atomically cancels all expired holds, restores their
+// balances, and writes ledger entries in one statement. The leading CTE
+// locks the affected rows with FOR UPDATE before any dependent write runs,
+// so a concurrent Confirm/Cancel on the same hold either blocks until this
+// commits, or (if it locked first) is simply excluded here.
+// Must be called within a transaction. Returns number of holds cancelled.
 func (r *HoldRepo) CancelAllExpiredHolds(ctx context.Context, tx *sql.Tx) (int64, error) {
 	query := `
-        UPDATE holds
-        SET status = 'cancelled'
-        WHERE status = 'active'
-          AND expires_at < NOW()
+        WITH expired AS (
+            SELECT id, user_id, amount
+            FROM holds
+            WHERE status = 'active' AND expires_at < NOW()
+            FOR UPDATE
+        ),
+        sums AS (
+            SELECT user_id, SUM(amount) AS amt FROM expired GROUP BY user_id
+        ),
+        balance_upd AS (
+            UPDATE balances b
+            SET available = available + s.amt,
+                held = held - s.amt,
+                updated_at = NOW()
+            FROM sums s
+            WHERE b.user_id = s.user_id
+        ),
+        ledger_ins AS (
+            INSERT INTO ledger (user_id, operation_type, amount, batch_id, external_key, created_at, metadata)
+            SELECT user_id, 'cancel', amount, NULL,
+                   'cancel-' || id || '-' || EXTRACT(EPOCH FROM NOW())::TEXT,
+                   NOW(), jsonb_build_object('reason', 'ttl_expiry')
+            FROM expired
+        )
+        UPDATE holds SET status = 'cancelled' WHERE id IN (SELECT id FROM expired)
     `
 
 	result, err := tx.ExecContext(ctx, query)
 	if err != nil {
 		return 0, fmt.Errorf("failed to cancel expired holds: %w", err)
 	}
-
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return 0, fmt.Errorf("failed to get rows affected: %w", err)
 	}
-
 	return rowsAffected, nil
 }
