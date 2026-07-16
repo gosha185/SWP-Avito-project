@@ -1,5 +1,32 @@
 # Storage Layer Documentation
 
+The `internal/storage` package implements the repository pattern: one repository
+per table, each wrapping `*sql.DB`. It is the only layer that talks SQL.
+
+## Conventions
+
+- Every method takes `context.Context` as the first argument.
+- **Read** methods run on the pool (`*sql.DB`) directly.
+- **Write** methods that must be atomic with others take a `*sql.Tx` — the
+  service layer owns the transaction and decides commit/rollback.
+- Row locks use `SELECT … FOR UPDATE`.
+- Inserts use `RETURNING id, created_at` to populate the model in place.
+- Expected outcomes return the sentinel errors below; unexpected failures return
+  wrapped errors (`%w`).
+
+## Sentinel Errors (`errors.go`)
+
+| Error                    | Meaning                                           |
+|--------------------------|---------------------------------------------------|
+| `ErrBalanceNotFound`     | balance row missing                               |
+| `ErrBalanceNotUpdated`   | `UPDATE balances` affected 0 rows                 |
+| `ErrBatchNotFound`       | batch missing or `remaining < amount` on decrease |
+| `ErrHoldNotFound`        | hold missing or not `active`                      |
+| `ErrLedgerDuplicate`     | `external_key` already used (idempotency hit)     |
+| `ErrIncorrectInput`      | non-positive amount/duration in validation        |
+| `ErrInsufficientBalance` | not enough `available` to cover the operation     |
+| `ErrOrderAlreadyHeld`    | order already has a hold (`UNIQUE` violation)     |
+
 ## BalanceRepo
 
 ### GetBalance
@@ -54,6 +81,45 @@
 **Returns:**
 
 - `error` — database error; `ErrBalanceNotUpdated` if no rows affected
+
+### UpdateBalancesForExpiredBatches
+
+**Purpose:** Decrease `available` for all users whose batches have expired (`remaining > 0`, `expires_at < NOW()`).
+
+**When to use:** Batch-expiry worker.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `tx *sql.Tx` — open transaction (required)
+
+**Returns:**
+
+- `int64` — number of updated rows
+- `error` — database error
+
+**⚠️ Superseded:** the balance update is now part of the atomic `BatchRepo.ExpireAllBatches`. This method is no longer
+called and is kept until a cleanup PR.
+
+### UpdateBalancesForExpiredHolds
+
+**Purpose:** Restore `available` and decrease `held` for all users whose holds have expired (`status = 'active'`,
+`expires_at < NOW()`).
+
+**When to use:** TTL worker.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `tx *sql.Tx` — open transaction (required)
+
+**Returns:**
+
+- `int64` — number of updated rows
+- `error` — database error
+
+**⚠️ Superseded:** the balance update is now part of the atomic `HoldRepo.CancelAllExpiredHolds`. Kept until a cleanup
+PR.
 
 ## BatchRepo
 
@@ -174,10 +240,11 @@
 
 **Returns:**
 
-- `error` — `ErrBatchNotFound` if batch doesn't exist
+- `bool` — `true` if the batch was updated; `false` if it does not exist or has already expired
+- `error` — database error
 
-**Important:** This method does NOT check for expiration or any other conditions. The caller must ensure the batch is
-still valid (e.g., not expired).
+**Important:** Only restores points to non-expired batches (`expires_at > NOW()`); expired batches are not topped up (
+points are burned instead).
 
 ---
 
@@ -238,6 +305,68 @@ still valid (e.g., not expired).
 - `error` — `ErrBatchNotFound` if batch does not exist
 
 **Important:** Bypasses normal spending validation and should be used with caution.
+
+---
+
+### GetExpiredBatches
+
+**Purpose:** Get all batches with `remaining > 0` and `expires_at < NOW()`. No locking.
+
+**When to use:** Historically used by the batch-expiry worker to list batches to expire.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+
+**Returns:**
+
+- `[]models.BonusBatch` — expired batches (oldest first)
+- `error` — database error
+
+**⚠️ Superseded:** the expiry sweep is now done atomically by `ExpireAllBatches`; this method is no longer called.
+
+---
+
+### DeleteExpiredZeroBatches
+
+**Purpose:** Delete fully-spent (`remaining = 0`) batches that expired more than `daysOld` days ago.
+
+**When to use:** Batch-cleanup worker.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `daysOld int` — retention window in days
+
+**Returns:**
+
+- `int64` — number of deleted rows
+- `error` — database error
+
+**Important:** `ON DELETE RESTRICT` on `hold_batches` prevents removing a batch still referenced by a hold.
+
+---
+
+### ExpireAllBatches
+
+**Purpose:** Atomically expire all overdue batches in a single statement — deduct the lost points from `available`,
+write `expiry` ledger entries, and set `remaining = 0`.
+
+**When to use:** Batch-expiry worker.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `tx *sql.Tx` — open transaction (required)
+
+**Returns:**
+
+- `int64` — number of expired batches
+- `error` — database error
+
+**Important:** A leading CTE locks the target rows with `FOR UPDATE` before any dependent write, so the
+balance/ledger/remaining updates all act on the same snapshot and cannot race with a concurrent hold spending from the
+same batch.
 
 ## HoldRepo
 
@@ -305,7 +434,7 @@ still valid (e.g., not expired).
 
 **Returns:**
 
-- `error` — database error
+- `error` — database error; `ErrOrderAlreadyHeld` if the order already has a hold (`UNIQUE` violation)
 
 **Note:** `hold.ID` and `hold.CreatedAt` are populated by the database via `RETURNING`.
 
@@ -328,9 +457,50 @@ still valid (e.g., not expired).
 
 ### GetExpiredHolds
 
-**Purpose:** Get all active holds with `expires_at < NOW()`.
+**Purpose:** Get all active holds with `expires_at < NOW()`. No locking.
 
-**When to use:** TTL worker — finds holds that need automatic cancellation.
+**When to use:** Historically used by the TTL worker to list holds to cancel.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+
+**Returns:**
+
+- `[]models.Hold` — list of expired active holds (oldest first)
+- `error` — database error
+
+**⚠️ Superseded:** cancellation is now done atomically by `CancelAllExpiredHolds`; this read-only method is no longer
+called.
+
+---
+
+### DeleteOldHolds
+
+**Purpose:** Delete `confirmed`/`cancelled` holds that expired more than `daysOld` days ago.
+
+**When to use:** Hold-cleanup worker.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `daysOld int` — retention window in days
+
+**Returns:**
+
+- `int64` — number of deleted rows
+- `error` — database error
+
+**Note:** Linked `hold_batches` rows are removed via `ON DELETE CASCADE`.
+
+---
+
+### CancelAllExpiredHolds
+
+**Purpose:** Atomically cancel all expired active holds in a single statement — restore `available` / decrease `held`,
+write `cancel` ledger entries, and set `status = 'cancelled'`.
+
+**When to use:** TTL worker.
 
 **Parameters:**
 
@@ -339,10 +509,11 @@ still valid (e.g., not expired).
 
 **Returns:**
 
-- `[]models.Hold` — list of expired holds (locked with `FOR UPDATE`)
+- `int64` — number of cancelled holds
 - `error` — database error
 
-**Important:** Rows are locked with `FOR UPDATE` to prevent concurrent processing. This method only finds holds — cancellation logic (restoring balances, batches, ledger) must be implemented in the service layer.
+**Important:** A leading CTE locks the target rows with `FOR UPDATE` before any dependent write, so the operation is
+serialized against a concurrent confirm/cancel on the same hold.
 
 ## HoldBatchRepo
 
@@ -359,6 +530,7 @@ Methods for managing many-to-many relationships between holds and batches (`hold
 - `ctx context.Context`
 - `tx *sql.Tx`
 - `holdID int64`
+- `batchUserID uuid.UUID`
 - `batchID int64`
 - `amount int64`
 
@@ -421,6 +593,24 @@ Methods for managing many-to-many relationships between holds and batches (`hold
 - `*models.LedgerEntry` — existing ledger entry, or `nil` if not found
 - `error` — database error
 
+### GetByExternalKeyTx
+
+**Purpose:** Same idempotency check as `GetByExternalKey`, but with `SELECT FOR UPDATE` to lock the row and prevent race
+conditions.
+
+**When to use:** Inside a transaction, when the idempotency check must be serialized with the writing.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `tx *sql.Tx` — open transaction (required)
+- `externalKey string` — idempotency key provided by the caller
+
+**Returns:**
+
+- `*models.LedgerEntry` — existing ledger entry, or `nil` if not found
+- `error` — database error
+
 ### GetHistory
 
 **Purpose:** Get paginated transaction history for a user.
@@ -475,6 +665,42 @@ Methods for managing many-to-many relationships between holds and batches (`hold
 
 **Note:** Uses JSONB search in `metadata` field.
 
+### InsertExpiryEntries
+
+**Purpose:** Insert `expiry` ledger entries for all expired batches (`remaining > 0`, `expires_at < NOW()`).
+
+**When to use:** Batch-expiry worker.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `tx *sql.Tx` — open transaction (required)
+
+**Returns:**
+
+- `int64` — number of inserted rows
+- `error` — database error
+
+**⚠️ Superseded:** ledger insertion is now part of the atomic `BatchRepo.ExpireAllBatches`. Kept until a cleanup PR.
+
+### InsertCancelEntries
+
+**Purpose:** Insert `cancel` ledger entries for all expired active holds.
+
+**When to use:** TTL worker.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `tx *sql.Tx` — open transaction (required)
+
+**Returns:**
+
+- `int64` — number of inserted rows
+- `error` — database error
+
+**⚠️ Superseded:** ledger insertion is now part of the atomic `HoldRepo.CancelAllExpiredHolds`. Kept until a cleanup PR.
+
 ### isDuplicateKeyError
 
 **Purpose:** Detects if an error is a PostgreSQL unique violation (error code 23505).
@@ -490,6 +716,46 @@ Methods for managing many-to-many relationships between holds and batches (`hold
 - `bool` — `true` if the error is a unique violation, `false` otherwise
 
 **Note:** Private helper function. Not exported.
+
+## LeaderRepo
+
+Coordinates background workers so they run on a single instance at a time
+(`leaders` table). See [workers.md](workers.md).
+
+### TryAcquireLock
+
+**Purpose:** Attempt to become the leader for a role. Upserts into `leaders`, succeeding only if the current lease is
+stale (`updated_at < NOW() - ttl`) or already owned by this instance; a successful call by the current holder also
+renews the lease.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `roleName string` — worker role (e.g. `bonus_worker`)
+- `instanceID string` — this instance's id (`<host>:9091`)
+- `ttlSeconds int` — lease TTL in seconds
+
+**Returns:**
+
+- `bool` — `true` if this instance now holds the lease
+- `error` — database error
+
+### RenewLock
+
+**Purpose:** Refresh `updated_at` for the current leader.
+
+**Parameters:**
+
+- `ctx context.Context` — request context
+- `roleName string` — worker role
+- `instanceID string` — this instance's id
+
+**Returns:**
+
+- `bool` — `true` if the lease was renewed
+- `error` — error if the leader record was not found
+
+**Note:** Defined for completeness; lease renewal is currently handled by `TryAcquireLock`.
 
 ## DB
 
