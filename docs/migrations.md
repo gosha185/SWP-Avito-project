@@ -13,6 +13,7 @@ This document explains the database schema and indexes used in the bonus service
 | `holds`        | Two-phase spending: hold → confirm / cancel        |
 | `hold_batches` | Many-to-many link between holds and batches        |
 | `ledger`       | Immutable audit log (append-only)                  |
+| `leaders`      | Leader-election lock for background workers        |
 
 ---
 
@@ -51,7 +52,7 @@ Stores point batches with expiration dates. Supports FEFO (First-Expiring-First-
 | Index                      | Columns                                     | Purpose                                                  |
 |----------------------------|---------------------------------------------|----------------------------------------------------------|
 | `idx_batches_user_expires` | `(user_id, expires_at) WHERE remaining > 0` | FEFO lookups: ORDER BY expires_at for /hold and /balance |
-| `idx_batches_expired`      | `(expires_at) WHERE remaining > 0`          | TTL worker: find batches that have expired               |
+| `idx_batches_expired`      | `(expires_at) WHERE remaining > 0`          | Batch-expiry worker: find batches that have expired      |
 
 ---
 
@@ -66,7 +67,7 @@ Stores active and historical holds for two-phase spending.
 | `order_id`   | `UUID`        | Order identifier from external service (UNIQUE with user_id) |
 | `amount`     | `BIGINT`      | Amount held (> 0)                                            |
 | `status`     | `VARCHAR(20)` | `active` / `confirmed` / `cancelled` (CHECK constraint)      |
-| `expires_at` | `TIMESTAMPTZ` | TTL: 24h + 1h grace period                                   |
+| `expires_at` | `TIMESTAMPTZ` | Expiry time, set by caller as `now + hours`                  |
 | `created_at` | `TIMESTAMPTZ` | Creation timestamp                                           |
 
 **Constraints:**
@@ -80,7 +81,6 @@ Stores active and historical holds for two-phase spending.
 | `idx_holds_expires_status` | `(expires_at, status) WHERE status = 'active'` | TTL worker: find stale active holds     |
 | `idx_holds_order_id`       | `(order_id)`                                   | POST /confirm, POST /cancel lookups     |
 | `idx_holds_user_status`    | `(user_id, status)`                            | GET /balance (list user's active holds) |
-| `idx_holds_user_id_id`     | `(user_id, id)` UNIQUE                         | Future sharding support                 |
 
 ---
 
@@ -92,7 +92,7 @@ Many-to-many link between holds and batches. Stores which batches were locked by
 |-----------------|----------|-----------------------------------------------------------|
 | `hold_id`       | `BIGINT` | References holds(id) ON DELETE CASCADE                    |
 | `batch_user_id` | `UUID`   | User who owns the batch (part of composite FK to batches) |
-| `batch_id`      | `BIGINT` | References batches(id) ON DELETE RESTRICT                 |
+| `batch_id`      | `BIGINT` | Batch id (part of composite FK to batches)                |
 | `amount`        | `BIGINT` | Amount from this batch used in the hold (> 0)             |
 
 **Constraints:**
@@ -102,9 +102,9 @@ Many-to-many link between holds and batches. Stores which batches were locked by
 
 **Indexes:**
 
-| Index                       | Columns      | Purpose                                           |
-|-----------------------------|--------------|---------------------------------------------------|
-| `idx_hold_batches_batch_id` | `(batch_id)` | Batch cleanup: check if batch is still referenced |
+| Index                       | Columns                     | Purpose                                           |
+|-----------------------------|-----------------------------|---------------------------------------------------|
+| `idx_hold_batches_batch_id` | `(batch_user_id, batch_id)` | Batch cleanup: check if batch is still referenced |
 
 ---
 
@@ -136,16 +136,29 @@ Immutable audit log. Append-only, never updated or deleted.
 
 ---
 
+## leaders
+
+Distributed lock for background workers (leader election). One row per role;
+the holder is whoever last wrote `leader_id` within the TTL window. See
+[workers.md](workers.md).
+
+| Column       | Type           | Description                                         |
+|--------------|----------------|-----------------------------------------------------|
+| `role_name`  | `VARCHAR(255)` | Primary key, worker role (e.g. `bonus_worker`)      |
+| `leader_id`  | `VARCHAR(255)` | Current holder instance id (`<host>:9091`)          |
+| `updated_at` | `TIMESTAMPTZ`  | Lease heartbeat — lock is stale once older than TTL |
+
+---
+
 ## Index Usage Summary
 
 | Index                       | Table          | Used In                            |
 |-----------------------------|----------------|------------------------------------|
 | `idx_batches_user_expires`  | `batches`      | `POST /hold`, `GET /balance`       |
-| `idx_batches_expired`       | `batches`      | TTL worker / cleanup               |
+| `idx_batches_expired`       | `batches`      | Batch-expiry / cleanup workers     |
 | `idx_holds_expires_status`  | `holds`        | TTL background worker              |
 | `idx_holds_order_id`        | `holds`        | `POST /confirm`, `POST /cancel`    |
 | `idx_holds_user_status`     | `holds`        | `GET /balance` (list active holds) |
-| `idx_holds_user_id_id`      | `holds`        | Future sharding support            |
 | `idx_hold_batches_batch_id` | `hold_batches` | Batch cleanup, audit               |
 | `idx_ledger_external_key`   | `ledger`       | All write operations (idempotency) |
 | `idx_ledger_user_created`   | `ledger`       | `GET /balance/:user_id/history`    |
@@ -154,10 +167,10 @@ Immutable audit log. Append-only, never updated or deleted.
 
 ## Operation Type Reference
 
-| Operation | Description                     | Used In             |
-|-----------|---------------------------------|---------------------|
-| `accrual` | Points added to user balance    | `POST /accrue`      |
-| `hold`    | Points locked for an order      | `POST /hold`        |
-| `confirm` | Hold confirmed, points spent    | `POST /confirm`     |
-| `cancel`  | Hold cancelled, points released | `POST /cancel`      |
-| `expiry`  | Points expired automatically    | TTL worker (future) |
+| Operation | Description                     | Used In                    |
+|-----------|---------------------------------|----------------------------|
+| `accrual` | Points added to user balance    | `POST /accrue`             |
+| `hold`    | Points locked for an order      | `POST /hold`               |
+| `confirm` | Hold confirmed, points spent    | `POST /confirm`            |
+| `cancel`  | Hold cancelled, points released | `POST /cancel`, TTL worker |
+| `expiry`  | Points expired automatically    | TTL / batch-expiry workers |
