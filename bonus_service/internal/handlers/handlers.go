@@ -109,7 +109,7 @@ func (h *APIHandler) CreateHoldHandler(w http.ResponseWriter, r *http.Request) {
 		case errors.Is(err, storage.ErrInsufficientBalance):
 			h.errorResponse(w, r, http.StatusConflict, "not enough balance to hold the order")
 		case errors.Is(err, storage.ErrOrderAlreadyHeld):
-			h.badRequestResponse(w, r, err)
+			h.errorResponse(w, r, http.StatusConflict, "this order already held")
 		default:
 			h.serverErrorResponse(w, r, err)
 		}
