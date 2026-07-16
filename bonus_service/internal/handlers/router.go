@@ -2,6 +2,7 @@ package handlers
 
 import "net/http"
 
+// NewRouter creates and configures the HTTP router with all API endpoints.
 func NewRouter(h *APIHandler) *http.ServeMux {
 	router := http.NewServeMux()
 
