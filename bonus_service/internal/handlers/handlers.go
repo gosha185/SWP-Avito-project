@@ -12,16 +12,23 @@ import (
 	"github.com/google/uuid"
 )
 
+// APIHandler implements all HTTP endpoints for the bonus service.
+// It bridges HTTP requests to the service layer and handles JSON serialization.
 type APIHandler struct {
 	service *service.BonusService
 }
 
+// NewAPIHandler creates a new APIHandler with a service instance.
 func NewAPIHandler(s *service.BonusService) *APIHandler {
 	return &APIHandler{service: s}
 }
 
 //----------------------------- HANDLERS ------------------------------------------
 
+// AccrualHandler handles POST /accrual requests to accrue bonus points for a user.
+// Validates Idempotency-Key header, request body, and calls service.Accrue().
+// Returns 201 with accrual batch ID on success.
+// Error responses: 400 (bad request), 422 (validation), 409 (conflict - duplicate key), 500 (server error).
 func (h *APIHandler) AccrualHandler(w http.ResponseWriter, r *http.Request) {
 	key := r.Header.Get("Idempotency-Key")
 	if key == "" {
@@ -71,6 +78,10 @@ func (h *APIHandler) AccrualHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// CreateHoldHandler handles POST /hold requests to reserve points for an order.
+// Validates Idempotency-Key header, request body, and calls service.Hold().
+// Returns 201 with hold ID on success.
+// Error responses: 400 (bad request), 422 (validation), 409 (conflict - duplicate key, insufficient balance, order already held), 500 (server error).
 func (h *APIHandler) CreateHoldHandler(w http.ResponseWriter, r *http.Request) {
 	key := r.Header.Get("Idempotency-Key")
 	if key == "" {
@@ -125,6 +136,10 @@ func (h *APIHandler) CreateHoldHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ConfirmHoldHandler handles POST /users/{user_id}/holds/{order_id}/confirm requests to confirm a held order.
+// Validates Idempotency-Key header, path parameters, and calls service.ConfirmWithdraw().
+// Returns 200 with hold ID on success.
+// Error responses: 400 (bad request, hold not found), 422 (validation), 409 (conflict - duplicate key), 500 (server error).
 func (h *APIHandler) ConfirmHoldHandler(w http.ResponseWriter, r *http.Request) {
 	key := r.Header.Get("Idempotency-Key")
 	if key == "" {
@@ -180,6 +195,10 @@ func (h *APIHandler) ConfirmHoldHandler(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
+// CancelHoldHandler handles POST /users/{user_id}/holds/{order_id}/cancel requests to cancel a held order.
+// Validates Idempotency-Key header, path parameters, and calls service.CancelHold().
+// Returns 200 with hold ID on success.
+// Error responses: 400 (bad request, hold not found), 422 (validation), 409 (conflict - duplicate key), 500 (server error).
 func (h *APIHandler) CancelHoldHandler(w http.ResponseWriter, r *http.Request) {
 	key := r.Header.Get("Idempotency-Key")
 	if key == "" {
@@ -235,6 +254,10 @@ func (h *APIHandler) CancelHoldHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetBalanceHandler handles GET /users/{user_id}/balance requests to retrieve available bonus points.
+// Validates path parameters and calls service.GetAvailablePoints().
+// Returns 200 with the available balance on success.
+// Error responses: 400 (bad request), 422 (validation), 500 (server error).
 func (h *APIHandler) GetBalanceHandler(w http.ResponseWriter, r *http.Request) {
 	userId, err := uuid.Parse(r.PathValue("user_id"))
 	if err != nil {
@@ -264,6 +287,10 @@ func (h *APIHandler) GetBalanceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetExpirationsHandler handles GET /users/{user_id}/balance/expirations requests to retrieve expiring bonus points.
+// Validates path parameters and query parameters, and calls service.GetExpiringAvailablePoints().
+// Returns 200 with expiring bonus information on success.
+// Error responses: 400 (bad request), 422 (validation), 500 (server error).
 func (h *APIHandler) GetExpirationsHandler(w http.ResponseWriter, r *http.Request) {
 	userId, err := uuid.Parse(r.PathValue("user_id"))
 	if err != nil {
@@ -303,6 +330,10 @@ func (h *APIHandler) GetExpirationsHandler(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+// GetHistoryHandler handles GET /users/{user_id}/history requests to retrieve transaction history.
+// Validates path parameters and pagination query parameters, and calls service.GetHistory().
+// Returns 200 with paginated transaction history on success.
+// Error responses: 400 (bad request), 422 (validation), 500 (server error).
 func (h *APIHandler) GetHistoryHandler(w http.ResponseWriter, r *http.Request) {
 	userId, err := uuid.Parse(r.PathValue("user_id"))
 	if err != nil {
@@ -356,6 +387,10 @@ func (h *APIHandler) GetHistoryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetHoldsHandler handles GET /users/{user_id}/holds requests to retrieve the total amount of held bonus points.
+// Validates path parameters and calls service.GetHeld().
+// Returns 200 with the held bonus amount on success.
+// Error responses: 400 (bad request), 422 (validation), 500 (server error).
 func (h *APIHandler) GetHoldsHandler(w http.ResponseWriter, r *http.Request) {
 	userId, err := uuid.Parse(r.PathValue("user_id"))
 	if err != nil {

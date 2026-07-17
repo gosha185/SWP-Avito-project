@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// readIDParam extracts and validates the UUID path parameter named "id".
 func (h *APIHandler) readIDParam(r *http.Request) (uuid.UUID, error) {
 	id, err := uuid.Parse(r.PathValue("id"))
 
@@ -21,6 +22,7 @@ func (h *APIHandler) readIDParam(r *http.Request) (uuid.UUID, error) {
 	return id, nil
 }
 
+// writeJSON serializes the provided data as JSON and writes it to the response.
 func (h *APIHandler) writeJSON(w http.ResponseWriter, status int, data any, headers http.Header) error {
 	json, err := json.Marshal(data)
 	if err != nil {
@@ -43,6 +45,8 @@ func (h *APIHandler) writeJSON(w http.ResponseWriter, status int, data any, head
 	return nil
 }
 
+// readJSON reads and validates a JSON request body into the provided destination.
+// It rejects malformed JSON, unknown fields, multiple JSON values, and oversized request bodies.
 func (h *APIHandler) readJSON(w http.ResponseWriter, r *http.Request, dst any) error {
 	maxBytes := 10 * 1024 // 10 Kb
 	r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytes))
