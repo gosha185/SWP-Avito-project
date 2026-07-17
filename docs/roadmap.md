@@ -87,24 +87,22 @@
 
 ---
 
-## Sprint 5 – Final Transition and MVP v3 (Planned)
+## Sprint 5 – MVP v3 (Completed)
 
 **Dates:** 13–19 July 2026  
 **Sprint Goal:** Address trial feedback, complete final transition, deliver MVP v3, and prepare for Demo Day.
 
 **Milestone:** [Sprint 5 – MVP v3](https://github.com/gosha185/SWP-Avito-project/milestone/5)
 
-**Expected items:**
-- Follow-up fixes and improvements based on Week 6 trial feedback
-- Final deployment and SemVer release for MVP v3
-- Updated customer-handover.md with final handover status
-- Final transition confirmation with customer
-- Week 7 public report (reports/week7/README.md)
-- Updated presentation slides and Demo Day preparation
+**Completed:**
+- Final handover meeting with customer
+- Handover status confirmed: `Ready for independent use`
+- Customer confirmation: `Accepted`
+- Bug fixes (error codes, rare edge cases, ledger data insertion)
+- Code fully commented and documented
+- User stories marked as implemented
+- Week 7 reports: README, sprint-review-transcript, sprint-review-summary, reflection, retrospective, llm-report
 - Public sanitized demo video for MVP v3
-
-**Focus areas:**
-- Resolve all remaining issues identified during the trial
-- Confirm handover status with customer
-- Deliver MVP v3 as the final course version
-- Prepare for Demo Day presentation
+- SemVer release for MVP v3 created
+- CHANGELOG.md updated
+- Demo Day presentation prepared
