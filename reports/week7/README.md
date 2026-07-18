@@ -155,27 +155,11 @@
 ---
 
 ## Screenshots
-
-### Sprint 5 Milestone
-![Sprint Milestone](images/sprint-milestone.png)
-
-### Sprint 5 Backlog
-![Sprint 5 Backlog](images/sprint5-backlog.png)
-
-### Latest CI Run
+![Sprint Milestone](images/sprint-milestone.jpg)
+![Sprint 5 Backlog](images/sprint5-backlog.jpg)
 ![Latest CI Run](images/ci-run.png)
-
-### SemVer Release MVP v3
 ![SemVer Release](images/release.png)
-
-### Reviewed PR
-![Reviewed PR](images/reviewed-pr.png)
-
-### Hosted Docs Site
-![Hosted Docs](images/hosted-docs.png)
-
-### Final Product Access
-![Final Deployment](images/final-deployment.png)
-
-### Branch Protection Rules
-![Branch Protection](images/branch-protection.png)
+![Reviewed PR](images/reviewed-pr.jpg)
+![Hosted Docs](images/hosted-docs.jpg)
+![Final Deployment](images/final-deployment.jpg)
+![Branch Protection](images/branch-protection.jpg)
