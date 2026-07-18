@@ -3,7 +3,7 @@
 ## Project
 [SWP-Avito-project](https://github.com/gosha185/SWP-Avito-project) – Bonus System
 
-**License:** [MIT](LICENSE)
+**License:** [MIT](https://github.com/gosha185/SWP-Avito-project/blob/main/LICENSE)
 
 ---
 
@@ -36,38 +36,38 @@
 
 ## Quality Documentation
 
-- [Quality Requirements](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md)
-- [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md)
-- [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/testing.md)
-- [User Acceptance Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/user-acceptance-tests.md)
+- [Quality Requirements](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/quality-requirements.md)
+- [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/quality-requirement-tests.md)
+- [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/testing.md)
+- [User Acceptance Tests](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/user-acceptance-tests.md)
 
 ---
 
 ## Architecture Documentation
 
-- [Architecture README](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/architecture/README.md)
-- [Static View](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/static-view)
-- [Dynamic View](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/dynamic-view)
-- [Deployment View](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/deployment-view)
-- [ADRs](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/adr)
+- [Architecture README](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/README.md)
+- [Static View](https://github.com/gosha185/SWP-Avito-project/tree/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/static-view)
+- [Dynamic View](https://github.com/gosha185/SWP-Avito-project/tree/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/dynamic-view)
+- [Deployment View](https://github.com/gosha185/SWP-Avito-project/tree/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/deployment-view)
+- [ADRs](https://github.com/gosha185/SWP-Avito-project/tree/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/adr)
 
 ---
 
 ## Process Documentation
 
-- [Development Process](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/development-process.md)
-- [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/definition-of-done.md)
-- [Roadmap](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/roadmap.md)
-- [Process Requirements](https://github.com/gosha185/SWP-Avito-project/blob/main/Process_Requirements.md)
-- [CONTRIBUTING.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CONTRIBUTING.md)
-- [AGENTS.md](https://github.com/gosha185/SWP-Avito-project/blob/main/AGENTS.md)
+- [Development Process](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/development-process.md)
+- [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/definition-of-done.md)
+- [Roadmap](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/roadmap.md)
+- [Process Requirements](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/Process_Requirements.md)
+- [CONTRIBUTING.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/CONTRIBUTING.md)
+- [AGENTS.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/AGENTS.md)
 
 ---
 
 ## Customer-Facing Documentation
 
-- [README.md](https://github.com/gosha185/SWP-Avito-project/blob/main/README.md)
-- [Customer Handover](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/customer-handover.md)
+- [README.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/README.md)
+- [Customer Handover](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/customer-handover.md)
 - [Hosted Documentation Site](https://gosha185.github.io/SWP-Avito-project/)
 
 ---
@@ -76,7 +76,7 @@
 
 - [Deployment URL](http://10.93.26.189:8080/)
 - [SemVer Release v3.0.0 (MVP v3)](https://github.com/gosha185/SWP-Avito-project/releases/tag/v3.0.0)
-- [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
+- [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/CHANGELOG.md)
 - [Public Demo Video](https://drive.google.com/drive/folders/1ErYiGQRrbtJMk0coST_A4IIJJGk0-AWv)
 
 ---
@@ -85,7 +85,7 @@
 
 - [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions)
 - [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions/runs/29649096319)
-- [Branch Protection Rules](https://github.com/gosha185/SWP-Avito-project/settings/branches)
+- [Branch Protection Rules](images/branch-protection.png) (screenshot)
 
 ---
 
@@ -107,7 +107,7 @@
 |-------|-------|
 | **Handover level reached** | `Ready for independent use` |
 | **Customer confirmation status** | `Accepted` |
-| **Date of confirmation** | 16 July 2026 |
+| **Date of confirmation** | 17 July 2026 |
 
 ---
 
@@ -136,11 +136,11 @@
 
 | Team Member | Issues | PRs | Reviews | Testing/QA | Documentation |
 |---|---|---|---|---|---|
-| Leilia (Leilia34) | #262, #318, #319, #320, #321, #323, #330, #332 | ✅ | ✅ | — | ✅ |
-| Stepan (Stepan4ick) | #301, #316 | ✅ | ✅ | — | —✅ |
-| Ekaterina (deadnothingness) | #309, #311 | ✅ | ✅ | — | ✅ |
-| Georgii (gosha185) | #308, #314 | ✅ | ✅ | — | ✅ |
-| Ivan (Laplace-mt) | #322 | ✅ | ✅ |✅ | ✅ |
+| Leilia (Leilia34) | #201, #262, #324, #325, #328, #329 | ✅ | ✅ | — | ✅ |
+| Stepan (Stepan4ick) | #307, #317 | ✅ | ✅ | — | — |
+| Ekaterina (deadnothingness) | #310, #312 | ✅ | ✅ | — | ✅ |
+| Georgii (gosha185) | #313, #315 | ✅ | ✅ | — | — |
+| Ivan (Laplace-mt) | #326 | ✅ | ✅ | ✅ | — |
 
 ---
 
@@ -176,3 +176,6 @@
 
 ### Final Product Access
 ![Final Deployment](images/final-deployment.png)
+
+### Branch Protection Rules
+![Branch Protection](images/branch-protection.png)
