@@ -182,6 +182,9 @@ func (r *HoldRepo) UpdateHoldStatus(ctx context.Context, tx *sql.Tx, holdID int6
 
 // GetExpiredHolds returns all active holds with expired_at < NOW().
 // No locking.
+//
+// Deprecated: CancelAllExpiredHolds now selects and updates in one statement.
+// This method takes no lock, so acting on its result races. Kept until the cleanup PR.
 func (r *HoldRepo) GetExpiredHolds(ctx context.Context) ([]models.Hold, error) {
 	query := `
         SELECT id, user_id, order_id, amount, status, expires_at, created_at

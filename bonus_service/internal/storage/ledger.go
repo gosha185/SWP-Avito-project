@@ -268,6 +268,8 @@ func (r *LedgerRepo) GetLedgerByOrderID(ctx context.Context, orderID uuid.UUID) 
 // InsertExpiryEntries inserts ledger entries for expired batches.
 // Must be called within a transaction.
 // Returns number of inserted rows.
+//
+// Deprecated: now part of BatchRepo.ExpireAllBatches. Kept until the cleanup PR.
 func (r *LedgerRepo) InsertExpiryEntries(ctx context.Context, tx *sql.Tx) (int64, error) {
 	query := `
         INSERT INTO ledger (user_id, operation_type, amount, batch_id, external_key, created_at, metadata)
@@ -299,6 +301,8 @@ func (r *LedgerRepo) InsertExpiryEntries(ctx context.Context, tx *sql.Tx) (int64
 // InsertCancelEntries inserts ledger entries for cancelled holds.
 // Must be called within a transaction.
 // Returns number of inserted rows.
+//
+// Deprecated: now part of HoldRepo.CancelAllExpiredHolds. Kept until the cleanup PR.
 func (r *LedgerRepo) InsertCancelEntries(ctx context.Context, tx *sql.Tx) (int64, error) {
 	query := `
         INSERT INTO ledger (user_id, operation_type, amount, batch_id, external_key, created_at, metadata)

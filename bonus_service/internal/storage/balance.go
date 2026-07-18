@@ -137,6 +137,9 @@ func (r *BalanceRepo) UpdateBalance(ctx context.Context, tx *sql.Tx, userID uuid
 // for users whose batches have expired.
 // Must be called within a transaction.
 // Returns number of updated rows.
+//
+// Deprecated: now done atomically inside BatchRepo.ExpireAllBatches.
+// Calling it separately reintroduces the race. Kept until the cleanup PR.
 func (r *BalanceRepo) UpdateBalancesForExpiredBatches(ctx context.Context, tx *sql.Tx) (int64, error) {
 	query := `
         UPDATE balances
@@ -169,6 +172,9 @@ func (r *BalanceRepo) UpdateBalancesForExpiredBatches(ctx context.Context, tx *s
 // for users whose holds have expired.
 // Must be called within a transaction.
 // Returns number of updated rows.
+//
+// Deprecated: now done atomically inside HoldRepo.CancelAllExpiredHolds.
+// Calling it separately reintroduces the race. Kept until the cleanup PR.
 func (r *BalanceRepo) UpdateBalancesForExpiredHolds(ctx context.Context, tx *sql.Tx) (int64, error) {
 	query := `
         UPDATE balances

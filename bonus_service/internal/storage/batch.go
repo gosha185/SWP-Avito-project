@@ -293,6 +293,9 @@ func (r *BatchRepo) DeleteExpiredZeroBatches(ctx context.Context, daysOld int) (
 
 // GetExpiredBatches returns all batches with remaining > 0 and expires_at < NOW().
 // No locking.
+//
+// Deprecated: ExpireAllBatches now selects and updates in one statement.
+// This method takes no lock, so acting on its result races. Kept until the cleanup PR.
 func (r *BatchRepo) GetExpiredBatches(ctx context.Context) ([]models.BonusBatch, error) {
 	query := `
         SELECT id, user_id, amount, remaining, expires_at, created_at
@@ -331,10 +334,12 @@ func (r *BatchRepo) GetExpiredBatches(ctx context.Context) ([]models.BonusBatch,
 	return batches, nil
 }
 
-// ExpireAllBatches sets remaining = 0 for all batches with remaining > 0
-// and expires_at < NOW(). This is a mass operation used by the cleanup worker.
-// Must be called within a transaction.
-// Returns number of updated rows.
+// ExpireAllBatches atomically expires all overdue batches, deducts the lost
+// points from the users' available balance, and writes expiry ledger entries
+// in one statement. The leading CTE locks the affected rows with FOR UPDATE
+// before any dependent write, so a concurrent hold spending from the same
+// batch cannot race with it.
+// Must be called within a transaction. Returns number of batches expired.
 func (r *BatchRepo) ExpireAllBatches(ctx context.Context, tx *sql.Tx) (int64, error) {
 	query := `
         WITH expired AS (
