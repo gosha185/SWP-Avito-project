@@ -77,7 +77,7 @@
 - [Deployment URL](http://10.93.26.189:8080/)
 - [SemVer Release v3.0.0 (MVP v3)](https://github.com/gosha185/SWP-Avito-project/releases/tag/v3.0.0)
 - [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/CHANGELOG.md)
-- [Public Demo Video](https://drive.google.com/drive/folders/1ErYiGQRrbtJMk0coST_A4IIJJGk0-AWv)
+- [Public Demo Video](https://drive.google.com/drive/folders/1JxWQv6aLp6FBSjmf7poTA1Vw5K7fj1My?usp=sharing)
 
 ---
 
@@ -155,11 +155,27 @@
 ---
 
 ## Screenshots
+
+### Sprint 5 Milestone
 ![Sprint Milestone](images/sprint-milestone.jpg)
+
+### Sprint 5 Backlog
 ![Sprint 5 Backlog](images/sprint5-backlog.jpg)
+
+### Latest CI Run
 ![Latest CI Run](images/ci-run.png)
+
+### SemVer Release MVP v3
 ![SemVer Release](images/release.png)
+
+### Reviewed PR
 ![Reviewed PR](images/reviewed-pr.jpg)
+
+### Hosted Docs Site
 ![Hosted Docs](images/hosted-docs.jpg)
+
+### Final Product Access
 ![Final Deployment](images/final-deployment.jpg)
-![Branch Protection Rules](images/branch-protection.png)
+
+### Branch Protection Rules
+![Branch Protection](images/branch-protection.jpg)
