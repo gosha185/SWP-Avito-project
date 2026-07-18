@@ -1,0 +1,178 @@
+# Week 7 Report – MVP v3 (Final Delivery)
+
+## Project
+[SWP-Avito-project](https://github.com/gosha185/SWP-Avito-project) – Bonus System
+
+**License:** [MIT](LICENSE)
+
+---
+
+## Sprint Overview
+
+### Sprint Goal
+
+**Address trial feedback, complete final transition, deliver MVP v3, and prepare for Demo Day.**
+
+### Sprint Dates
+
+13–19 July 2026
+
+### Sprint Milestone
+
+[Sprint 5 – MVP v3](https://github.com/gosha185/SWP-Avito-project/milestone/5)
+
+---
+
+## Artifacts
+
+### Backlogs
+- [Product Backlog](https://github.com/users/gosha185/projects/1)
+- [Sprint 5 Backlog](https://github.com/users/gosha185/projects/5)
+
+### Sprint
+- [MVP v3 Scope](https://github.com/gosha185/SWP-Avito-project/issues?q=is%3Aopen+is%3Aissue+milestone%3A%22Sprint+5+–+MVP+v3%22)
+
+---
+
+## Quality Documentation
+
+- [Quality Requirements](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md)
+- [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md)
+- [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/testing.md)
+- [User Acceptance Tests](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/user-acceptance-tests.md)
+
+---
+
+## Architecture Documentation
+
+- [Architecture README](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/architecture/README.md)
+- [Static View](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/static-view)
+- [Dynamic View](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/dynamic-view)
+- [Deployment View](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/deployment-view)
+- [ADRs](https://github.com/gosha185/SWP-Avito-project/tree/main/docs/architecture/adr)
+
+---
+
+## Process Documentation
+
+- [Development Process](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/development-process.md)
+- [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/definition-of-done.md)
+- [Roadmap](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/roadmap.md)
+- [Process Requirements](https://github.com/gosha185/SWP-Avito-project/blob/main/Process_Requirements.md)
+- [CONTRIBUTING.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CONTRIBUTING.md)
+- [AGENTS.md](https://github.com/gosha185/SWP-Avito-project/blob/main/AGENTS.md)
+
+---
+
+## Customer-Facing Documentation
+
+- [README.md](https://github.com/gosha185/SWP-Avito-project/blob/main/README.md)
+- [Customer Handover](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/customer-handover.md)
+- [Hosted Documentation Site](https://gosha185.github.io/SWP-Avito-project/)
+
+---
+
+## Deployment and Release
+
+- [Deployment URL](http://10.93.26.189:8080/)
+- [SemVer Release v3.0.0 (MVP v3)](https://github.com/gosha185/SWP-Avito-project/releases/tag/v3.0.0)
+- [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/main/CHANGELOG.md)
+- [Public Demo Video](https://drive.google.com/drive/folders/1ErYiGQRrbtJMk0coST_A4IIJJGk0-AWv)
+
+---
+
+## CI and Quality Gates
+
+- [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions)
+- [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions/runs/29649096319)
+- [Branch Protection Rules](https://github.com/gosha185/SWP-Avito-project/settings/branches)
+
+---
+
+## Customer Feedback Response
+
+| Feedback point | Resulting PBI | Status | Response |
+|---|---|---|---|
+| Cancel hold should return HTTP 400, not HTTP 500 | [#177](https://github.com/gosha185/SWP-Avito-project/issues/177) | Done | Fixed in Sprint 3 |
+| FEFO should be verified | — | Done | Verified — works correctly |
+| Architecture should be documented | — | Done | ADRs created |
+| Add DoD/DoR checklists to Issue templates | — | Done | Added to all templates |
+| Idempotency: return 200 on retry with same key | — | Done | Fixed in Sprint 5 |
+
+---
+
+## Handover Status
+
+| Field | Value |
+|-------|-------|
+| **Handover level reached** | `Ready for independent use` |
+| **Customer confirmation status** | `Accepted` |
+| **Date of confirmation** | 16 July 2026 |
+
+---
+
+## Current Product Status
+
+### Completed
+- ✅ MVP v1 (Sprint 1)
+- ✅ Quality and Testing (Sprint 2)
+- ✅ MVP v2 (Sprint 3)
+- ✅ Trial Release and Handover Preparation (Sprint 4)
+- ✅ MVP v3 – Final Delivery (Sprint 5)
+- ✅ All UAT scenarios passed (10/10)
+- ✅ Customer confirmed `Ready for independent use`
+- ✅ Final SemVer release v3.0.0 created
+
+---
+
+## Next Steps
+
+- Demo Day presentation (22 July 2026)
+- Final course submission
+
+---
+
+## Contribution Traceability
+
+| Team Member | Issues | PRs | Reviews | Testing/QA | Documentation |
+|---|---|---|---|---|---|
+| Leilia (Leilia34) | #262, #318, #319, #320, #321, #323, #330, #332 | ✅ | ✅ | — | ✅ |
+| Stepan (Stepan4ick) | #301, #316 | ✅ | ✅ | — | —✅ |
+| Ekaterina (deadnothingness) | #309, #311 | ✅ | ✅ | — | ✅ |
+| Georgii (gosha185) | #308, #314 | ✅ | ✅ | — | ✅ |
+| Ivan (Laplace-mt) | #322 | ✅ | ✅ |✅ | ✅ |
+
+---
+
+## Week 7 Files
+
+- [Sprint Review Transcript](sprint-review-transcript.md)
+- [Sprint Review Summary](sprint-review-summary.md)
+- [Reflection](reflection.md)
+- [Retrospective](retrospective.md)
+- [LLM Report](llm-report.md)
+
+---
+
+## Screenshots
+
+### Sprint 5 Milestone
+![Sprint Milestone](images/sprint-milestone.png)
+
+### Sprint 5 Backlog
+![Sprint 5 Backlog](images/sprint5-backlog.png)
+
+### Latest CI Run
+![Latest CI Run](images/ci-run.png)
+
+### SemVer Release MVP v3
+![SemVer Release](images/release.png)
+
+### Reviewed PR
+![Reviewed PR](images/reviewed-pr.png)
+
+### Hosted Docs Site
+![Hosted Docs](images/hosted-docs.png)
+
+### Final Product Access
+![Final Deployment](images/final-deployment.png)
