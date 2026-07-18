@@ -3,7 +3,7 @@
 ## Active Stories
 
 | ID | Short title | MoSCoW priority |Work Status |
-|---|---|---|---|---|---|---|
+|---|---|---|---|
 | US-01 | Admin view total points in circulation | Could Have | Done |
 | US-03 | Bonuses with different lifespans | Should Have | Done |
 | US-06 | View points held for a concrete order | Must Have | Done |
