@@ -59,11 +59,12 @@ A PBI (Product Backlog Item) is considered **Done** when all of the following co
 
 ---
 
-## 8. Quality Requirements and QRTs
+## 8. Quality Requirements, QRTs, and ADRs
 
-- Relevant quality requirements (`QR-001`, `QR-002`, `QR-003`) are satisfied.
-- Relevant automated quality requirement tests (`QRT-001`, `QRT-002`, `QRT-003`) pass.
-- If a quality requirement is not applicable, it must be explicitly documented with rationale.
+- Relevant quality requirements (`QR-001`, `QR-002`, `QR-003`, `QR-004`, `QR-005`) are satisfied.
+- Relevant automated quality requirement tests (`QRT-001`, `QRT-002`, `QRT-003`, `QRT-004`, `QRT-005`) pass.
+- Relevant architecture decisions (ADRs) are documented and addressed where applicable.
+- If a quality requirement, QRT, or ADR is not applicable, it must be explicitly documented with rationale.
 
 ---
 
