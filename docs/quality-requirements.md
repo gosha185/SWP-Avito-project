@@ -39,7 +39,7 @@ systems).
 
 **Linked quality requirement tests:**
 
-- [QRT-001](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-001-api-response-time)
+- [QRT-001](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md#qrt-001-api-response-time)
 
 ---
 
@@ -62,7 +62,7 @@ transactions, double processing, and user frustration.
 
 **Linked quality requirement tests:**
 
-- [QRT-002](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-002-api-response-time)
+- [QRT-002](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md#qrt-002-api-response-time)
 
 ---
 
@@ -83,7 +83,7 @@ making changes.
 
 **Linked quality requirement tests:**
 
-- [QRT-003](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-003-api-response-time)
+- [QRT-003](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md#qrt-003-api-response-time)
 
 ---
 
@@ -112,7 +112,7 @@ undermines user confidence and creates disputes.
 
 **Linked quality requirement tests:**
 
-- [QRT-004](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-004-api-response-time)
+- [QRT-004](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md#qrt-004-data-retention-and-integrity)
 
 ---
 
@@ -135,4 +135,4 @@ experience double processing due to temporary issues.
 
 **Linked quality requirement tests:**
 
-- [QRT-005](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirement-tests.md#qrt-005-api-response-time)
+- [QRT-005](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirement-tests.md#qrt-005-api-response-time)

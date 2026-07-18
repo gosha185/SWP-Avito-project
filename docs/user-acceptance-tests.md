@@ -303,7 +303,7 @@ is invalid rather than the server encountering an internal error."
 
 ---
 
-## Summary of UAT Results (4 July 2026)
+## Summary of UAT Results (Final)
 
 | UAT     | Scenario                                          | Status |
 |---------|---------------------------------------------------|--------|

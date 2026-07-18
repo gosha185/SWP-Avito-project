@@ -3,7 +3,7 @@
 ## Project
 [SWP-Avito-project](https://github.com/gosha185/SWP-Avito-project) – Bonus System
 
-**License:** [MIT](https://github.com/gosha185/SWP-Avito-project/blob/65-week3-report-index/LICENSE)
+**License:** [MIT](https://github.com/gosha185/SWP-Avito-project/blob/main/LICENSE)
 
 ---
 
