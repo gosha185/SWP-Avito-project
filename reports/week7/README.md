@@ -85,7 +85,7 @@
 
 - [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions)
 - [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions/runs/29649096319)
-- [Branch Protection Rules](images/branch-protection.png)
+
 
 ---
 
@@ -162,3 +162,4 @@
 ![Reviewed PR](images/reviewed-pr.jpg)
 ![Hosted Docs](images/hosted-docs.jpg)
 ![Final Deployment](images/final-deployment.jpg)
+![Branch Protection Rules](images/branch-protection.png)
