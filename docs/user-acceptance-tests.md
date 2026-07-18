@@ -303,7 +303,37 @@ is invalid rather than the server encountering an internal error."
 
 ---
 
-## Summary of UAT Results (4 July 2026)
+## UAT-010: Final handover verification
+
+| Field | Value |
+|-------|-------|
+| **Scenario ID** | UAT-010 |
+| **Scenario status** | Active |
+| **User goal** | As a customer, I want to confirm that the product is ready for independent use and that all documentation is complete. |
+
+**Preconditions:**
+- Product is deployed and accessible
+- All previous UAT scenarios have passed
+- Customer-facing documentation is complete
+
+**Step-by-step instructions:**
+1. Review the product functionality (balance, holds, accrual, TTL workers)
+2. Review the documentation (`README.md`, `customer-handover.md`, `CONTRIBUTING.md`, `AGENTS.md`)
+3. Confirm that the product meets the handover criteria
+
+**Expected outcome:**
+- Customer confirms `Ready for independent use`
+- All documentation is accepted
+
+**Execution result (17 July 2026):** ✅ Passed
+
+**Customer comments:** "Ready for independent use. Accepted."
+
+**Resulting PBIs or issues:** None
+
+---
+
+## Summary of UAT Results (Final)
 
 | UAT     | Scenario                                          | Status |
 |---------|---------------------------------------------------|--------|
@@ -316,3 +346,4 @@ is invalid rather than the server encountering an internal error."
 | UAT-007 | Cancel an already cancelled hold (error handling) | ✅ Passed — fixed in Sprint 3 |
 | UAT-008 | TTL worker — expired points are burned            | ✅ Passed |
 | UAT-009 | TTL worker — stale holds are released             | ✅ Passed |
+| UAT-010 | Final handover verification                       | ✅ Passed |
