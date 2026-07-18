@@ -3,7 +3,7 @@
 ## Project
 [SWP-Avito-project](https://github.com/gosha185/SWP-Avito-project) – Bonus System
 
-**License:** [MIT](https://github.com/gosha185/SWP-Avito-project/blob/main/LICENSE)
+**License:** [MIT](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/LICENSE)
 
 ---
 
@@ -36,38 +36,38 @@
 
 ## Quality Documentation
 
-- [Quality Requirements](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/quality-requirements.md)
-- [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/quality-requirement-tests.md)
-- [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/testing.md)
-- [User Acceptance Tests](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/user-acceptance-tests.md)
+- [Quality Requirements](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/quality-requirements.md)
+- [Quality Requirement Tests](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/quality-requirement-tests.md)
+- [Testing Documentation](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/testing.md)
+- [User Acceptance Tests](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/user-acceptance-tests.md)
 
 ---
 
 ## Architecture Documentation
 
-- [Architecture README](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/README.md)
-- [Static View](https://github.com/gosha185/SWP-Avito-project/tree/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/static-view)
-- [Dynamic View](https://github.com/gosha185/SWP-Avito-project/tree/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/dynamic-view)
-- [Deployment View](https://github.com/gosha185/SWP-Avito-project/tree/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/deployment-view)
-- [ADRs](https://github.com/gosha185/SWP-Avito-project/tree/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/architecture/adr)
+- [Architecture README](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/architecture/README.md)
+- [Static View](https://github.com/gosha185/SWP-Avito-project/tree/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/architecture/static-view)
+- [Dynamic View](https://github.com/gosha185/SWP-Avito-project/tree/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/architecture/dynamic-view)
+- [Deployment View](https://github.com/gosha185/SWP-Avito-project/tree/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/architecture/deployment-view)
+- [ADRs](https://github.com/gosha185/SWP-Avito-project/tree/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/architecture/adr)
 
 ---
 
 ## Process Documentation
 
-- [Development Process](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/development-process.md)
-- [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/definition-of-done.md)
-- [Roadmap](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/roadmap.md)
-- [Process Requirements](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/Process_Requirements.md)
-- [CONTRIBUTING.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/CONTRIBUTING.md)
-- [AGENTS.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/AGENTS.md)
+- [Development Process](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/development-process.md)
+- [Definition of Done](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/definition-of-done.md)
+- [Roadmap](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/roadmap.md)
+- [Process Requirements](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/Process_Requirements.md)
+- [CONTRIBUTING.md](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/CONTRIBUTING.md)
+- [AGENTS.md](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/AGENTS.md)
 
 ---
 
 ## Customer-Facing Documentation
 
-- [README.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/README.md)
-- [Customer Handover](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/docs/customer-handover.md)
+- [README.md](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/README.md)
+- [Customer Handover](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/docs/customer-handover.md)
 - [Hosted Documentation Site](https://gosha185.github.io/SWP-Avito-project/)
 
 ---
@@ -76,7 +76,7 @@
 
 - [Deployment URL](http://10.93.26.189:8080/)
 - [SemVer Release v3.0.0 (MVP v3)](https://github.com/gosha185/SWP-Avito-project/releases/tag/v3.0.0)
-- [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/49a0025484e5e18f0c0d0464a73c7ffdbf6b5c25/CHANGELOG.md)
+- [CHANGELOG.md](https://github.com/gosha185/SWP-Avito-project/blob/d08edda531b97b988a1c9dd67fb26d165decb8aa/CHANGELOG.md)
 - [Public Demo Video](https://drive.google.com/drive/folders/1JxWQv6aLp6FBSjmf7poTA1Vw5K7fj1My?usp=sharing)
 
 ---
@@ -85,7 +85,6 @@
 
 - [CI Pipeline](https://github.com/gosha185/SWP-Avito-project/actions)
 - [Latest CI Run](https://github.com/gosha185/SWP-Avito-project/actions/runs/29649096319)
-
 
 ---
 
@@ -127,8 +126,7 @@
 
 ## Next Steps
 
-- Demo Day presentation (22 July 2026)
-- Final course submission
+- Demo Day presentation (21 July 2026)
 
 ---
 
@@ -136,11 +134,11 @@
 
 | Team Member | Issues | PRs | Reviews | Testing/QA | Documentation |
 |---|---|---|---|---|---|
-| Leilia (Leilia34) | #201, #262, #324, #325, #328, #329 | ✅ | ✅ | — | ✅ |
-| Stepan (Stepan4ick) | #307, #317 | ✅ | ✅ | — | — |
-| Ekaterina (deadnothingness) | #310, #312 | ✅ | ✅ | — | ✅ |
-| Georgii (gosha185) | #313, #315 | ✅ | ✅ | — | — |
-| Ivan (Laplace-mt) | #326 | ✅ | ✅ | ✅ | — |
+| Leilia (Leilia34) | #262, #318, #319, #320, #321, #323, #330, #332, #335, #337 | ✅ | ✅ | — | ✅ |
+| Stepan (Stepan4ick) | #301, #316 | ✅ | ✅ | — | ✅ |
+| Ekaterina (deadnothingness) | #309, #311 | ✅ | ✅ | — | ✅ |
+| Georgii (gosha185) | #308, #314 | ✅ | ✅ | — | ✅ |
+| Ivan (Laplace-mt) | #322 | ✅ | ✅ | ✅ | ✅ |
 
 ---
 
