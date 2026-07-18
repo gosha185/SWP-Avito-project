@@ -5,6 +5,19 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [3.0.0] - 2026-07-18
+
+### Added
+- In-code documentation and comments for service, storage, and HTTP layers
+- Reference documentation for storage, migrations, and background workers
+
+### Changed
+- Duplicate hold creation now returns HTTP 409 Conflict instead of 500 Internal Server Error
+
+### Fixed
+- Race condition in expiry workers causing balance double‑counting during concurrent confirm/cancel and expiry sweeps
+- Accrual operation now correctly writes `batch_id` to the ledger entry
+
 ## [2.0.0] - 2026-07-05
 
 ### Added
@@ -99,3 +112,4 @@ with interactive API documentation.
 [1.0.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.0.0
 [1.1.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v1.1.0
 [2.0.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v2.0.0
+[3.0.0]: https://github.com/gosha185/SWP-Avito-project/releases/tag/v3.0.0
