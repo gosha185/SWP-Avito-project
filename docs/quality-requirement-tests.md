@@ -1,12 +1,12 @@
 # Quality Requirement Tests
 
-This document defines automated quality requirement tests (QRTs) that verify the measurable quality requirements defined in [quality-requirements.md](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirements.md).
+This document defines automated quality requirement tests (QRTs) that verify the measurable quality requirements defined in [quality-requirements.md](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md).
 
 ---
 
 ## QRT-001: API response time
 
-**Linked quality requirement:** [QR-001](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirements.md#qr-001-api-response-time)
+**Linked quality requirement:** [QR-001](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md#qr-001-api-response-time)
 
 **Verification method:** Automated CI check using performance tests.
 
@@ -26,7 +26,7 @@ go test  ./internal/service
 
 ## QRT-002: Health check availability
 
-**Linked quality requirement:** [QR-002](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirements.md#qr-002-service-availability)
+**Linked quality requirement:** [QR-002](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md#qr-002-service-availability)
 
 **Verification method:** Automated CI check that verifies health endpoint.
 
@@ -42,7 +42,7 @@ go test  ./internal/service
 
 ## QRT-003: Critical module unit coverage
 
-**Linked quality requirement:** [QR-003](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirements.md#qr-003-service-availability)
+**Linked quality requirement:** [QR-003](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md#qr-003-critical-module-testability)
 
 **Verification method:** Automated CI coverage check.
 
@@ -62,7 +62,7 @@ go test ./internal/storage
 
 ## QRT-004: Data retention and integrity
 
-**Linked quality requirement:** [QR-004](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirements.md#qr-004-data-retention-and-availability)
+**Linked quality requirement:** [QR-004](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md#qr-004-data-retention-and-availability)
 
 **Verification method:** Automated CI check that verifies data integrity.
 
@@ -82,7 +82,7 @@ go test ./internal/service
 
 ## QRT-005: Fault tolerance and recovery
 
-**Linked quality requirement:** [QR-005](https://github.com/gosha185/SWP-Avito-project/blob/132-quality-requirements/docs/quality-requirements.md#qr-005-data-retention-and-availability)
+**Linked quality requirement:** [QR-005](https://github.com/gosha185/SWP-Avito-project/blob/main/docs/quality-requirements.md#qr-005-fault-tolerance-and-recovery)
 
 **Verification method:** Automated CI check that simulates database failure.
 
