@@ -14,7 +14,6 @@
 
 | ID | Short title | Previous MoSCoW | Reason |
 |---|---|---|---|
-
 | US-02 | Bonuses not lost during failures (idempotency) | Must Have | Replaced by technical idempotency tasks (#29, #30) |
 | US-04 | Warning about exceeding point limit | Should Have | Not implemented |
 | US-05 | View points that will expire soon | Must Have | Moved to technical PBI (#8) |
