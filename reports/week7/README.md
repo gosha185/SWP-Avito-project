@@ -177,3 +177,9 @@
 
 ### Branch Protection Rules
 ![Branch Protection](images/branch-protection.jpg)
+
+---
+
+## Link to the prerecorded demo video
+
+### https://drive.google.com/drive/folders/1JxWQv6aLp6FBSjmf7poTA1Vw5K7fj1My
